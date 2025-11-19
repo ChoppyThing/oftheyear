@@ -1,0 +1,27 @@
+meta {
+  name: User Update
+  type: http
+  seq: 5
+}
+
+patch {
+  url: {{url}}/user/update
+  body: json
+  auth: inherit
+}
+
+headers {
+  Content-Type: application/json
+  Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsImVtYWlsIjoidGVzdEB0ZXN0LmZyIiwiZmlyc3ROYW1lIjoidGVzdCIsImxhc3ROYW1lIjoidGVzdCIsInJvbGVzIjpbInVzZXIiXSwiaWF0IjoxNzYzNDcyMDI5LCJleHAiOjE3NjM0NzU2Mjl9.LkM-cv9kgMyw90IW692b3b3zC2gKFD77jkpy0V3WzKY
+}
+
+body:json {
+  {
+    "firstName":"test 4"
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

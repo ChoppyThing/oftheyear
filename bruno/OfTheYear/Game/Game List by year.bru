@@ -1,0 +1,20 @@
+meta {
+  name: Game List by year
+  type: http
+  seq: 6
+}
+
+get {
+  url: {{url}}/game?year=2024
+  body: none
+  auth: inherit
+}
+
+params:query {
+  year: 2024
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

@@ -1,0 +1,15 @@
+meta {
+  name: Game List
+  type: http
+  seq: 5
+}
+
+get {
+  url: {{url}}/game
+  body: none
+  auth: inherit
+}
+
+settings {
+  encodeUrl: true
+}

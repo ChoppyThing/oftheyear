@@ -1,0 +1,38 @@
+services:
+  db:
+    image: postgres:16-alpine
+    container_name: database-postgres
+    environment:
+      POSTGRES_DB: database
+      POSTGRES_USER: database
+      POSTGRES_PASSWORD: password
+      TZ: Europe/Paris
+    ports:
+      - "5433:5432"
+    volumes:
+      - pg_data_c:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB} -h 127.0.0.1"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  mailpit:
+    image: axllent/mailpit:latest
+    container_name: email-mailpit
+    environment:
+      MP_SMTP_AUTH_ACCEPT_ANY: "1"
+      MP_SMTP_AUTH_ALLOW_INSECURE: "1"
+      TZ: Europe/Paris
+    ports:
+      - "1025:1025"
+      - "8025:8025"
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://localhost:8025/healthz"]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+
+volumes:
+  pg_data_c:

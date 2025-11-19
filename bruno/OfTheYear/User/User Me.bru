@@ -1,0 +1,21 @@
+meta {
+  name: User Me
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{url}}/user/me
+  body: none
+  auth: inherit
+}
+
+headers {
+  Content-Type: application/json
+  Authorization: Bearer {{token}}
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

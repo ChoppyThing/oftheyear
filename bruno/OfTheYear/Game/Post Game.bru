@@ -1,0 +1,30 @@
+meta {
+  name: Post Game
+  type: http
+  seq: 3
+}
+
+post {
+  url: {{url}}/game
+  body: json
+  auth: inherit
+}
+
+headers {
+  Content-Type: application/json
+  Authorization: Bearer {{token}}
+}
+
+body:json {
+    {
+      "name": "Elden Ring",
+      "image": "https://example.com/images/elden-ring.jpg",
+      "developer": "FromSoftware",
+      "editor": "Bandai Namco Entertainment"
+    }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

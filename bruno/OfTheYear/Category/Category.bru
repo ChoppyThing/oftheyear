@@ -1,0 +1,27 @@
+meta {
+  name: Category
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{url}}/category
+  body: json
+  auth: inherit
+}
+
+headers {
+  Content-Type: application/json
+  Authorization: Bearer {{token}}
+}
+
+body:json {
+    {
+      "name": "RPG"
+    }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}
