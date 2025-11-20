@@ -1,0 +1,27 @@
+meta {
+  name: User Admin User Update
+  type: http
+  seq: 7
+}
+
+patch {
+  url: {{url}}/admin/users/12
+  body: json
+  auth: inherit
+}
+
+headers {
+  Content-Type: application/json
+  Authorization: Bearer {{token}}
+}
+
+body:json {
+  {
+    "firstName": "Jerry"
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

@@ -1,0 +1,25 @@
+meta {
+  name: User Admin User Filter role
+  type: http
+  seq: 4
+}
+
+get {
+  url: {{url}}/admin/users?role=admin
+  body: none
+  auth: inherit
+}
+
+params:query {
+  role: admin
+}
+
+headers {
+  Content-Type: application/json
+  Authorization: Bearer {{token}}
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

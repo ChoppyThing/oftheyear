@@ -1,0 +1,21 @@
+meta {
+  name: User Admin User Delete
+  type: http
+  seq: 8
+}
+
+delete {
+  url: {{url}}/admin/users/999
+  body: none
+  auth: inherit
+}
+
+headers {
+  Content-Type: application/json
+  Authorization: Bearer {{token}}
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

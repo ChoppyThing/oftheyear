@@ -30,7 +30,7 @@ import { Category } from './category/category.entity';
         entities: [User, Game, Category],
         synchronize: true,
         //synchronize: configService.get('NODE_ENV') !== 'production',
-        logging: configService.get('NODE_ENV') !== 'production',
+        //logging: configService.get('NODE_ENV') !== 'production',
       }),
       inject: [ConfigService],
     }),

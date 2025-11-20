@@ -8,24 +8,16 @@ const dictionaries: Record<Locale, () => Promise<any>> = {
 };
 
 export const getDictionary = async (locale: Locale) => {
-  console.log('🔍 [getDictionary] Requested locale:', locale);
-  
-  // ✅ Vérification stricte
   const dictionary = dictionaries[locale];
   
   if (!dictionary) {
-    console.error(`❌ [getDictionary] Locale "${locale}" not found in dictionaries`);
-    console.log('Available locales:', Object.keys(dictionaries));
     throw new Error(`Dictionary for locale "${locale}" not found`);
   }
 
   try {
     const dict = await dictionary();
-    console.log('✅ [getDictionary] Loaded dictionary for:', locale);
-    console.log('Has about section:', !!dict.about);
     return dict;
   } catch (error) {
-    console.error(`❌ [getDictionary] Error loading dictionary for "${locale}":`, error);
     throw error;
   }
 };

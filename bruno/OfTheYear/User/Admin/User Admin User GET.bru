@@ -1,0 +1,21 @@
+meta {
+  name: User Admin User GET
+  type: http
+  seq: 6
+}
+
+get {
+  url: {{url}}/admin/users/12
+  body: none
+  auth: inherit
+}
+
+headers {
+  Content-Type: application/json
+  Authorization: Bearer {{token}}
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}
