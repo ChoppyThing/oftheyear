@@ -53,11 +53,11 @@ export class UserService {
 		await this.userRepository.save(user);
 	}
 
-	async verifyAccount(token: string): Promise<User> {
+/*	async verifyAccount(token: string): Promise<User> {
 		const user = await this.findByVerificationToken(token);
 		if (!user) throw new NotFoundException('Invalid verification token');
 		user.isVerified = true;
 		user.verificationToken = null;
 		return await this.userRepository.save(user);
-	}
+	}*/
 }

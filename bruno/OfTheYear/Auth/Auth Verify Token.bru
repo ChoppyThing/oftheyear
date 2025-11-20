@@ -1,0 +1,20 @@
+meta {
+  name: Auth Verify Token
+  type: http
+  seq: 3
+}
+
+get {
+  url: {{url}}/auth/verify?token=ab85576e-cefe-41d9-ab6f-85e67dcc3b69662393cb-ac7a-4989-a205-f7165efadd08
+  body: none
+  auth: inherit
+}
+
+params:query {
+  token: ab85576e-cefe-41d9-ab6f-85e67dcc3b69662393cb-ac7a-4989-a205-f7165efadd08
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

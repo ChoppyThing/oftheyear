@@ -1,0 +1,243 @@
+{
+  "meta": {
+    "title": "GOTY - Game of the Year",
+    "description": "Discover the best games of the year. Vote for your favorite game and explore the ultimate voting game community."
+  },
+  "header": {
+    "home": "Home",
+    "about": "About",
+    "categories": "Categories",
+    "login": "Sign In"
+  },
+  "home": {
+    "title": "Game of the Year",
+    "slogan": "Vote for the game that moved you the most.",
+    "pitch": {
+      "title": "Giving voting power back to players",
+      "description": "Here, everyone can vote for their favorite game of the year — the game that made them vibrate, surprised or brought them together. The idea: a community that shares its favorites and elects the best game."
+    },
+    "latestGames": {
+      "title": "Latest games added",
+      "template": "(template - will be replaced by API later)"
+    },
+    "currentLocale": "Current locale:"
+  },
+  "login": {
+    "title": "Login",
+    "welcome": "Welcome to Game of the Year",
+    "email": "Email",
+    "emailPlaceholder": "your@email.com",
+    "password": "Password",
+    "forgotPassword": "Forgot password?",
+    "submit": "Sign In",
+    "connecting": "Connecting...",
+    "error": "Connection error",
+    "emailNotVerified": "Please verify your email before logging in",
+    "noAccount": "Don't have an account?",
+    "createAccount": "Create account"
+  },
+  "stats": {
+    "show": "Show statistics",
+    "hide": "Hide statistics",
+    "users": "Registered",
+    "games": "Games",
+    "publishers": "Publishers",
+    "developers": "Developers"
+  },
+  "user": {
+    "welcome": "Welcome",
+    "proposeGame": "Propose a game",
+    "proposeCategory": "Propose a category",
+    "logout": "Sign out"
+  },
+  "register": {
+    "title": "Create an account",
+    "welcome": "Join the Game of the Year community",
+    "email": "Email",
+    "emailPlaceholder": "your@email.com",
+    "firstName": "First Name",
+    "firstNamePlaceholder": "John",
+    "lastName": "Last Name",
+    "lastNamePlaceholder": "Doe",
+    "nickname": "Username",
+    "nicknamePlaceholder": "GamerPro123",
+    "password": "Password",
+    "passwordHint": "Min. 6 characters, 1 uppercase, 1 number, 1 special character",
+    "confirmPassword": "Confirm password",
+    "submit": "Create my account",
+    "creating": "Creating...",
+    "error": "Registration error",
+    "hasAccount": "Already have an account?",
+    "loginLink": "Sign in",
+    "successTitle": "Registration successful!",
+    "successMessage": "Check your email!"
+  },
+  "verify": {
+    "loadingTitle": "Verifying",
+    "loadingMessage": "Please wait...",
+    "successTitle": "Email Verified!",
+    "successMessage": "Your account has been successfully verified.",
+    "redirecting": "Redirecting to homepage...",
+    "errorTitle": "Verification Error",
+    "error": "An error occurred",
+    "unknownError": "Unknown error",
+    "backToLogin": "Back to Login"
+  },
+  "forgotPassword": {
+    "title": "Forgot Password",
+    "subtitle": "Reset your password",
+    "description": "Enter your email to receive a reset link",
+    "emailLabel": "Email",
+    "emailPlaceholder": "your@email.com",
+    "submit": "Send Reset Link",
+    "sending": "Sending...",
+    "successMessage": "If an account with that email exists, a password reset link has been sent.",
+    "errorMessage": "An error occurred. Please try again.",
+    "backToLogin": "← Back to Login"
+  },
+  "resetPassword": {
+    "title": "Reset Password",
+    "subtitle": "Reset your password",
+    "newPasswordLabel": "New Password",
+    "confirmPasswordLabel": "Confirm Password",
+    "submit": "Reset Password",
+    "resetting": "Resetting...",
+    "successMessage": "Password reset successfully! Redirecting to login...",
+    "passwordMismatch": "Passwords do not match",
+    "passwordTooShort": "Password must be at least 8 characters long",
+    "invalidToken": "Invalid or expired reset token",
+    "errorMessage": "An error occurred. Please try again.",
+    "invalidLink": "Invalid reset link",
+    "invalidLinkTitle": "Invalid Reset Link",
+    "requestNewLink": "Request a new link",
+    "backToLogin": "← Back to Login"
+  },
+  "about": {
+    "meta": {
+      "title": "About - Game of the Year",
+      "description": "Discover Game of the Year, the independent platform where every player votes for their game of the year. One voice = one vote."
+    },
+    "hero": {
+      "title": "Game of the year",
+      "subtitle": "The platform where every player elects his game of the year"
+    },
+    "independence": {
+      "title": "A voice for all players",
+      "intro": "Game of the Year is an independent platform that puts the power back in the hands of players. Here, no closed jury or weighted votes: every registration counts as one voice, and every voice has the same weight.",
+      "freedom": "You are free to vote for the game that marked you the most this year, whether it's a AAA blockbuster or an unknown indie game. It's your experience that matters.",
+      "community": "Together, the gaming community decides which game truly deserves the title of Game of the Year."
+    },
+    "proposal": {
+      "title": "Propose your games and categories",
+      "intro": "Game of the Year is also your creativity. Every registered member can actively contribute to the platform:",
+      "games": {
+        "title": "Game proposals",
+        "description": "You can propose up to 5 games you want to see in the competition. Before submitting, check via search that the game isn't already present.",
+        "validation": "Each proposed game is subject to validation: it must have been released during the current year, and the provided image must meet our quality standards."
+      },
+      "categories": {
+        "title": "Category proposals",
+        "description": "Think a category is missing? Propose one! Each member can suggest 1 custom category.",
+        "validation": "Proposed categories are also validated by our team to ensure their relevance.",
+        "limit": "A maximum of 20 categories will be selected for the final votes."
+      }
+    },
+    "voting": {
+      "title": "Voting and revelation",
+      "opening": {
+        "title": "Vote opening",
+        "description": "One month before Christmas, the voting phase officially opens. For each selected category, you can choose one game among the nominees."
+      },
+      "reveal": {
+        "title": "The big reveal",
+        "description": "One week before Christmas, the results will be revealed live. The game elected by the community will finally be known.",
+        "date": "The exact date will be announced in advance so no one misses this event!"
+      }
+    },
+    "values": {
+      "title": "Why Game of the Year?",
+      "items": [
+        {
+          "title": "Independent",
+          "description": "No industrial influence, no biased partnerships. Just players and their passion."
+        },
+        {
+          "title": "Democratic",
+          "description": "One person = one vote. Your opinion matters as much as anyone else's."
+        },
+        {
+          "title": "Transparent",
+          "description": "Rules are clear, validation processes are explained, and results are public."
+        },
+        {
+          "title": "Community-driven",
+          "description": "You're not a spectator, you're an actor. Propose, vote, and celebrate together."
+        }
+      ]
+    },
+    "cta": {
+      "title": "Ready to make your voice heard?",
+      "description": "Join thousands of players and participate in electing the true Game of the Year.",
+      "button": "Create my account"
+    }
+  },
+  "legal": {
+    "meta": {
+      "title": "Legal Notice - Game of the Year",
+      "description": "Legal information about the Game of the Year platform."
+    },
+    "title": "Legal Notice",
+    "lastUpdate": "Last updated: January 2025",
+    "editor": {
+      "title": "1. Website Editor",
+      "projectName": "Project name",
+      "nature": "Nature",
+      "natureDesc": "Independent non-commercial community project",
+      "contact": "Contact"
+    },
+    "hosting": {
+      "title": "2. Hosting",
+      "info": "This website is hosted via Vercel Inc. Data is stored securely in compliance with industry standards."
+    },
+    "data": {
+      "title": "3. Personal Data",
+      "collected": {
+        "title": "Data collected:",
+        "items": [
+          "Email address (required for registration)",
+          "First name, last name and nickname (user profile)",
+          "Votes and game/category proposals"
+        ]
+      },
+      "usage": {
+        "title": "Data usage:",
+        "description": "Your data is used only for platform operations: authentication, vote management and results display. It is never sold or shared with third parties."
+      },
+      "rights": {
+        "title": "Your rights:",
+        "description": "In accordance with GDPR, you have the right to access, rectify and delete your data. To exercise these rights, contact us at the address below."
+      }
+    },
+    "cookies": {
+      "title": "4. Cookies",
+      "description": "This site uses strictly necessary cookies for operation:",
+      "types": [
+        "Authentication cookie (to maintain your logged-in session)",
+        "Language preferences (to remember your language)"
+      ]
+    },
+    "property": {
+      "title": "5. Intellectual Property",
+      "content": "The site content (texts, design, structure) is protected by copyright. Any reproduction without authorization is prohibited.",
+      "gameImages": "Video game images belong to their respective publishers and are used for illustrative purposes within the framework of criticism and information (fair use)."
+    },
+    "liability": {
+      "title": "6. Liability",
+      "description": "Game of the Year is a community platform. We make every effort to ensure service availability, but cannot guarantee the absence of interruptions or errors. Votes and results are public and reflect the community's opinion."
+    },
+    "contact": {
+      "title": "Need to contact us?",
+      "description": "For any questions regarding this legal notice or your personal data:"
+    }
+  }
+}

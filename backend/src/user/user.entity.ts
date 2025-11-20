@@ -37,6 +37,12 @@ export class User {
   @Column({ default: false })
   isVerified: boolean;
 
+  @Column({ nullable: true })
+  resetPasswordToken: string;
+
+  @Column({ type: 'timestamp', nullable: true })
+  resetPasswordExpires: Date | null;
+
   @Column({
     type: 'enum',
     enum: Role,

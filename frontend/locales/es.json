@@ -1,0 +1,247 @@
+{
+  "meta": {
+    "title": "GOTY - Juego del Año",
+    "description": "Descubre los mejores juegos del año. Vota por tu juego favorito y explora la comunidad gaming definitiva."
+  },
+  "header": {
+    "home": "Inicio",
+    "about": "Acerca de",
+    "categories": "Categorías",
+    "login": "Iniciar sesión"
+  },
+  "home": {
+    "title": "Game of the Year",
+    "slogan": "Vota por el juego que más te emocionó.",
+    "pitch": {
+      "title": "Devolver el poder de voto a los jugadores",
+      "description": "Aquí, todos pueden votar por su juego favorito del año — el juego que les hizo vibrar, sorprendió o reunió. La idea: una comunidad que comparte sus favoritos y elige el mejor juego."
+    },
+    "latestGames": {
+      "title": "Últimos juegos añadidos",
+      "template": "(plantilla - será reemplazada por API más tarde)"
+    },
+    "currentLocale": "Idioma actual:"
+  },
+  "login": {
+    "title": "Iniciar sesión",
+    "welcome": "Bienvenido a Game of the Year",
+    "email": "Correo electrónico",
+    "emailPlaceholder": "tu@email.com",
+    "password": "Contraseña",
+    "forgotPassword": "¿Olvidaste tu contraseña?",
+    "submit": "Iniciar sesión",
+    "connecting": "Conectando...",
+    "error": "Error de conexión",
+    "emailNotVerified": "Por favor verifica tu correo electrónico antes de iniciar sesión",
+    "noAccount": "¿No tienes cuenta?",
+    "createAccount": "Crear cuenta"
+  },
+  "stats": {
+    "show": "Mostrar estadísticas",
+    "hide": "Ocultar estadísticas",
+    "users": "Registrados",
+    "games": "Juegos",
+    "publishers": "Editores",
+    "developers": "Desarrolladores"
+  },
+  "user": {
+    "welcome": "Bienvenido",
+    "proposeGame": "Proponer un juego",
+    "proposeCategory": "Proponer una categoría",
+    "logout": "Cerrar sesión"
+  },
+  "register": {
+    "title": "Crear una cuenta",
+    "welcome": "Únete a la comunidad Game of the Year",
+    "email": "Correo electrónico",
+    "emailPlaceholder": "tu@correo.com",
+    "firstName": "Nombre",
+    "firstNamePlaceholder": "Juan",
+    "lastName": "Apellido",
+    "lastNamePlaceholder": "García",
+    "nickname": "Apodo",
+    "nicknamePlaceholder": "GamerPro123",
+    "password": "Contraseña",
+    "passwordHint": "Mín. 6 caracteres, 1 mayúscula, 1 número, 1 carácter especial",
+    "confirmPassword": "Confirmar contraseña",
+    "submit": "Crear mi cuenta",
+    "creating": "Creando...",
+    "error": "Error al registrarse",
+    "hasAccount": "¿Ya tienes una cuenta?",
+    "loginLink": "Iniciar sesión",
+    "successTitle": "¡Registro exitoso!",
+    "successMessage": "¡Revisa tu correo electrónico!"
+  },
+  "verify": {
+    "loadingTitle": "Verificando",
+    "loadingMessage": "Por favor espere...",
+    "successTitle": "¡Email Verificado!",
+    "successMessage": "Su cuenta ha sido verificada exitosamente.",
+    "redirecting": "Redirigiendo a la página de inicio...",
+    "errorTitle": "Error de Verificación",
+    "error": "Ocurrió un error",
+    "unknownError": "Error desconocido",
+    "backToLogin": "Volver al inicio de sesión"
+  },
+  "forgotPassword": {
+    "title": "Contraseña olvidada",
+    "subtitle": "Restablece tu contraseña",
+    "description": "Ingresa tu correo para recibir un enlace de restablecimiento",
+    "emailLabel": "Correo electrónico",
+    "emailPlaceholder": "tu@correo.com",
+    "submit": "Enviar enlace",
+    "sending": "Enviando...",
+    "successMessage": "Si existe una cuenta con ese correo, se ha enviado un enlace de restablecimiento.",
+    "errorMessage": "Ocurrió un error. Por favor, inténtalo de nuevo.",
+    "backToLogin": "← Volver al inicio de sesión"
+  },
+  "resetPassword": {
+    "title": "Restablecer contraseña",
+    "subtitle": "Restablece tu contraseña",
+    "newPasswordLabel": "Nueva contraseña",
+    "confirmPasswordLabel": "Confirmar contraseña",
+    "submit": "Restablecer contraseña",
+    "resetting": "Restableciendo...",
+    "successMessage": "¡Contraseña restablecida con éxito! Redirigiendo al inicio de sesión...",
+    "passwordMismatch": "Las contraseñas no coinciden",
+    "passwordTooShort": "La contraseña debe tener al menos 8 caracteres",
+    "invalidToken": "Token de restablecimiento inválido o expirado",
+    "errorMessage": "Ocurrió un error. Por favor, inténtalo de nuevo.",
+    "invalidLink": "Enlace de restablecimiento inválido",
+    "invalidLinkTitle": "Enlace de restablecimiento inválido",
+    "requestNewLink": "Solicitar un nuevo enlace",
+    "backToLogin": "← Volver al inicio de sesión"
+  },
+  "about": {
+    "meta": {
+      "title": "Acerca de - Game of the Year",
+      "description": "Descubre Game of the Year, la plataforma independiente donde cada jugador vota por su juego del año. Una voz = un voto."
+    },
+    "hero": {
+      "title": "Game of the Year",
+      "subtitle": "La plataforma donde cada jugador puede votar por su juego del año"
+    },
+    "independence": {
+      "title": "Una voz para todos los jugadores",
+      "intro": "Game of the Year es una plataforma independiente que devuelve el poder a las manos de los jugadores. Aquí, no hay jurado cerrado ni votos ponderados: cada registro cuenta como una voz, y cada voz tiene el mismo peso.",
+      "freedom": "Eres libre de votar por el juego que más te ha marcado este año, ya sea un blockbuster AAA o un juego independiente desconocido. Lo que cuenta es tu experiencia.",
+      "community": "Juntos, la comunidad de jugadores decide qué juego merece realmente el título de Game of the Year."
+    },
+    "proposal": {
+      "title": "Propón tus juegos y categorías",
+      "intro": "Game of the Year también es tu creatividad. Cada miembro registrado puede contribuir activamente a la plataforma:",
+      "games": {
+        "title": "Propuesta de juegos",
+        "description": "Puedes proponer hasta 5 juegos que te gustaría ver en la competición. Antes de enviar, verifica mediante la búsqueda que el juego no esté ya presente.",
+        "validation": "Cada juego propuesto se somete a validación: debe haber sido lanzado durante el año en curso, y la imagen proporcionada debe respetar nuestros estándares de calidad."
+      },
+      "categories": {
+        "title": "Propuesta de categorías",
+        "description": "¿Crees que falta una categoría? ¡Propón una! Cada miembro puede sugerir 1 categoría personalizada.",
+        "validation": "Las categorías propuestas también son validadas por nuestro equipo para garantizar su pertinencia.",
+        "limit": "Se seleccionará un máximo de 20 categorías para las votaciones finales."
+      }
+    },
+    "voting": {
+      "title": "La votación y la revelación",
+      "opening": {
+        "title": "Apertura de votaciones",
+        "description": "Un mes antes de Navidad, la fase de votación se abre oficialmente. Para cada categoría seleccionada, podrás elegir un juego entre los nominados."
+      },
+      "reveal": {
+        "title": "La gran revelación",
+        "description": "Una semana antes de Navidad, los resultados se revelarán en directo. El juego elegido por la comunidad será finalmente conocido.",
+        "date": "¡La fecha exacta se anunciará con anticipación para que nadie se pierda este evento!"
+      }
+    },
+    "values": {
+      "title": "¿Por qué Game of the Year?",
+      "items": [
+        {
+          "title": "Independiente",
+          "description": "Sin influencia industrial, sin asociaciones sesgadas. Solo los jugadores y su pasión."
+        },
+        {
+          "title": "Democrático",
+          "description": "Una persona = un voto. Tu opinión cuenta tanto como la de cualquier otra persona."
+        },
+        {
+          "title": "Transparente",
+          "description": "Las reglas son claras, los procesos de validación están explicados y los resultados son públicos."
+        },
+        {
+          "title": "Comunitario",
+          "description": "No eres espectador, eres actor. Propón, vota y celebra juntos."
+        }
+      ]
+    },
+    "cta": {
+      "title": "¿Listo para hacer oír tu voz?",
+      "description": "Únete a miles de jugadores y participa en la elección del verdadero Game of the Year.",
+      "button": "Crear mi cuenta"
+    }
+  },
+  "legal": {
+    "meta": {
+      "title": "Aviso Legal - Game of the Year",
+      "description": "Aviso legal e información sobre la plataforma Game of the Year."
+    },
+    "title": "Aviso Legal",
+    "lastUpdate": "Última actualización: Enero 2025",
+    "editor": {
+      "title": "1. Editor del sitio",
+      "projectName": "Nombre del proyecto",
+      "nature": "Naturaleza",
+      "natureDesc": "Proyecto comunitario independiente y no comercial",
+      "contact": "Contacto"
+    },
+    "hosting": {
+      "title": "2. Alojamiento",
+      "info": "Este sitio está alojado a través de Vercel Inc. Los datos se almacenan de forma segura conforme a los estándares de la industria."
+    },
+    "data": {
+      "title": "3. Datos personales",
+      "collected": {
+        "title": "Datos recopilados:",
+        "items": [
+          "Dirección de correo electrónico (obligatoria para el registro)",
+          "Nombre, apellido y apodo (perfil de usuario)",
+          "Votos y propuestas de juegos/categorías"
+        ]
+      },
+      "usage": {
+        "title": "Uso de los datos:",
+        "description": "Sus datos se utilizan únicamente para el funcionamiento de la plataforma: autenticación, gestión de votos y visualización de resultados. Nunca se venden ni se comparten con terceros."
+      },
+      "rights": {
+        "title": "Sus derechos:",
+        "description": "De conformidad con el RGPD, usted tiene derecho de acceso, rectificación y eliminación de sus datos. Para ejercer estos derechos, contáctenos en la dirección indicada a continuación."
+      }
+    },
+    "cookies": {
+      "title": "4. Cookies",
+      "description": "Este sitio utiliza cookies estrictamente necesarias para el funcionamiento:",
+      "types": [
+        "Cookie de autenticación (para mantener su sesión activa)",
+        "Preferencias de idioma (para recordar su idioma)"
+      ]
+    },
+    "property": {
+      "title": "5. Propiedad intelectual",
+      "content": "El contenido del sitio (textos, diseño, estructura) está protegido por derechos de autor. Toda reproducción sin autorización está prohibida.",
+      "gameImages": "Las imágenes de videojuegos pertenecen a sus respectivos editores y se utilizan con fines ilustrativos en un contexto de crítica e información (uso legítimo)."
+    },
+    "liability": {
+      "title": "6. Responsabilidad",
+      "description": "Game of the Year es una plataforma comunitaria. Hacemos todo lo posible para garantizar la disponibilidad del servicio, pero no podemos garantizar la ausencia de interrupciones o errores. Los votos y resultados son públicos y reflejan la opinión de la comunidad."
+    },
+    "contact": {
+      "title": "¿Necesita contactarnos?",
+      "description": "Para cualquier pregunta sobre este aviso legal o sus datos personales:"
+    }
+  },
+  "footer": {
+    "rights": "Todos los derechos reservados",
+    "legal": "Aviso legal"
+  }
+}

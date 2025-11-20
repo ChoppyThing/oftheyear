@@ -2,6 +2,7 @@ import { Controller, Get, Patch, Body, Req, HttpCode } from '@nestjs/common';
 import { UserService } from './user.service';
 import { UpdateUserDto, UpdatePasswordDto } from './user.dto';
 import type { Request } from 'express';
+import { User } from './user.entity';
 
 /**
  * Jeu TikTok de l'année
@@ -12,9 +13,8 @@ export class UserController {
 
 	@Get('me')
 	async me(@Req() req: Request) {
-		const payload: any = (req as any).user;
-		const userId = payload?.sub;
-		return this.userService.findById(userId);
+		const user = (req as any).user as User;
+    return this.userService.findById(user.id);
 	}
 
 	@Patch('update')
@@ -33,11 +33,11 @@ export class UserController {
 		return;
 	}
 
-	@Get('verify')
+/*	@Get('verify')
 	async verify(@Req() req: Request) {
 		const token = (req.query?.token as string) || null;
 		if (!token) return { success: false, message: 'Token missing' };
 		await this.userService.verifyAccount(token);
 		return { success: true };
-	}
+	}*/
 }

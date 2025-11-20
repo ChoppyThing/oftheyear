@@ -2,7 +2,11 @@ import { Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import nodemailer from 'nodemailer';
 import type SMTPTransport from 'nodemailer/lib/smtp-transport';
-import { validationEmail } from './templates/validation.email';
+import { validationEmail, validationEmailSubjects } from './templates/validation.email';
+import {
+  emailSubjects,
+  resetPasswordEmail,
+} from './templates/reset-password.email';
 
 @Injectable()
 export class MailService {
@@ -28,16 +32,22 @@ export class MailService {
     this.transporter = nodemailer.createTransport(opts);
   }
 
-  async sendVerificationEmail(to: string, firstName: string, token: string) {
+  async sendVerificationEmail(
+    to: string,
+    firstName: string,
+    token: string,
+    locale: string = 'en',
+  ) {
     const baseUrl = this.config.get('APP_URL') || 'http://localhost:3000';
-    const verifyUrl = `${baseUrl}/user/verify?token=${encodeURIComponent(token)}`;
-
-    const html = validationEmail(firstName, verifyUrl);
+    const verifyUrl = `${baseUrl}/${locale}/verify-email?token=${encodeURIComponent(token)}`;
+    const html = validationEmail(firstName, verifyUrl, locale);
+    const subject =
+      validationEmailSubjects.validation[locale] || validationEmailSubjects.validation['en'];
 
     const mail = {
       from: this.config.get('MAIL_FROM') || 'no-reply@example.com',
       to,
-      subject: 'Activation de votre compte',
+      subject,
       html,
     };
 
@@ -47,6 +57,35 @@ export class MailService {
       return info;
     } catch (err) {
       this.logger.error('Failed to send verification email', err as any);
+      throw err;
+    }
+  }
+
+  async sendPasswordResetEmail(
+    to: string,
+    firstName: string,
+    token: string,
+    locale: string = 'en',
+  ) {
+    const baseUrl = this.config.get('APP_URL') || 'http://localhost:3000';
+    const resetUrl = `${baseUrl}/${locale}/reset-password?token=${encodeURIComponent(token)}`;
+    const html = resetPasswordEmail(firstName, resetUrl, locale);
+    const subject =
+      emailSubjects.resetPassword[locale] || emailSubjects.resetPassword['en'];
+
+    const mail = {
+      from: this.config.get('MAIL_FROM') || 'no-reply@example.com',
+      to,
+      subject,
+      html,
+    };
+
+    try {
+      const info = await this.transporter.sendMail(mail);
+      this.logger.log(`Sent password reset email to ${to}: ${info.messageId}`);
+      return info;
+    } catch (err) {
+      this.logger.error('Failed to send password reset email', err as any);
       throw err;
     }
   }

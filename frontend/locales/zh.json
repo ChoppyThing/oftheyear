@@ -1,0 +1,247 @@
+{
+  "meta": {
+    "title": "GOTY - 年度游戏",
+    "description": "发现年度最佳游戏。为您最喜欢的游戏投票，探索终极游戏社区。"
+  },
+  "header": {
+    "home": "首页",
+    "about": "关于",
+    "categories": "分类",
+    "login": "登录"
+  },
+  "home": {
+    "title": "Game of the Year",
+    "slogan": "为最打动你的游戏投票。",
+    "pitch": {
+      "title": "将投票权归还给玩家",
+      "description": "在这里，每个人都可以为自己今年最喜欢的游戏投票——那个让他们激动、惊喜或团结的游戏。理念：一个分享最爱并选出最佳游戏的社区。"
+    },
+    "latestGames": {
+      "title": "最新添加的游戏",
+      "template": "（模板 - 稍后将被API替换）"
+    },
+    "currentLocale": "当前语言："
+  },
+  "login": {
+    "title": "登录",
+    "welcome": "欢迎来到年度游戏",
+    "email": "邮箱",
+    "emailPlaceholder": "你的@邮箱.com",
+    "password": "密码",
+    "forgotPassword": "忘记密码？",
+    "submit": "登录",
+    "connecting": "连接中...",
+    "error": "连接错误",
+    "emailNotVerified": "请在登录前验证您的邮箱",
+    "noAccount": "还没有账户？",
+    "createAccount": "创建账户"
+  },
+  "stats": {
+    "show": "显示统计",
+    "hide": "隐藏统计",
+    "users": "注册用户",
+    "games": "游戏",
+    "publishers": "发行商",
+    "developers": "开发者"
+  },
+  "user": {
+    "welcome": "欢迎",
+    "proposeGame": "推荐游戏",
+    "proposeCategory": "推荐类别",
+    "logout": "退出"
+  },
+  "register": {
+    "title": "创建账户",
+    "welcome": "加入年度游戏社区",
+    "email": "邮箱",
+    "emailPlaceholder": "your@email.com",
+    "firstName": "名字",
+    "firstNamePlaceholder": "小明",
+    "lastName": "姓氏",
+    "lastNamePlaceholder": "王",
+    "nickname": "用户名",
+    "nicknamePlaceholder": "GamerPro123",
+    "password": "密码",
+    "passwordHint": "至少6个字符，1个大写字母，1个数字，1个特殊字符",
+    "confirmPassword": "确认密码",
+    "submit": "创建我的账户",
+    "creating": "创建中...",
+    "error": "注册错误",
+    "hasAccount": "已有账户？",
+    "loginLink": "登录",
+    "successTitle": "注册成功！",
+    "successMessage": "请查看您的邮箱！"
+  },
+  "verify": {
+    "loadingTitle": "验证中",
+    "loadingMessage": "请稍候...",
+    "successTitle": "邮箱已验证！",
+    "successMessage": "您的账户已成功验证。",
+    "redirecting": "正在重定向到首页...",
+    "errorTitle": "验证错误",
+    "error": "发生错误",
+    "unknownError": "未知错误",
+    "backToLogin": "返回登录"
+  },
+  "forgotPassword": {
+    "title": "忘记密码",
+    "subtitle": "重置您的密码",
+    "description": "输入您的电子邮件以接收重置链接",
+    "emailLabel": "电子邮件",
+    "emailPlaceholder": "your@email.com",
+    "submit": "发送重置链接",
+    "sending": "发送中...",
+    "successMessage": "如果该邮箱存在账户，已发送重置链接。",
+    "errorMessage": "发生错误，请重试。",
+    "backToLogin": "← 返回登录"
+  },
+  "resetPassword": {
+    "title": "重置密码",
+    "subtitle": "重置您的密码",
+    "newPasswordLabel": "新密码",
+    "confirmPasswordLabel": "确认密码",
+    "submit": "重置密码",
+    "resetting": "重置中...",
+    "successMessage": "密码重置成功！正在跳转到登录页面...",
+    "passwordMismatch": "密码不匹配",
+    "passwordTooShort": "密码必须至少8个字符",
+    "invalidToken": "无效或过期的重置令牌",
+    "errorMessage": "发生错误，请重试。",
+    "invalidLink": "无效的重置链接",
+    "invalidLinkTitle": "无效的重置链接",
+    "requestNewLink": "请求新链接",
+    "backToLogin": "← 返回登录"
+  },
+  "about": {
+    "meta": {
+      "title": "关于 - 年度游戏",
+      "description": "发现年度游戏，这是一个独立平台，每位玩家都可以为自己的年度游戏投票。一人一票。"
+    },
+    "hero": {
+      "title": "年度游戏",
+      "subtitle": "每位玩家都能为自己的年度游戏投票的平台"
+    },
+    "independence": {
+      "title": "让每位玩家都有发言权",
+      "intro": "年度游戏是一个独立平台，将权力交还给玩家。这里没有封闭的评审团或加权投票：每个注册账号代表一票，每一票都具有同等分量。",
+      "freedom": "您可以自由投票给今年最打动您的游戏，无论是3A大作还是鲜为人知的独立游戏。重要的是您的体验。",
+      "community": "玩家社区共同决定哪款游戏真正配得上年度游戏的称号。"
+    },
+    "proposal": {
+      "title": "提议您的游戏和类别",
+      "intro": "年度游戏也是您创意的舞台。每位注册会员都可以积极为平台做出贡献：",
+      "games": {
+        "title": "游戏提议",
+        "description": "您可以提议最多5款希望在竞赛中看到的游戏。提交前，请通过搜索确认该游戏尚未存在。",
+        "validation": "每款提议的游戏都需经过验证：必须是当年发行的游戏，提供的图片必须符合我们的质量标准。"
+      },
+      "categories": {
+        "title": "类别提议",
+        "description": "您认为缺少某个类别？提议一个！每位会员可以建议1个自定义类别。",
+        "validation": "提议的类别也会由我们的团队验证，以确保其相关性。",
+        "limit": "最终投票将选出最多20个类别。"
+      }
+    },
+    "voting": {
+      "title": "投票与揭晓",
+      "opening": {
+        "title": "投票开启",
+        "description": "圣诞节前一个月，投票阶段正式开启。对于每个入选的类别，您可以从提名游戏中选择一款。"
+      },
+      "reveal": {
+        "title": "盛大揭晓",
+        "description": "圣诞节前一周，结果将现场公布。由社区选出的游戏将最终揭晓。",
+        "date": "确切日期将提前公布，确保没有人错过这一盛事！"
+      }
+    },
+    "values": {
+      "title": "为什么选择年度游戏？",
+      "items": [
+        {
+          "title": "独立",
+          "description": "没有产业影响，没有偏见的合作关系。只有玩家和他们的热情。"
+        },
+        {
+          "title": "民主",
+          "description": "一人一票。您的意见与其他任何人一样重要。"
+        },
+        {
+          "title": "透明",
+          "description": "规则清晰，验证流程公开，结果公开透明。"
+        },
+        {
+          "title": "社区驱动",
+          "description": "您不是旁观者，您是参与者。提议、投票，共同庆祝。"
+        }
+      ]
+    },
+    "cta": {
+      "title": "准备好发出您的声音了吗？",
+      "description": "加入数千名玩家，参与真正的年度游戏评选。",
+      "button": "创建我的账号"
+    }
+  },
+  "legal": {
+    "meta": {
+      "title": "法律声明 - 年度游戏",
+      "description": "年度游戏平台的法律信息。"
+    },
+    "title": "法律声明",
+    "lastUpdate": "最后更新：2025年1月",
+    "editor": {
+      "title": "1. 网站编辑者",
+      "projectName": "项目名称",
+      "nature": "性质",
+      "natureDesc": "独立非商业社区项目",
+      "contact": "联系方式"
+    },
+    "hosting": {
+      "title": "2. 托管",
+      "info": "本网站通过 Vercel Inc. 托管。数据按照行业标准安全存储。"
+    },
+    "data": {
+      "title": "3. 个人数据",
+      "collected": {
+        "title": "收集的数据：",
+        "items": [
+          "电子邮件地址（注册必需）",
+          "名字、姓氏和昵称（用户资料）",
+          "投票和游戏/类别提议"
+        ]
+      },
+      "usage": {
+        "title": "数据使用：",
+        "description": "您的数据仅用于平台运营：身份验证、投票管理和结果显示。我们绝不会出售或与第三方共享您的数据。"
+      },
+      "rights": {
+        "title": "您的权利：",
+        "description": "根据GDPR（通用数据保护条例），您有权访问、更正和删除您的数据。要行使这些权利，请通过以下地址联系我们。"
+      }
+    },
+    "cookies": {
+      "title": "4. Cookie",
+      "description": "本网站使用运营必需的Cookie：",
+      "types": [
+        "身份验证Cookie（维持您的登录会话）",
+        "语言偏好（记住您的语言选择）"
+      ]
+    },
+    "property": {
+      "title": "5. 知识产权",
+      "content": "网站内容（文本、设计、结构）受版权保护。未经授权的任何复制均被禁止。",
+      "gameImages": "电子游戏图像属于其各自的发行商，在批评和信息的框架内用于说明目的（合理使用）。"
+    },
+    "liability": {
+      "title": "6. 责任",
+      "description": "年度游戏是一个社区平台。我们尽一切努力确保服务可用性，但不能保证不会出现中断或错误。投票和结果是公开的，反映了社区的意见。"
+    },
+    "contact": {
+      "title": "需要联系我们？",
+      "description": "如有任何关于本法律声明或您个人数据的问题："
+    }
+  },
+  "footer": {
+    "rights": "版权所有",
+    "legal": "法律声明"
+  }
+}

@@ -1,15 +1,9 @@
 'use client';
 
+import { User } from '@/types/UserType';
 import { useEffect, useState } from 'react';
 
-interface User {
-  id: number;
-  firstName: string;
-  lastName: string;
-  email: string;
-  roles: string[];
-  isVerified: boolean;
-}
+
 
 function getCookie(name: string): string | null {
   if (typeof document === 'undefined') return null;

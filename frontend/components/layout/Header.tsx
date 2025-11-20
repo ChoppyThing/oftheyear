@@ -4,9 +4,12 @@ import Link from 'next/link';
 import { useState } from 'react';
 import AnimatedBackground from './AnimatedBackground';
 import UserButton from '../UserButton';
+import { Locale, defaultLocale } from '@/i18n.config';
+import LanguageSwitcher from '../LanguageSwitcher';
 
-export default function Header() {
+export default function Header({ locale, dict }: { locale: Locale; dict: any }) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const prefix = locale === defaultLocale ? '' : `/${locale}`;
 
   return (
     <header className="sticky top-0 z-50 w-full bg-[#0062bd] shadow-lg backdrop-blur-sm uppercase font-bold">
@@ -22,28 +25,29 @@ export default function Header() {
           {/* Navigation Links - Center (Desktop) */}
           <div className="hidden md:flex items-center space-x-16 flex-1 justify-center font-bold">
             <Link 
-              href="/" 
+              href={`${prefix}/`}
               className="text-white hover:text-blue-200 transition-colors duration-350 text-lg tracking-wider"
             >
-              Home
+              {dict.header.home}
             </Link>
             <Link 
-              href="/about" 
+              href={`${prefix}/about`}
               className="text-white hover:text-blue-200 transition-colors duration-350 text-lg tracking-wider"
             >
-              About
+              {dict.header.about}
             </Link>
             <Link 
-              href="/categories" 
+              href={`${prefix}/category`}
               className="text-white hover:text-blue-200 transition-colors duration-350 text-lg tracking-wider"
             >
-              Categories
+              {dict.header.categories}
             </Link>
           </div>
 
           {/* Login Button - Right (Desktop) */}
           <div className="hidden md:flex items-center flex-1 justify-end">
-            <UserButton />
+            <LanguageSwitcher currentLocale={locale} />
+            <UserButton dict={dict} />
           </div>
 
           {/* Mobile Menu Button */}
@@ -75,28 +79,29 @@ export default function Header() {
           <div className="md:hidden py-4 border-t border-blue-900">
             <div className="flex flex-col space-y-3 text-center">
               <Link 
-                href="/" 
+                href={`${prefix}/`}
                 className="text-white hover:text-blue-200 transition-colors duration-200 font-medium py-2"
                 onClick={() => setIsMenuOpen(false)}
               >
-                Home
+                {dict.header.home}
               </Link>
               <Link 
-                href="/about" 
+                href={`${prefix}/about`}
                 className="text-white hover:text-blue-200 transition-colors duration-200 font-medium py-2"
                 onClick={() => setIsMenuOpen(false)}
               >
-                About
+                {dict.header.about}
               </Link>
               <Link 
-                href="/categories" 
+                href={`${prefix}/categories`}
                 className="text-white hover:text-blue-200 transition-colors duration-200 font-medium py-2"
                 onClick={() => setIsMenuOpen(false)}
               >
-                Categories
+                {dict.header.categories}
               </Link>
               <div className="pt-2">
-                <UserButton />
+                <LanguageSwitcher currentLocale={locale} />
+                <UserButton dict={dict} />
               </div>
             </div>
           </div>

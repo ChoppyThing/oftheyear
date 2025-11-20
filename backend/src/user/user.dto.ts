@@ -1,4 +1,11 @@
-import { IsEmail, IsString, MinLength, IsNotEmpty, IsOptional, IsEnum } from 'class-validator';
+import {
+  IsEmail,
+  IsString,
+  MinLength,
+  IsNotEmpty,
+  IsOptional,
+  IsEnum,
+} from 'class-validator';
 import { Role } from './role.enum';
 import { Exclude, Expose } from 'class-transformer';
 
@@ -26,6 +33,10 @@ export class CreateUserDto {
   @IsOptional()
   @IsEnum(Role, { each: true })
   roles?: Role[];
+
+  @IsString()
+  @IsOptional()
+  locale?: string;
 }
 
 export class LoginDto {
@@ -91,4 +102,30 @@ export class UserResponseDto {
 
   @Expose()
   updatedAt: Date;
+}
+
+export class VerifyEmailDto {
+  @IsString()
+  @IsNotEmpty()
+  token: string;
+}
+
+export class ForgotPasswordDto {
+  @IsEmail()
+  @IsNotEmpty()
+  email: string;
+
+  @IsString()
+  @IsOptional()
+  locale?: string;
+}
+
+export class ResetPasswordDto {
+  @IsString()
+  @IsNotEmpty()
+  token: string;
+
+  @IsString()
+  @MinLength(8, { message: 'Password must be at least 8 characters long' })
+  newPassword: string;
 }
