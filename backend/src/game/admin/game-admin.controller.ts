@@ -9,12 +9,16 @@ import {
   UseGuards,
   HttpCode,
   Post,
+  UseInterceptors,
+  UploadedFile,
 } from '@nestjs/common';
+import { FileInterceptor } from '@nestjs/platform-express';
 import { GameAdminService } from './game-admin.service';
 import { CreateGameAdminDto, ListGamesAdminQueryDto, UpdateGameAdminDto } from './game-admin.dto';
 import { AdminGuard } from '../../auth/guards/admin.guard';
 import { User } from 'src/user/user.entity';
 import { CurrentUser } from 'src/auth/current-user.decorator';
+import { multerConfig } from 'src/common/config/multer.config';
 
 @Controller('admin/games')
 @UseGuards(AdminGuard)
@@ -40,11 +44,13 @@ export class GameAdminController {
   }
 
   @Post()
+  @UseInterceptors(FileInterceptor('image', multerConfig))
   async createGame(
     @Body() createGameDto: CreateGameAdminDto,
     @CurrentUser() user: User,
+    @UploadedFile() image?: Express.Multer.File,
   ) {
-    return this.gameAdminService.createGame(createGameDto, user);
+    return this.gameAdminService.createGame(createGameDto, user, image);
   }
 
   /**
@@ -52,8 +58,13 @@ export class GameAdminController {
    * PATCH /admin/games/:id
    */
   @Patch(':id')
-  async updateGame(@Param('id') id: number, @Body() dto: UpdateGameAdminDto) {
-    return this.gameAdminService.updateGame(id, dto);
+  @UseInterceptors(FileInterceptor('image', multerConfig))
+  async updateGame(
+    @Param('id') id: number,
+    @Body() dto: UpdateGameAdminDto,
+    @UploadedFile() image?: Express.Multer.File,
+  ) {
+    return this.gameAdminService.updateGame(id, dto, image);
   }
 
   /**

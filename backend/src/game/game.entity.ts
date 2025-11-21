@@ -27,7 +27,7 @@ export class Game {
   @Column('text', { nullable: true })
   description?: string;
 
-  @Column()
+  @Column({ nullable: true })
   image: string;
 
   @Column({ nullable: true })
@@ -42,6 +42,9 @@ export class Game {
     default: Status.Sent,
   })
   status: Status;
+
+  @Column()
+  year: number;
 
   @ManyToOne(() => User, { nullable: false })
   author: User;

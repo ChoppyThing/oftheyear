@@ -13,12 +13,14 @@ import {
 } from './game-admin.dto';
 import { Status } from '../status.enum';
 import { User } from 'src/user/user.entity';
+import { ImageService } from 'src/common/services/image.service';
 
 @Injectable()
 export class GameAdminService {
   constructor(
     @InjectRepository(Game)
-    private gameRepository: Repository<Game>,
+    private readonly gameRepository: Repository<Game>,
+    private readonly imageService: ImageService,
   ) {}
 
   /**
@@ -42,6 +44,14 @@ export class GameAdminService {
     const queryBuilder = this.gameRepository
       .createQueryBuilder('game')
       .leftJoinAndSelect('game.author', 'author')
+      .select([
+        'game',
+        'author.id',
+        'author.firstName',
+        'author.lastName',
+        'author.nickname',
+        'author.email',
+      ]); // ✅ Ne sélectionner que les champs nécessaires de l'auteur
 
     // Recherche globale
     if (search) {
@@ -111,50 +121,65 @@ export class GameAdminService {
   async getGameById(id: number): Promise<Game> {
     const game = await this.gameRepository.findOne({
       where: { id },
-      relations: ['author', 'categories'],
+      relations: ['author'],
     });
 
     if (!game) {
-      throw new NotFoundException('Game not found');
+      throw new NotFoundException(`Game with ID ${id} not found`);
     }
 
     return game;
   }
 
+  /**
+   * Créer un nouveau jeu
+   */
   async createGame(
-    createGameDto: CreateGameAdminDto,
-    user: User,
+    dto: CreateGameAdminDto,
+    author: User,
+    image?: Express.Multer.File,
   ): Promise<Game> {
+    let imagePath: string | undefined;
+
+    if (image) {
+      imagePath = await this.imageService.processGameImage(image.path);
+    }
+
     const game = this.gameRepository.create({
-      ...createGameDto,
-      author: user, // ← Ajouter l'auteur
+      ...dto,
+      author,
+      image: imagePath,
       status: Status.Validated,
     });
 
-    return this.gameRepository.save(game);
+    const savedGame = await this.gameRepository.save(game);
+
+    return savedGame;
   }
 
   /**
    * Mettre à jour un jeu
    */
-  async updateGame(id: number, dto: UpdateGameAdminDto): Promise<Game> {
+  async updateGame(
+    id: number,
+    dto: UpdateGameAdminDto,
+    image?: Express.Multer.File,
+  ): Promise<Game> {
     const game = await this.getGameById(id);
 
-    // Vérifier l'unicité du nom si modifié
-    if (dto.name && dto.name !== game.name) {
-      const existing = await this.gameRepository.findOne({
-        where: { name: dto.name },
-      });
-      if (existing) {
-        throw new BadRequestException('A game with this name already exists');
+    // ✅ Si nouvelle image, traiter et supprimer l'ancienne
+    if (image) {
+      if (game.image) {
+        await this.imageService.deleteImage(game.image).catch(() => {
+          // ✅ Ne pas bloquer si l'ancienne image n'existe pas
+          console.warn(`Could not delete old image: ${game.image}`);
+        });
       }
-      game.name = dto.name;
+      game.image = await this.imageService.processGameImage(image.path);
     }
 
-    if (dto.image) game.image = dto.image;
-    if (dto.developer) game.developer = dto.developer;
-    if (dto.editor) game.editor = dto.editor;
-    if (dto.status) game.status = dto.status;
+    // ✅ Mettre à jour les champs fournis
+    Object.assign(game, dto);
 
     return await this.gameRepository.save(game);
   }
@@ -164,20 +189,45 @@ export class GameAdminService {
    */
   async deleteGame(id: number): Promise<void> {
     const game = await this.getGameById(id);
+
+    // ✅ Supprimer l'image associée
+    if (game.image) {
+      await this.imageService.deleteImage(game.image).catch(() => {
+        console.warn(`Could not delete image: ${game.image}`);
+      });
+    }
+
     await this.gameRepository.remove(game);
   }
 
   /**
-   * Approuver un jeu (statut → APPROVED)
+   * Approuver un jeu (statut → VALIDATED)
    */
   async approveGame(id: number): Promise<Game> {
-    return this.updateGame(id, { status: Status.Validated });
+    const game = await this.getGameById(id);
+
+    if (game.status === Status.Validated) {
+      throw new BadRequestException('Game is already validated');
+    }
+
+    game.status = Status.Validated;
+    game.publishAt = new Date(); // ✅ Définir la date de publication
+
+    return await this.gameRepository.save(game);
   }
 
   /**
-   * Rejeter un jeu (statut → REJECTED)
+   * Rejeter un jeu (statut → MODERATED)
    */
   async rejectGame(id: number): Promise<Game> {
-    return this.updateGame(id, { status: Status.Moderated });
+    const game = await this.getGameById(id);
+
+    if (game.status === Status.Moderated) {
+      throw new BadRequestException('Game is already moderated');
+    }
+
+    game.status = Status.Moderated;
+
+    return await this.gameRepository.save(game);
   }
 }

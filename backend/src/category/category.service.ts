@@ -44,7 +44,7 @@ export class CategoryService {
   async findOne(id: number): Promise<Category> {
     const category = await this.categoryRepository.findOne({
       where: { id },
-      relations: ['author', 'games'],
+      relations: ['author'],
     });
 
     if (!category) {
@@ -57,7 +57,7 @@ export class CategoryService {
   async findBySlug(slug: string): Promise<Category> {
     const category = await this.categoryRepository.findOne({
       where: { slug },
-      relations: ['author', 'games'],
+      relations: ['author'],
     });
 
     if (!category) {

@@ -60,8 +60,22 @@ export class CreateGameAdminDto {
   description?: string;
 
   @IsOptional()
+  @IsString()
+  developer?: string;
+
+  @IsOptional()
+  @IsString()
+  editor?: string;
+
+  @IsOptional()
+  @IsEnum(Status)
+  status?: Status;
+
+/*
+  @IsOptional()
   @IsUrl()
   image?: string;
+*/
 
   @IsOptional()
   @Type(() => Date)
@@ -74,9 +88,13 @@ export class UpdateGameAdminDto {
   name?: string;
 
   @IsOptional()
+  @IsString()
+  description?: string;
+/*
+  @IsOptional()
   @IsUrl()
   image?: string;
-
+*/
   @IsOptional()
   @IsString()
   developer?: string;
