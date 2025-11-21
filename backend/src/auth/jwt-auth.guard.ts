@@ -6,6 +6,7 @@ import {
 } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { JwtService } from '@nestjs/jwt';
+import { ConfigService } from '@nestjs/config'; // ✅ Ajouter
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Request } from 'express';
@@ -17,6 +18,7 @@ export class JwtAuthGuard implements CanActivate {
   constructor(
     private reflector: Reflector,
     private jwtService: JwtService,
+    private configService: ConfigService, // ✅ Ajouter
     @InjectRepository(User)
     private userRepository: Repository<User>,
   ) {}
@@ -26,14 +28,14 @@ export class JwtAuthGuard implements CanActivate {
       context.getHandler(),
       context.getClass(),
     ]);
-    
+
     if (isPublic) {
       return true;
     }
 
     const req = context.switchToHttp().getRequest<Request>();
     const auth = req.headers['authorization'];
-    
+
     if (!auth) {
       throw new UnauthorizedException('Authorization header missing');
     }
@@ -44,12 +46,14 @@ export class JwtAuthGuard implements CanActivate {
     }
 
     const token = parts[1];
-    
+
     try {
-      // Vérifier et décoder le token
-      const payload = this.jwtService.verify(token) as any;
-      
-      // ✅ Récupérer l'utilisateur complet depuis la DB
+      // ✅ Vérifier avec le secret depuis .env
+      const payload = this.jwtService.verify(token, {
+        secret: this.configService.get<string>('JWT_SECRET'),
+      }) as any;
+
+      // Récupérer l'utilisateur complet depuis la DB
       const user = await this.userRepository.findOne({
         where: { id: payload.sub },
       });
@@ -58,11 +62,12 @@ export class JwtAuthGuard implements CanActivate {
         throw new UnauthorizedException('User not found');
       }
 
-      // ✅ Attacher l'entité User complète à la requête
+      // Attacher l'entité User complète à la requête
       (req as any).user = user;
-      
+
       return true;
     } catch (err) {
+      console.error('❌ Erreur JWT:', err.message); // ✅ Debug
       if (err instanceof UnauthorizedException) {
         throw err;
       }

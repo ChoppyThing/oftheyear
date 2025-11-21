@@ -1,6 +1,5 @@
 import { Injectable, CanActivate, ExecutionContext, ForbiddenException } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
-import { Role } from '../../user/role.enum';
 
 @Injectable()
 export class AdminGuard implements CanActivate {
@@ -10,11 +9,15 @@ export class AdminGuard implements CanActivate {
     const request = context.switchToHttp().getRequest();
     const user = request.user;
 
+    console.log('🔍 AdminGuard - User:', user);
+    console.log('🔍 AdminGuard - user.roles:', user?.roles); // ✅ Pluriel !
+
     if (!user) {
-      throw new ForbiddenException('Access denied');
+      throw new ForbiddenException('User not authenticated');
     }
 
-    if (!user.roles || !user.roles.includes(Role.Admin)) {
+    // ✅ Vérifier si 'admin' est dans le tableau roles
+    if (!user.roles || !user.roles.includes('admin')) {
       throw new ForbiddenException('Admin access required');
     }
 

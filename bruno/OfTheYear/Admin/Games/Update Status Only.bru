@@ -1,0 +1,26 @@
+meta {
+  name: Update Status Only
+  type: http
+  seq: 8
+}
+
+patch {
+  url: {{url}}/admin/games/1
+  body: json
+  auth: none
+}
+
+headers {
+  Content-Type: application/json
+  Authorization: Bearer {{token}}
+}
+
+body:json {
+  {
+    "status": "approved"
+  }
+}
+
+docs {
+  Change uniquement le statut sans toucher aux autres champs
+}

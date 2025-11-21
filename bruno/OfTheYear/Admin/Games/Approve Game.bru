@@ -1,0 +1,20 @@
+meta {
+  name: Approve Game
+  type: http
+  seq: 9
+}
+
+post {
+  url: {{url}}/admin/games/1/approve
+  body: none
+  auth: none
+}
+
+headers {
+  Content-Type: application/json
+  Authorization: Bearer {{token}}
+}
+
+docs {
+  Raccourci pour approuver un jeu (status → approved)
+}

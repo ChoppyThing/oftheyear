@@ -9,21 +9,39 @@ import {
   JoinTable,
   BeforeInsert,
   BeforeUpdate,
+  OneToMany,
+  Index,
 } from 'typeorm';
 import { User } from 'src/user/user.entity';
-import { Game } from 'src/game/game.entity';
 import { v4 as uuidv4 } from 'uuid';
+import { CategoryPhase } from './category-phase.enum';
+import { CategoryVote } from 'src/category-vote/category-vote.entity';
+import { CategoryNominee } from 'src/category-nominee/category-nominee.entity';
 
 @Entity()
+@Index(['name', 'year'], { unique: true })
 export class Category {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ unique: true })
+  @Column()
   name: string;
+
+  @Column({ type: 'text', nullable: true })
+  description: string;
 
   @Column({ unique: true })
   slug: string;
+
+  @Column({ type: 'int' })
+  year: number;
+
+  @Column({
+    type: 'enum',
+    enum: CategoryPhase,
+    default: CategoryPhase.Nomination,
+  })
+  phase: CategoryPhase; // Actual phase
 
   @CreateDateColumn()
   createdAt: Date;
@@ -34,13 +52,11 @@ export class Category {
   @ManyToOne(() => User, { nullable: false })
   author: User;
 
-  @ManyToMany(() => Game, (game) => game.categories)
-  @JoinTable({
-    name: 'game_categories',
-    joinColumn: { name: 'categoryId', referencedColumnName: 'id' },
-    inverseJoinColumn: { name: 'gameId', referencedColumnName: 'id' },
-  })
-  games: Game[];
+  @OneToMany(() => CategoryVote, (vote) => vote.category)
+  votes: CategoryVote[]; // Phase 1
+
+  @OneToMany(() => CategoryNominee, (nominee) => nominee.category)
+  nominees: CategoryNominee[]; // Phase 2
 
   @BeforeInsert()
   @BeforeUpdate()

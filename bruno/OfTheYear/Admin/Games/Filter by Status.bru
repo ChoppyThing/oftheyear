@@ -1,0 +1,25 @@
+meta {
+  name: Filter by Status
+  type: http
+  seq: 3
+}
+
+get {
+  url: {{url}}/admin/games?status=sent
+  body: none
+  auth: none
+}
+
+headers {
+  Content-Type: application/json
+  Authorization: Bearer {{token}}
+}
+
+params:query {
+  status: sent
+}
+
+docs {
+  Filtre les jeux par statut
+  Valeurs possibles : sent, approved, rejected
+}

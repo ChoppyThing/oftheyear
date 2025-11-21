@@ -1,0 +1,31 @@
+meta {
+  name: Update Game
+  type: http
+  seq: 7
+}
+
+patch {
+  url: {{url}}/admin/games/1
+  body: json
+  auth: none
+}
+
+headers {
+  Content-Type: application/json
+  Authorization: Bearer {{token}}
+}
+
+body:json {
+  {
+    "name": "The Legend of Zelda: Breath of the Wild",
+    "developer": "Nintendo EPD",
+    "editor": "Nintendo",
+    "image": "https://example.com/zelda.jpg",
+    "status": "approved"
+  }
+}
+
+docs {
+  Modifie les informations d'un jeu
+  Tous les champs sont optionnels
+}

@@ -1,0 +1,20 @@
+meta {
+  name: Get Game by ID
+  type: http
+  seq: 6
+}
+
+get {
+  url: {{url}}/admin/games/1
+  body: none
+  auth: none
+}
+
+headers {
+  Content-Type: application/json
+  Authorization: Bearer {{token}}
+}
+
+docs {
+  Détails complets d'un jeu avec auteur et catégories
+}

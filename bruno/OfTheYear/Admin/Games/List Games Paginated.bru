@@ -1,0 +1,25 @@
+meta {
+  name: List Games Paginated
+  type: http
+  seq: 2
+}
+
+get {
+  url: {{url}}/admin/games?page=1&limit=5
+  body: none
+  auth: none
+}
+
+headers {
+  Content-Type: application/json
+  Authorization: Bearer {{token}}
+}
+
+params:query {
+  page: 1
+  limit: 5
+}
+
+docs {
+  Liste paginée : 5 jeux par page
+}

@@ -1,0 +1,16 @@
+meta {
+  name: Delete Category (Admin)
+  type: http
+  seq: 5
+}
+
+delete {
+  url: {{url}}/admin/category/1
+  body: none
+  auth: none
+}
+
+headers {
+  Content-Type: application/json
+  Authorization: Bearer {{token}}
+}
