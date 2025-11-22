@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { gameAdminService } from '@/services/admin/gameAdminService';
 import { FaTimes } from 'react-icons/fa';
 import { Game, GameStatus } from '@/types/GameType';
+import ImageUpload from './project/ImageUpload';
 
 interface EditGameModalProps {
   game: Game;
@@ -14,11 +15,13 @@ interface EditGameModalProps {
 
 export default function EditGameModal({ game, isOpen, onClose, onSuccess }: EditGameModalProps) {
   const [loading, setLoading] = useState(false);
+  const [imageFile, setImageFile] = useState<File | null>(null);
+  const [removeImage, setRemoveImage] = useState(false);
   const [formData, setFormData] = useState({
     name: game.name,
-    developer: game.developer,
-    editor: game.editor,
-    image: game.image,
+    developer: game.developer || '',
+    editor: game.editor || '',
+    description: game.description || '',
     status: game.status,
   });
 
@@ -29,7 +32,20 @@ export default function EditGameModal({ game, isOpen, onClose, onSuccess }: Edit
     setLoading(true);
 
     try {
-      await gameAdminService.update(game.id, formData);
+      const submitData = new FormData();
+      submitData.append('name', formData.name);
+      if (formData.developer) submitData.append('developer', formData.developer);
+      if (formData.editor) submitData.append('editor', formData.editor);
+      if (formData.description) submitData.append('description', formData.description);
+      submitData.append('status', formData.status);
+
+      if (imageFile) {
+        submitData.append('image', imageFile);
+      } else if (removeImage) {
+        submitData.append('removeImage', 'true');
+      }
+
+      await gameAdminService.update(game.id, submitData);
       alert('Jeu modifié avec succès');
       onSuccess();
       onClose();
@@ -57,7 +73,7 @@ export default function EditGameModal({ game, isOpen, onClose, onSuccess }: Edit
         <form onSubmit={handleSubmit} className="p-6 space-y-4">
           <div>
             <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-1">
-              Nom du jeu
+              Nom du jeu *
             </label>
             <input
               id="name"
@@ -70,46 +86,57 @@ export default function EditGameModal({ game, isOpen, onClose, onSuccess }: Edit
           </div>
 
           <div>
-            <label htmlFor="developer" className="block text-sm font-medium text-gray-700 mb-1">
-              Développeur
+            <label htmlFor="description" className="block text-sm font-medium text-gray-700 mb-1">
+              Description
             </label>
-            <input
-              id="developer"
-              type="text"
-              value={formData.developer}
-              onChange={(e) => setFormData({ ...formData, developer: e.target.value })}
+            <textarea
+              id="description"
+              value={formData.description}
+              onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+              rows={4}
               className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-              required
             />
           </div>
 
-          <div>
-            <label htmlFor="editor" className="block text-sm font-medium text-gray-700 mb-1">
-              Éditeur
-            </label>
-            <input
-              id="editor"
-              type="text"
-              value={formData.editor}
-              onChange={(e) => setFormData({ ...formData, editor: e.target.value })}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-              required
-            />
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <label htmlFor="developer" className="block text-sm font-medium text-gray-700 mb-1">
+                Développeur
+              </label>
+              <input
+                id="developer"
+                type="text"
+                value={formData.developer}
+                onChange={(e) => setFormData({ ...formData, developer: e.target.value })}
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              />
+            </div>
+
+            <div>
+              <label htmlFor="editor" className="block text-sm font-medium text-gray-700 mb-1">
+                Éditeur
+              </label>
+              <input
+                id="editor"
+                type="text"
+                value={formData.editor}
+                onChange={(e) => setFormData({ ...formData, editor: e.target.value })}
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              />
+            </div>
           </div>
 
-          <div>
-            <label htmlFor="image" className="block text-sm font-medium text-gray-700 mb-1">
-              URL de l'image
-            </label>
-            <input
-              id="image"
-              type="url"
-              value={formData.image}
-              onChange={(e) => setFormData({ ...formData, image: e.target.value })}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-              required
-            />
-          </div>
+          <ImageUpload
+            currentImage={game.image}
+            onImageSelect={(file) => {
+              setImageFile(file);
+              setRemoveImage(false);
+            }}
+            onImageRemove={() => {
+              setImageFile(null);
+              setRemoveImage(true);
+            }}
+          />
 
           <div>
             <label htmlFor="status" className="block text-sm font-medium text-gray-700 mb-1">
@@ -122,8 +149,8 @@ export default function EditGameModal({ game, isOpen, onClose, onSuccess }: Edit
               className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             >
               <option value={GameStatus.Sent}>En attente</option>
-              <option value={GameStatus.Validated}>Approuvé</option>
-              <option value={GameStatus.Moderated}>Rejeté</option>
+              <option value={GameStatus.Validated}>Validé</option>
+              <option value={GameStatus.Moderated}>Modéré</option>
             </select>
           </div>
 

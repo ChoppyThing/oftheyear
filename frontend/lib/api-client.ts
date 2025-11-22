@@ -2,6 +2,7 @@ const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000';
 
 interface RequestOptions extends RequestInit {
   params?: Record<string, any>;
+  isFormData?: boolean; // ✅ Flag pour indiquer si c'est du FormData
 }
 
 class ApiClient {
@@ -13,29 +14,35 @@ class ApiClient {
 
   private getTokenFromCookies(): string | null {
     if (typeof window === 'undefined') return null;
-    
+
     const value = `; ${document.cookie}`;
     const parts = value.split(`; authToken=`);
-    
+
     if (parts.length === 2) {
       return parts.pop()?.split(';').shift() || null;
     }
-    
+
     return null;
   }
 
-  private getAuthHeaders(): HeadersInit {
+  private getAuthHeaders(isFormData = false): HeadersInit {
     const token = this.getTokenFromCookies();
-    
-    return {
-      'Content-Type': 'application/json',
+
+    const headers: HeadersInit = {
       ...(token && { Authorization: `Bearer ${token}` }),
     };
+
+    // ✅ Ne pas ajouter Content-Type pour FormData (fetch le fait automatiquement)
+    if (!isFormData) {
+      headers['Content-Type'] = 'application/json';
+    }
+
+    return headers;
   }
 
   private buildUrl(endpoint: string, params?: Record<string, any>): string {
     const url = new URL(`${this.baseUrl}${endpoint}`);
-    
+
     if (params) {
       Object.entries(params).forEach(([key, value]) => {
         if (value !== undefined && value !== null && value !== '') {
@@ -43,20 +50,20 @@ class ApiClient {
         }
       });
     }
-    
+
     return url.toString();
   }
 
   async request<T>(endpoint: string, options: RequestOptions = {}): Promise<T> {
-    const { params, ...fetchOptions } = options;
-    
+    const { params, isFormData, ...fetchOptions } = options;
+
     const url = this.buildUrl(endpoint, params);
-    
+
     const response = await fetch(url, {
       ...fetchOptions,
       credentials: 'include',
       headers: {
-        ...this.getAuthHeaders(),
+        ...this.getAuthHeaders(isFormData), // ✅ Passe le flag FormData
         ...fetchOptions.headers,
       },
     });
@@ -78,18 +85,24 @@ class ApiClient {
   }
 
   async post<T>(endpoint: string, data?: any, options?: RequestOptions): Promise<T> {
+    const isFormData = data instanceof FormData;
+
     return this.request<T>(endpoint, {
       ...options,
       method: 'POST',
-      body: data ? JSON.stringify(data) : undefined,
+      body: isFormData ? data : (data ? JSON.stringify(data) : undefined), // ✅ Gère FormData
+      isFormData,
     });
   }
 
   async patch<T>(endpoint: string, data?: any, options?: RequestOptions): Promise<T> {
+    const isFormData = data instanceof FormData;
+
     return this.request<T>(endpoint, {
       ...options,
       method: 'PATCH',
-      body: data ? JSON.stringify(data) : undefined,
+      body: isFormData ? data : (data ? JSON.stringify(data) : undefined), // ✅ Gère FormData
+      isFormData,
     });
   }
 

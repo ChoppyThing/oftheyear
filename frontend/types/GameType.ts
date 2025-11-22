@@ -7,9 +7,10 @@ export enum GameStatus {
 export interface Game {
   id: number;
   name: string;
-  image: string;
-  developer: string;
-  editor: string;
+  image?: string;
+  description?: string;
+  developer?: string;
+  editor?: string;
   status: GameStatus;
   slug: string;
   createdAt: string;
@@ -26,8 +27,10 @@ export interface Game {
 
 export interface GamesListResponse {
   data: Game[];
-  total: number;
-  page: number;
-  limit: number;
-  totalPages: number;
+  pagination: {
+    page: number;
+    limit: number;
+    total: number;
+    totalPages: number;
+  };
 }

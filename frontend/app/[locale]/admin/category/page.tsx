@@ -5,10 +5,10 @@ import { categoryAdminService } from '@/services/admin/categoryAdminService';
 import { FaEdit, FaTrash, FaSearch, FaPlus } from 'react-icons/fa';
 import { Category, CategoriesListResponse, CategoryPhase } from '@/types/CategoryType';
 import { formatDate } from '@/lib/date-utils';
-import CategoryPhaseBadge from '@/components/admin/Category/CategoryPhaseBadge';
-import CreateCategoryModal from '@/components/admin/Category/CreateCategoryModal';
-import EditCategoryModal from '@/components/admin/Category/EditCategoryModal';
-import DeleteCategoryModal from '@/components/admin/Category/DeleteCategoryModal';
+import CategoryPhaseBadge from '@/components/admin/category/CategoryPhaseBadge';
+import CreateCategoryModal from '@/components/admin/category/CreateCategoryModal';
+import EditCategoryModal from '@/components/admin/category/EditCategoryModal';
+import DeleteCategoryModal from '@/components/admin/category/DeleteCategoryModal';
 
 export default function AdminCategoriesPage() {
   const [data, setData] = useState<CategoriesListResponse | null>(null);

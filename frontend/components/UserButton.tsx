@@ -84,7 +84,7 @@ export default function UserButton({ dict }: { dict: any }) {
             </div>
 
             <Link
-              href={`/${locale}/propose/game`}
+              href={`/${locale}/user/games/propose`}
               className="flex items-center gap-3 px-4 py-2 text-sm text-sky-500 hover:bg-gray-100 transition-colors"
               onClick={() => setIsDropdownOpen(false)}
             >

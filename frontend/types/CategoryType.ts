@@ -7,19 +7,17 @@ export enum CategoryPhase {
 export interface Category {
   id: number;
   name: string;
+  description?: string; 
   slug: string;
-  year: number;
   phase: CategoryPhase;
+  year: number;
+  icon?: string;
+  gamesCount?: number;
   createdAt: string;
   updatedAt: string;
   author: {
     id: number;
-    pseudo: string;
-    email: string;
-  };
-  _count?: {
-    votes: number;
-    nominees: number;
+    username: string;
   };
 }
 

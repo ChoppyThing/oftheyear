@@ -1,4 +1,4 @@
-import CategoryStatsClient from '@/components/admin/Category/stats/CategoryStatsClient';
+import CategoryStatsClient from '@/components/admin/category/stats/CategoryStatsClient';
 import { Suspense } from 'react';
 
 export default async function CategoryStatsPage({

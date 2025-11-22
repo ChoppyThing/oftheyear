@@ -1,40 +1,61 @@
 import { apiClient } from '@/lib/api-client';
-import { Game, GamesListResponse, GameStatus } from '@/types/GameType';
+import { Game, GameStatus } from '@/types/GameType';
 
-interface ListGamesParams {
-  page?: number;
-  limit?: number;
-  search?: string;
-  name?: string;
-  developer?: string;
-  editor?: string;
-  status?: GameStatus;
-  authorId?: number;
-  sortBy?: string;
-  sortOrder?: 'ASC' | 'DESC';
-}
-
-interface CreateGameData {
+export interface CreateGameData {
   name: string;
   description?: string;
-  imageUrl?: string;
-  publishedAt?: string;
+  developer?: string;
+  editor?: string;
+  image?: string;
+  status?: GameStatus;
+}
+
+export interface UpdateGameData {
+  name?: string;
+  description?: string;
+  developer?: string;
+  editor?: string;
+  image?: string;
+  status?: GameStatus;
+  removeImage?: boolean;
+}
+
+export interface GamesListResponse {
+  data: Game[];
+  pagination: {
+    page: number;
+    limit: number;
+    total: number;
+    totalPages: number;
+  };
 }
 
 export const gameAdminService = {
-  list: async (params: ListGamesParams = {}): Promise<GamesListResponse> => {
-    return apiClient.get('/admin/games', { params });
+  list: async (params?: {
+    page?: number;
+    limit?: number;
+    status?: GameStatus;
+    search?: string;
+  }): Promise<GamesListResponse> => {
+    const queryParams = new URLSearchParams();
+    if (params?.page) queryParams.append('page', params.page.toString());
+    if (params?.limit) queryParams.append('limit', params.limit.toString());
+    if (params?.status) queryParams.append('status', params.status);
+    if (params?.search) queryParams.append('search', params.search);
+
+    const query = queryParams.toString();
+    return apiClient.get(`/admin/games${query ? `?${query}` : ''}`);
   },
 
   getById: async (id: number): Promise<Game> => {
     return apiClient.get(`/admin/games/${id}`);
   },
 
-  create: async (data: CreateGameData): Promise<Game> => {
+  create: async (data: CreateGameData | FormData): Promise<Game> => {
     return apiClient.post('/admin/games', data);
   },
 
-  update: async (id: number, data: Partial<Game>): Promise<Game> => {
+  update: async (id: number, data: UpdateGameData | FormData): Promise<Game> => {
     return apiClient.patch(`/admin/games/${id}`, data);
   },
 

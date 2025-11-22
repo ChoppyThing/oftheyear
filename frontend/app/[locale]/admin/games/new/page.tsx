@@ -3,16 +3,19 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { gameAdminService } from '@/services/admin/gameAdminService';
+import ImageUpload from '@/components/admin/project/ImageUpload';
 
 export default function NewGamePage() {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [imageFile, setImageFile] = useState<File | null>(null);
   const [formData, setFormData] = useState({
     name: '',
     description: '',
-    image: '',
-    publishedAt: '',
+    developer: '',
+    editor: '',
+    status: 'sent' as const,
   });
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -21,7 +24,18 @@ export default function NewGamePage() {
     setLoading(true);
 
     try {
-      await gameAdminService.create(formData);
+      const submitData = new FormData();
+      submitData.append('name', formData.name);
+      if (formData.description) submitData.append('description', formData.description);
+      if (formData.developer) submitData.append('developer', formData.developer);
+      if (formData.editor) submitData.append('editor', formData.editor);
+      submitData.append('status', formData.status);
+      
+      if (imageFile) {
+        submitData.append('image', imageFile);
+      }
+
+      await gameAdminService.create(submitData);
       router.push('/admin/games');
     } catch (err: any) {
       setError(err.message || 'Une erreur est survenue');
@@ -30,7 +44,7 @@ export default function NewGamePage() {
     }
   };
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     setFormData(prev => ({
       ...prev,
       [e.target.name]: e.target.value,
@@ -79,33 +93,56 @@ export default function NewGamePage() {
             />
           </div>
 
-          <div>
-            <label htmlFor="image" className="block text-sm font-medium text-gray-700 mb-2">
-              URL de l'image
-            </label>
-            <input
-              type="url"
-              id="image"
-              name="image"
-              value={formData.image}
-              onChange={handleChange}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <label htmlFor="developer" className="block text-sm font-medium text-gray-700 mb-2">
+                Développeur
+              </label>
+              <input
+                type="text"
+                id="developer"
+                name="developer"
+                value={formData.developer}
+                onChange={handleChange}
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              />
+            </div>
+
+            <div>
+              <label htmlFor="editor" className="block text-sm font-medium text-gray-700 mb-2">
+                Éditeur
+              </label>
+              <input
+                type="text"
+                id="editor"
+                name="editor"
+                value={formData.editor}
+                onChange={handleChange}
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              />
+            </div>
           </div>
 
           <div>
-            <label htmlFor="publishedAt" className="block text-sm font-medium text-gray-700 mb-2">
-              Date de publication
+            <label htmlFor="status" className="block text-sm font-medium text-gray-700 mb-2">
+              Statut
             </label>
-            <input
-              type="date"
-              id="publishedAt"
-              name="publishedAt"
-              value={formData.publishedAt}
+            <select
+              id="status"
+              name="status"
+              value={formData.status}
               onChange={handleChange}
               className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
+            >
+              <option value="sent">En attente</option>
+              <option value="validated">Validé</option>
+              <option value="moderated">Modéré</option>
+            </select>
           </div>
+
+          <ImageUpload
+            onImageSelect={setImageFile}
+          />
 
           <div className="flex gap-4">
             <button
