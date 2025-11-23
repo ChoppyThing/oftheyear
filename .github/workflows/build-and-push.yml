@@ -64,8 +64,11 @@ jobs:
           port: ${{ secrets.SERVER_SSH_PORT || '22' }}
           script: |
             set -e
+            # allow configurable deploy dir (default /opt/oftheyear/deploy)
+            DEPLOY_DIR=${{ env.DEPLOY_DIR:-/opt/oftheyear/deploy }}
+            echo "Using deploy dir: $DEPLOY_DIR"
             # go to the deploy dir on the server
-            cd /opt/oftheyear/deploy
+            cd "$DEPLOY_DIR"
             # load .env.production if present into environment for docker compose
             if [ -f .env.production ]; then export $(grep -v '^#' .env.production | xargs); fi
             docker compose pull || true
