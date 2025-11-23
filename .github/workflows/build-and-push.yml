@@ -80,3 +80,26 @@ jobs:
             docker compose up -d --remove-orphans
             # attempt to run migrations (no-op if command undefined)
             docker compose exec -T backend npm run typeorm:migration:run || true
+
+  diagnose:
+    runs-on: ubuntu-latest
+    needs: []
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Diagnose: show frontend tree and config
+        run: |
+          echo "=== node & npm versions ==="
+          node -v || true
+          npm -v || true
+          echo "\n=== frontend top-level files ==="
+          ls -la frontend || true
+          echo "\n=== tsconfig.json ==="
+          sed -n '1,200p' frontend/tsconfig.json || echo '(no tsconfig)'
+          echo "\n=== next.config.js ==="
+          sed -n '1,200p' frontend/next.config.js || echo '(no next.config.js)'
+          echo "\n=== components admin tree ==="
+          find frontend/components/admin -maxdepth 4 -type f -print || echo '(no admin components)'
+          echo "\n=== sample import grep (CategoryStatsClient) ==="
+          git grep -n "CategoryStatsClient" || echo '(no grep matches)'
