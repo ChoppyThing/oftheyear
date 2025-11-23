@@ -10,20 +10,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: CI debug: list build context for frontend
-        run: |
-          printf '=== repo root files ===\n'
-          ls -la
-          printf '\n=== .dockerignore (if any) ===\n'
-          if [ -f .dockerignore ]; then sed -n '1,200p' .dockerignore; else printf '(no .dockerignore)\n'; fi
-          printf '\n=== git-tracked files under frontend/components/admin/category ===\n'
-          git ls-files | grep '^frontend/components/admin/category' || printf '(no tracked files matched)\n'
-          printf '\n=== host filesystem: frontend/components/admin/category ===\n'
-          ls -la frontend/components/admin/category || printf '(path missing)\n'
-          printf '\n=== frontend/Dockerfile (head) ===\n'
-          sed -n '1,200p' frontend/Dockerfile || printf '(no frontend/Dockerfile)\n'
-          printf '\n=== sample frontend tree (top) ===\n'
-          find frontend -maxdepth 3 -type f -print | head -n 200 || true
+
 
       - name: Set lowercase repo owner
         run: echo "OWNER_LOWER=$(echo '${{ github.repository_owner }}' | tr '[:upper:]' '[:lower:]')" >> $GITHUB_ENV
