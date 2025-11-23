@@ -83,23 +83,22 @@ jobs:
 
   diagnose:
     runs-on: ubuntu-latest
-    needs: []
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
       - name: Diagnose: show frontend tree and config
         run: |
-          echo "=== node & npm versions ==="
+          printf '=== node & npm versions ===\n'
           node -v || true
           npm -v || true
-          echo "\n=== frontend top-level files ==="
+          printf '\n=== frontend top-level files ===\n'
           ls -la frontend || true
-          echo "\n=== tsconfig.json ==="
-          sed -n '1,200p' frontend/tsconfig.json || echo '(no tsconfig)'
-          echo "\n=== next.config.js ==="
-          sed -n '1,200p' frontend/next.config.js || echo '(no next.config.js)'
-          echo "\n=== components admin tree ==="
-          find frontend/components/admin -maxdepth 4 -type f -print || echo '(no admin components)'
-          echo "\n=== sample import grep (CategoryStatsClient) ==="
-          git grep -n "CategoryStatsClient" || echo '(no grep matches)'
+          printf '\n=== tsconfig.json ===\n'
+          sed -n '1,200p' frontend/tsconfig.json || printf '(no tsconfig)\n'
+          printf '\n=== next.config.js ===\n'
+          sed -n '1,200p' frontend/next.config.js || printf '(no next.config.js)\n'
+          printf '\n=== components admin tree ===\n'
+          find frontend/components/admin -maxdepth 4 -type f -print || printf '(no admin components)\n'
+          printf '\n=== sample import grep (CategoryStatsClient) ===\n'
+          git grep -n "CategoryStatsClient" || printf '(no grep matches)\n'
