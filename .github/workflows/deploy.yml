@@ -14,13 +14,13 @@ jobs:
 
       - name: Deploy via SSH
         uses: appleboy/ssh-action@v0.1.8
+        env:
+          DEPLOY_DIR: /opt/oftheyear/deploy
         with:
           host: ${{ secrets.SERVER_HOST }}
           username: ${{ secrets.SERVER_USER }}
           key: ${{ secrets.SERVER_SSH_KEY }}
           port: ${{ secrets.SERVER_SSH_PORT }}
-          env:
-            DEPLOY_DIR: /opt/oftheyear/deploy
           script: |
             set -e
             echo "Using deploy dir: ${DEPLOY_DIR}"
