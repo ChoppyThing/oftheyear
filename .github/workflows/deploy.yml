@@ -19,12 +19,16 @@ jobs:
           username: ${{ secrets.SERVER_USER }}
           key: ${{ secrets.SERVER_SSH_KEY }}
           port: ${{ secrets.SERVER_SSH_PORT }}
+          env:
+            DEPLOY_DIR: /opt/oftheyear/deploy
           script: |
             set -e
-            cd /srv/oftheyear/deploy
+            echo "Using deploy dir: ${DEPLOY_DIR}"
+            # go to the deploy dir on the server (defaults to /opt/oftheyear/deploy)
+            cd "${DEPLOY_DIR}"
             # export env from .env.production if present
-            if [ -f .env.production ]; then export $(cat .env.production | xargs); fi
-            docker compose pull
+            if [ -f .env.production ]; then export $(grep -v '^#' .env.production | xargs); fi
+            docker compose pull || true
             docker compose up -d --remove-orphans
             # optional: run migrations inside backend container
             docker compose exec -T backend npm run typeorm:migration:run || true
