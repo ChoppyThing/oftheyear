@@ -22,12 +22,8 @@ server {
     proxy_set_header X-Forwarded-Proto $scheme;
     proxy_set_header X-Forwarded-Host $host;
     
-    # Pass through CORS headers from backend (NestJS handles CORS)
-    # Remove Nginx CORS to let backend control it
-    proxy_hide_header Access-Control-Allow-Origin;
-    proxy_hide_header Access-Control-Allow-Methods;
-    proxy_hide_header Access-Control-Allow-Headers;
-    proxy_hide_header Access-Control-Allow-Credentials;
+    # Don't hide CORS headers - let backend handle them
+    # (Remove the proxy_hide_header lines that were blocking CORS)
   }
 
   client_max_body_size 16M;
