@@ -35,6 +35,9 @@ jobs:
           push: true
           platforms: linux/amd64,linux/arm64
           tags: ghcr.io/choppything/oftheyear-frontend:sha-${{ github.sha }}
+          build-args: |
+            NEXT_PUBLIC_API_URL=https://api.oftheyear.eu
+            NEXT_PUBLIC_HOST=https://oftheyear.eu
 
       - name: Build and push backend
         uses: docker/build-push-action@v4

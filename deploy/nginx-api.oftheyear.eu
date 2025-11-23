@@ -1,0 +1,36 @@
+# Nginx configuration for api.oftheyear.eu
+# This file should be placed at /etc/nginx/sites-available/api.oftheyear.eu
+# and symlinked to /etc/nginx/sites-enabled/
+#
+# Installation commands:
+#   sudo cp this_file /etc/nginx/sites-available/api.oftheyear.eu
+#   sudo ln -sf /etc/nginx/sites-available/api.oftheyear.eu /etc/nginx/sites-enabled/
+#   sudo nginx -t && sudo systemctl reload nginx
+#   sudo certbot --nginx -d api.oftheyear.eu
+
+server {
+  server_name api.oftheyear.eu;
+
+  # Proxy all requests to backend on 127.0.0.1:7001
+  location / {
+    # Proxy headers
+    proxy_pass http://127.0.0.1:7001;
+    proxy_http_version 1.1;
+    proxy_set_header Host $host;
+    proxy_set_header X-Real-IP $remote_addr;
+    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    proxy_set_header X-Forwarded-Proto $scheme;
+    proxy_set_header X-Forwarded-Host $host;
+    
+    # Pass through CORS headers from backend (NestJS handles CORS)
+    # Remove Nginx CORS to let backend control it
+    proxy_hide_header Access-Control-Allow-Origin;
+    proxy_hide_header Access-Control-Allow-Methods;
+    proxy_hide_header Access-Control-Allow-Headers;
+    proxy_hide_header Access-Control-Allow-Credentials;
+  }
+
+  client_max_body_size 16M;
+
+  listen 80;
+}

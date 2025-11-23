@@ -11,9 +11,26 @@ async function bootstrap() {
   const configService = app.get(ConfigService);
 
   const frontendUrl = configService.get<string>('FRONTEND_URL') || 'http://localhost:3001';
+  
+  // Allow both production frontend domains
+  const allowedOrigins = [
+    frontendUrl,
+    'https://oftheyear.eu',
+    'https://game.oftheyear.eu',
+    'http://localhost:3001', // dev
+  ];
 
   app.enableCors({
-    origin: frontendUrl,
+    origin: (origin, callback) => {
+      // Allow requests with no origin (like mobile apps, curl, Postman)
+      if (!origin) return callback(null, true);
+      
+      if (allowedOrigins.indexOf(origin) !== -1) {
+        callback(null, true);
+      } else {
+        callback(new Error('Not allowed by CORS'));
+      }
+    },
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization', 'Accept'],
