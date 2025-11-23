@@ -25,6 +25,15 @@ export interface Category {
   author: {
     id: number;
     username: string;
+    // these fields are optional and provided by some API responses
+    pseudo?: string;
+    email?: string;
+  };
+
+  // optional counts returned by some endpoints (e.g. _count.votes, _count.nominees)
+  _count?: {
+    votes?: number;
+    nominees?: number;
   };
 }
 

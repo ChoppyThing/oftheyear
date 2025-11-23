@@ -1,5 +1,4 @@
 import { Locale, defaultLocale, locales } from '@/i18n.config';
-import { cookies } from 'next/headers';
 
 const dictionaries: Record<Locale, () => Promise<any>> = {
   en: () => import('@/locales/en.json').then((module) => module.default),
@@ -8,7 +7,7 @@ const dictionaries: Record<Locale, () => Promise<any>> = {
   zh: () => import('@/locales/zh.json').then((module) => module.default),
 };
 
-export const getDictionary = async (localeInput?: any) => {
+export const getDictionary = async (localeInput?: any): Promise<any> => {
   // Support flexible inputs: string locale, object { locale }, or Promise that resolves to either
   try {
     if (localeInput && typeof localeInput.then === 'function') {
@@ -27,15 +26,24 @@ export const getDictionary = async (localeInput?: any) => {
 
     let loc = (localeStr && (locales as readonly string[]).includes(localeStr)) ? (localeStr as Locale) : undefined;
 
-    // If no locale from input, try cookie (server-side)
+    // If no locale from input, try cookie (server-side only).
+    // Avoid importing `next/headers` at module top-level because that makes
+    // this module server-only and breaks builds when this file is imported
+    // by client-side code. Do a dynamic import only when running on server.
     if (!loc) {
-      try {
-        const cookieLocale = cookies().get('NEXT_LOCALE')?.value;
-        if (cookieLocale && (locales as readonly string[]).includes(cookieLocale)) {
-          loc = cookieLocale as Locale;
+      if (typeof window === 'undefined') {
+        try {
+          // dynamic import so Turbopack/Next doesn't treat this file as server-only
+          const nh = await import('next/headers');
+          const maybeCookies = nh.cookies();
+          const cookiesObj = (maybeCookies && typeof (maybeCookies as any).then === 'function') ? await (maybeCookies as Promise<any>) : maybeCookies;
+          const cookieLocale = cookiesObj?.get?.('NEXT_LOCALE')?.value;
+          if (cookieLocale && (locales as readonly string[]).includes(cookieLocale)) {
+            loc = cookieLocale as Locale;
+          }
+        } catch (e) {
+          // ignore: if import or cookies() fails, we'll fallback to defaultLocale
         }
-      } catch (e) {
-        // ignore: cookies() may fail in non-server context
       }
     }
 

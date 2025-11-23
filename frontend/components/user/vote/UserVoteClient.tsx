@@ -54,7 +54,7 @@ export default function UserVoteClient({ dict }: { dict: any }) {
           router.push('/user/vote/finished');
           return;
         }
-        nextCategory = fallback || null;
+        nextCategory = fallback;
       }
 
       if (nextCategory) {
