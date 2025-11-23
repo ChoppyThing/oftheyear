@@ -1,0 +1,38 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:15
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    volumes:
+      - ${POSTGRES_DATA_DIR}:/var/lib/postgresql/data
+
+  backend:
+    image: ghcr.io/choppything/oftheyear-backend:sha-REPLACE_ME
+    restart: unless-stopped
+    env_file: .env
+    depends_on:
+      - postgres
+    ports:
+      - "127.0.0.1:6001:3001"
+
+  frontend:
+    image: ghcr.io/choppything/oftheyear-frontend:sha-REPLACE_ME
+    restart: unless-stopped
+    env_file: .env
+    depends_on:
+      - backend
+    ports:
+      - "127.0.0.1:6000:3000"
+
+networks:
+  default:
+    name: oftheyear_network
+
+volumes:
+  postgres_data:
+    name: oftheyear_postgres_data
