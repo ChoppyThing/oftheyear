@@ -33,6 +33,7 @@ jobs:
           context: ./frontend
           file: ./frontend/Dockerfile
           push: true
+          platforms: linux/amd64,linux/arm64
           tags: ghcr.io/choppything/oftheyear-frontend:sha-${{ github.sha }}
 
       - name: Build and push backend
@@ -41,4 +42,5 @@ jobs:
           context: ./backend
           file: ./backend/Dockerfile
           push: true
+          platforms: linux/amd64,linux/arm64
           tags: ghcr.io/choppything/oftheyear-backend:sha-${{ github.sha }}
