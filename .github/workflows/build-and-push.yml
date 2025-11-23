@@ -44,8 +44,17 @@ jobs:
   deploy:
     needs: build
     runs-on: ubuntu-latest
-    if: ${{ secrets.SERVER_HOST && secrets.SERVER_SSH_KEY && secrets.SERVER_USER }}
     steps:
+      - name: Check deploy secrets
+        env:
+          SERVER_HOST: ${{ secrets.SERVER_HOST }}
+          SERVER_USER: ${{ secrets.SERVER_USER }}
+          SERVER_SSH_KEY: ${{ secrets.SERVER_SSH_KEY }}
+        run: |
+          if [ -z "$SERVER_HOST" ] || [ -z "$SERVER_USER" ] || [ -z "$SERVER_SSH_KEY" ]; then
+            echo "Missing deploy secrets (SERVER_HOST, SERVER_USER, SERVER_SSH_KEY). Aborting deploy job.";
+            exit 1;
+          fi
       - name: Deploy via SSH to server
         uses: appleboy/ssh-action@v0.1.8
         with:

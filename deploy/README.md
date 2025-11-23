@@ -20,50 +20,11 @@ sudo chown $USER:$USER /opt/oftheyear/deploy
 
 3. Place your production `.env.production` at `/opt/oftheyear/deploy/.env.production` (follow `.env.example`).
 4. Ensure `/opt/oftheyear/postgres_data` exists and is writable by Docker (Postgres container user).
-5. The stack exposes the application containers on the host localhost ports `6000` (frontend) and `6001` (backend). Start the stack from the server:
+5. Run (from the server):
 
 ```bash
 cd /opt/oftheyear/deploy
 docker compose -f docker-compose.prod.yml up -d --build
-```
-
-6. SSL / Let's Encrypt notes & common error
-
-If you see an error like:
-
-```
-cannot load certificate "/etc/letsencrypt/live/oftheyear.net/fullchain.pem": BIO_new_file() failed
-```
-
-it means the certificate files do not exist at that path. To obtain valid certs:
-
-- Option A (recommended if Nginx is already configured and accessible on port 80):
-
-```bash
-sudo apt update && sudo apt install -y certbot python3-certbot-nginx
-sudo certbot --nginx -d oftheyear.net -d www.oftheyear.net
-```
-
-- Option B (if Nginx is running and you prefer to use the standalone mode; you must stop Nginx temporarily so certbot can bind port 80):
-
-```bash
-sudo systemctl stop nginx
-sudo certbot certonly --standalone -d oftheyear.net -d www.oftheyear.net
-sudo systemctl start nginx
-```
-
-- Option C (webroot): if you serve a static directory on port 80 from the host, use `--webroot` and provide the webroot path.
-
-After certificates are created, ensure the files exist:
-
-```bash
-ls -l /etc/letsencrypt/live/oftheyear.net/
-```
-
-Then test and reload Nginx:
-
-```bash
-sudo nginx -t && sudo systemctl reload nginx
 ```
 
 6. Obtain Let's Encrypt certs (example using certbot on host):
