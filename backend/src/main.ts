@@ -12,12 +12,17 @@ async function bootstrap() {
 
   const frontendUrl = configService.get<string>('FRONTEND_URL') || 'http://localhost:3001';
   
-  // Allow both production frontend domains
+  // Allow production and local development origins
   const allowedOrigins = [
     frontendUrl,
     'https://oftheyear.eu',
     'https://game.oftheyear.eu',
-    'http://localhost:3001', // dev
+    'https://www.oftheyear.eu',
+    'https://www.game.oftheyear.eu',
+    'http://localhost:3000',  // Next.js dev
+    'http://localhost:3001',  // Alternative dev port
+    'http://127.0.0.1:3000',
+    'http://127.0.0.1:3001',
   ];
 
   app.enableCors({
@@ -28,6 +33,7 @@ async function bootstrap() {
       if (allowedOrigins.indexOf(origin) !== -1) {
         callback(null, true);
       } else {
+        console.warn(`CORS blocked origin: ${origin}`);
         callback(new Error('Not allowed by CORS'));
       }
     },
