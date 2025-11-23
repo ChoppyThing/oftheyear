@@ -22,9 +22,9 @@ import { UserModule } from 'src/user/user.module';
     JwtModule.registerAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
-      useFactory: async (configService: ConfigService) => ({ // ✅ async ajouté
+      useFactory: async (configService: ConfigService) => ({
         secret: configService.get<string>('JWT_SECRET'),
-        signOptions: { expiresIn: configService.get<string>('JWT_EXPIRES') as any }, // ✅ as any
+        signOptions: { expiresIn: configService.get<string>('JWT_EXPIRES') as any },
       }),
     }),
   ],

@@ -2,7 +2,7 @@ const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000';
 
 interface RequestOptions extends RequestInit {
   params?: Record<string, any>;
-  isFormData?: boolean; // ✅ Flag pour indiquer si c'est du FormData
+  isFormData?: boolean;
 }
 
 class ApiClient {
@@ -32,7 +32,6 @@ class ApiClient {
       ...(token && { Authorization: `Bearer ${token}` }),
     };
 
-    // ✅ Ne pas ajouter Content-Type pour FormData (fetch le fait automatiquement)
     if (!isFormData) {
       headers['Content-Type'] = 'application/json';
     }
@@ -63,7 +62,7 @@ class ApiClient {
       ...fetchOptions,
       credentials: 'include',
       headers: {
-        ...this.getAuthHeaders(isFormData), // ✅ Passe le flag FormData
+        ...this.getAuthHeaders(isFormData),
         ...fetchOptions.headers,
       },
     });
@@ -90,7 +89,7 @@ class ApiClient {
     return this.request<T>(endpoint, {
       ...options,
       method: 'POST',
-      body: isFormData ? data : (data ? JSON.stringify(data) : undefined), // ✅ Gère FormData
+      body: isFormData ? data : (data ? JSON.stringify(data) : undefined),
       isFormData,
     });
   }
@@ -101,7 +100,7 @@ class ApiClient {
     return this.request<T>(endpoint, {
       ...options,
       method: 'PATCH',
-      body: isFormData ? data : (data ? JSON.stringify(data) : undefined), // ✅ Gère FormData
+      body: isFormData ? data : (data ? JSON.stringify(data) : undefined),
       isFormData,
     });
   }

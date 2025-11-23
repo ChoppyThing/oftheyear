@@ -1,0 +1,20 @@
+meta {
+  name: Get My Voted Categories
+  type: http
+  seq: 5
+}
+
+get {
+  url: {{url}}/category-vote/my-voted-categories?year=2024
+  body: none
+  auth: none
+}
+
+headers {
+  Content-Type: application/json
+  Authorization: Bearer {{token}}
+}
+
+params:query {
+  year: 2024
+}

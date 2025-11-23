@@ -30,11 +30,22 @@ export class Category {
   @Column({ type: 'text', nullable: true })
   description: string;
 
+  @Column({ type: 'json', nullable: true })
+  translations: {
+    fr?: { title?: string; description?: string };
+    en?: { title?: string; description?: string };
+    es?: { title?: string; description?: string };
+    zh?: { title?: string; description?: string };
+  };
+
   @Column({ unique: true })
   slug: string;
 
   @Column({ type: 'int' })
   year: number;
+
+  @Column({ type: 'int', default: 0 })
+  sort: number;
 
   @Column({
     type: 'enum',

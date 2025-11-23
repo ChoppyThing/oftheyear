@@ -11,6 +11,7 @@ import {
   IoHeart 
 } from 'react-icons/io5';
 import { Category } from '@/types/CategoryType';
+import { usePathname } from 'next/navigation';
 import { categoryService } from '@/services/category/category';
 
 const categoryIcons = {
@@ -34,7 +35,7 @@ const categoryColors = [
   'from-indigo-500 to-purple-600',
 ];
 
-export default function CategoriesClient() {
+export default function CategoriesClient({ dict }: { dict?: any }) {
   const [categories, setCategories] = useState<Category[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedYear, setSelectedYear] = useState<number>(new Date().getFullYear());
@@ -42,6 +43,9 @@ export default function CategoriesClient() {
   useEffect(() => {
     loadCategories();
   }, [selectedYear]);
+
+  const pathname = usePathname();
+  const locale = pathname?.split('/')?.[1] || 'fr';
 
   const loadCategories = async () => {
     try {
@@ -69,7 +73,9 @@ export default function CategoriesClient() {
         <div className="bg-gray-800/50 rounded-lg p-8 max-w-md mx-auto">
           <IoGameController className="w-16 h-16 text-gray-500 mx-auto mb-4" />
           <p className="text-gray-400 text-lg">
-            Aucune catégorie disponible pour {selectedYear}
+            {(
+              dict?.category?.index?.empty || `Aucune catégorie disponible pour {year}`
+            ).replace('{year}', String(selectedYear))}
           </p>
         </div>
       </div>
@@ -120,21 +126,21 @@ export default function CategoriesClient() {
 
                   {/* Badge phase */}
                   <span className="px-3 py-1 bg-blue-500/20 text-blue-400 text-xs font-semibold rounded-full border border-blue-500/30">
-                    {category.phase === 'vote' && '🗳️ Vote'}
-                    {category.phase === 'nomination' && '🏆 Nomination'}
-                    {category.phase === 'closed' && '📦 Archivé'}
+                    {category.phase === 'vote' && `🗳️ ${dict?.category?.phase?.vote || 'Vote'}`}
+                    {category.phase === 'nomination' && `🏆 ${dict?.category?.phase?.nomination || 'Nomination'}`}
+                    {category.phase === 'closed' && `📦 ${dict?.category?.phase?.closed || 'Archivé'}`}
                   </span>
                 </div>
 
                 {/* Titre */}
                 <h3 className="text-xl font-bold text-white group-hover:text-blue-400 transition-colors">
-                  {category.name}
+                  {category.translations?.[locale as keyof typeof category.translations]?.title || category.name}
                 </h3>
 
                 {/* Description */}
-                {category.description && (
+                {((category.translations?.[locale as keyof typeof category.translations]?.description) || category.description) && (
                   <p className="text-gray-400 text-sm line-clamp-2">
-                    {category.description}
+                    {category.translations?.[locale as keyof typeof category.translations]?.description || category.description}
                   </p>
                 )}
 
@@ -146,7 +152,7 @@ export default function CategoriesClient() {
                   </div>
 
                   <span className="text-blue-400 text-sm font-semibold group-hover:translate-x-1 transition-transform">
-                    Voir →
+                    {dict?.category?.card?.see || 'Voir →'}
                   </span>
                 </div>
               </div>

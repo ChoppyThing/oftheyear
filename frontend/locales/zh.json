@@ -7,7 +7,17 @@
     "home": "首页",
     "about": "关于",
     "categories": "分类",
-    "login": "登录"
+    "login": "登录",
+    "vote": "投票",
+    "results": "结果"
+  },
+  "results": {
+    "page": {
+      "title": "结果",
+      "description": "本年度按类别评选出的游戏。"
+    },
+    "noResults": "暂无结果",
+    "noWinner": "无获胜者"
   },
   "home": {
     "title": "Game of the Year",
@@ -48,6 +58,9 @@
     "welcome": "欢迎",
     "proposeGame": "推荐游戏",
     "proposeCategory": "推荐类别",
+    "proposeCategoryDescription": "为社区建议一个新的投票类别",
+    "myProposals": "我的提议",
+    "myProposalsDescription": "跟踪您类别提议的状态",
     "logout": "退出"
   },
   "register": {
@@ -243,5 +256,51 @@
   "footer": {
     "rights": "版权所有",
     "legal": "法律声明"
+  }
+  ,"common": {
+    "loading": "加载中...",
+    "noImage": "无图片",
+    "error": "发生错误",
+    "backToCategories": "返回分类"
+  },
+
+  "category": {
+    "index": {
+      "title": "投票类别",
+      "description": "查看所有可供投票的类别，选择你喜欢的游戏",
+      "empty": "暂无 {year} 年的可投票类别"
+    },
+    "card": {
+      "see": "查看 →"
+    },
+    "phase": {
+      "vote": "投票",
+      "nomination": "提名",
+      "closed": "已归档"
+    },
+    "nomination": {
+      "title": "为您喜爱的游戏投票",
+      "noValidatedGames": "该类别暂无已验证的游戏",
+      "maxNominationsReached": "达到最大 {max} 提名数"
+    },
+    "vote": {
+      "skipButton": "跳过此类别 →",
+      "voteForThis": "为此游戏投票",
+      "removeVote": "取消我的投票",
+      "noFinalists": "该类别暂无最终游戏",
+      "votedBadge": "已投票",
+      "notFound": "未找到类别",
+      "searchingNext": "正在搜索下一个类别...",
+      "noAvailable": "暂无可供投票的类别",
+      "congrats": "恭喜！",
+      "oops": "出错了！"
+    }
+  },
+
+  "navigation": {
+    "next": "下一个",
+    "prev": "上一个",
+    "nextAria": "转到下一个类别",
+    "prevAria": "返回上一个类别"
   }
 }

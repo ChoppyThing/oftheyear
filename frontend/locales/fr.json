@@ -7,7 +7,17 @@
     "home": "Accueil",
     "about": "À propos",
     "categories": "Catégories",
-    "login": "Se connecter"
+    "login": "Se connecter",
+    "vote": "Voter",
+    "results": "Résultats"
+  },
+  "results": {
+    "page": {
+      "title": "Résultats",
+      "description": "Les jeux élus par catégorie pour cette année."
+    },
+    "noResults": "Aucun résultat pour le moment",
+    "noWinner": "Pas de gagnant"
   },
   "footer": {
     "legal": "Mentions légales"
@@ -51,6 +61,9 @@
     "welcome": "Bienvenue",
     "proposeGame": "Proposer un jeu",
     "proposeCategory": "Proposer une catégorie",
+    "proposeCategoryDescription": "Suggérez une nouvelle catégorie de vote pour la communauté",
+    "myProposals": "Mes propositions",
+    "myProposalsDescription": "Suivez l'état de vos propositions de catégories",
     "logout": "Se déconnecter"
   },
   "register": {
@@ -243,4 +256,52 @@
       "description": "Pour toute question concernant ces mentions légales ou vos données personnelles :"
     }
   }
+
+  ,"common": {
+    "loading": "Chargement...",
+    "noImage": "Pas d'image",
+    "error": "Une erreur est survenue",
+    "backToCategories": "Retour aux catégories"
+  },
+
+  "category": {
+    "index": {
+      "title": "Catégories de vote",
+      "description": "Découvrez toutes les catégories disponibles pour voter pour vos jeux préférés",
+      "empty": "Aucune catégorie disponible pour {year}"
+    },
+    "card": {
+      "see": "Voir →"
+    },
+    "phase": {
+      "vote": "Vote",
+      "nomination": "Nomination",
+      "closed": "Archivé"
+    },
+    "nomination": {
+      "title": "Votez pour vos jeux favoris",
+      "noValidatedGames": "Aucun jeu validé disponible pour cette catégorie",
+      "maxNominationsReached": "Maximum {max} nominations atteint"
+    },
+    "vote": {
+      "skipButton": "Passer cette catégorie →",
+      "voteForThis": "Voter pour ce jeu",
+      "removeVote": "Retirer mon vote",
+      "noFinalists": "Aucun jeu finalisé pour cette catégorie",
+      "votedBadge": "Voté",
+      "notFound": "Catégorie introuvable",
+      "searchingNext": "Recherche de la prochaine catégorie...",
+      "noAvailable": "Aucune catégorie disponible pour voter",
+      "congrats": "Félicitations !",
+      "oops": "Oups !"
+    }
+  },
+
+  "navigation": {
+    "next": "Suivante",
+    "prev": "Précédente",
+    "nextAria": "Passer à la catégorie suivante",
+    "prevAria": "Revenir à la catégorie précédente"
+  }
+ 
 }

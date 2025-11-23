@@ -1,0 +1,21 @@
+meta {
+  name: Create Game (Multipart with Image)
+  type: http
+  seq: 4
+}
+
+post {
+  url: {{url}}/admin/games
+  body: multipartForm
+  auth: none
+}
+
+headers {
+  Authorization: Bearer {{token}}
+}
+
+body:multipart-form {
+  name: Elden Ring
+  description: Open-world action RPG
+  image: @file(/Users/jerry/Downloads/FLUX-2025-11-19-10_41_49.png)
+}

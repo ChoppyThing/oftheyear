@@ -7,6 +7,7 @@ import {
   Param,
   Delete,
   ParseIntPipe,
+  Query,
 } from '@nestjs/common';
 import { CategoryService } from './category.service';
 import { Category } from './category.entity';
@@ -15,9 +16,15 @@ import { User } from 'src/user/user.entity';
 import { Public } from 'src/auth/public.decorator';
 import { CreateCategoryDto, UpdateCategoryDto } from './category.dto';
 
+@Public()
 @Controller('category')
 export class CategoryController {
   constructor(private readonly categoryService: CategoryService) {}
+
+  @Get('nominated')
+  async findValidated(@Query('year', ParseIntPipe) year?: number) {
+    return this.categoryService.findNominatedWithGamesCount(year);
+  }
 
   @Post()
   async create(

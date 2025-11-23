@@ -8,6 +8,7 @@ import { Repository } from 'typeorm';
 import { Category } from './category.entity';
 import { User } from 'src/user/user.entity';
 import { CreateCategoryDto, UpdateCategoryDto } from './category.dto';
+import { CategoryPhase } from './category-phase.enum';
 
 @Injectable()
 export class CategoryService {
@@ -16,7 +17,10 @@ export class CategoryService {
     private categoryRepository: Repository<Category>,
   ) {}
 
-  async create(createCategoryDto: CreateCategoryDto, user: User): Promise<Category> {
+  async create(
+    createCategoryDto: CreateCategoryDto,
+    user: User,
+  ): Promise<Category> {
     // Vérifier si la catégorie existe déjà
     const existing = await this.categoryRepository.findOne({
       where: { name: createCategoryDto.name },
@@ -91,5 +95,51 @@ export class CategoryService {
   async remove(id: number): Promise<void> {
     const category = await this.findOne(id);
     await this.categoryRepository.remove(category);
+  }
+
+  /**
+   * Category front page
+   */
+  /**
+   * Récupérer toutes les catégories validées
+   */
+  async findValidated(year?: number): Promise<Category[]> {
+    const queryBuilder = this.categoryRepository
+      .createQueryBuilder('category')
+      .leftJoinAndSelect('category.author', 'author')
+      .where('category.phase = :phase', { phase: CategoryPhase.Vote })
+      .orderBy('category.name', 'ASC');
+
+    if (year) {
+      queryBuilder.andWhere('category.year = :year', { year });
+    }
+
+    return await queryBuilder.getMany();
+  }
+
+  /**
+   * Récupérer les catégories avec le nombre de jeux
+   */
+  async findNominatedWithGamesCount(year?: number): Promise<any[]> {
+    const queryBuilder = this.categoryRepository
+      .createQueryBuilder('category')
+      .leftJoinAndSelect('category.author', 'author')
+      .leftJoin('category.nominees', 'nominees')
+      .addSelect('COUNT(DISTINCT nominees.id)', 'gamesCount')
+      .where('category.phase = :phase', { phase: CategoryPhase.Nomination })
+      .groupBy('category.id')
+      .addGroupBy('author.id')
+      .orderBy('category.name', 'ASC');
+
+    if (year) {
+      queryBuilder.andWhere('category.year = :year', { year });
+    }
+
+    const categories = await queryBuilder.getRawAndEntities();
+
+    return categories.entities.map((category, index) => ({
+      ...category,
+      gamesCount: parseInt(categories.raw[index].gamesCount) || 0,
+    }));
   }
 }

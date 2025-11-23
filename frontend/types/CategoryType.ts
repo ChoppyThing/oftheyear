@@ -9,6 +9,13 @@ export interface Category {
   name: string;
   description?: string; 
   slug: string;
+  sort?: number;
+  translations?: {
+    fr?: { title?: string; description?: string };
+    en?: { title?: string; description?: string };
+    es?: { title?: string; description?: string };
+    zh?: { title?: string; description?: string };
+  };
   phase: CategoryPhase;
   year: number;
   icon?: string;
@@ -43,12 +50,26 @@ export interface CreateCategoryDto {
   name: string;
   year: number;
   phase?: CategoryPhase;
+  sort?: number;
+  translations?: {
+    fr?: { title?: string; description?: string };
+    en?: { title?: string; description?: string };
+    es?: { title?: string; description?: string };
+    zh?: { title?: string; description?: string };
+  };
 }
 
 export interface UpdateCategoryDto {
   name?: string;
   year?: number;
   phase?: CategoryPhase;
+  sort?: number;
+  translations?: {
+    fr?: { title?: string; description?: string };
+    en?: { title?: string; description?: string };
+    es?: { title?: string; description?: string };
+    zh?: { title?: string; description?: string };
+  };
 }
 
 export interface CategoryStats {

@@ -1,0 +1,23 @@
+meta {
+  name: Create Game (JSON)
+  type: http
+  seq: 3
+}
+
+post {
+  url: {{url}}/admin/games
+  body: json
+  auth: none
+}
+
+headers {
+  Content-Type: application/json
+  Authorization: Bearer {{token}}
+}
+
+body:json {
+  {
+    "name": "The Legend of Zelda: Tears of the Kingdom",
+    "description": "Sequel to Breath of the Wild"
+  }
+}

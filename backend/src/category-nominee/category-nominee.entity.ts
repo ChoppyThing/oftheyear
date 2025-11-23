@@ -13,7 +13,7 @@ import { Category } from '../category/category.entity';
 import { FinalVote } from './final-vote.entity';
 
 @Entity()
-@Index(['category', 'game'], { unique: true })
+@Index(['category', 'game', 'user'], { unique: true })
 export class CategoryNominee {
   @PrimaryGeneratedColumn()
   id: number;
@@ -26,6 +26,9 @@ export class CategoryNominee {
 
   @ManyToOne(() => Game, { nullable: false, onDelete: 'CASCADE' })
   game: Game;
+
+  @ManyToOne(() => User, { nullable: false, onDelete: 'CASCADE' })
+  user: User;
 
   @Column({ type: 'int', default: 0 })
   nominationCount: number; // Nombre de votes en Phase 1

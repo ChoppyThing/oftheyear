@@ -8,12 +8,14 @@ interface NominationGridProps {
   categoryId: number;
   games: Game[];
   maxNominations: number;
+  dict?: any;
 }
 
 export default function NominationGrid({
   categoryId,
   games,
   maxNominations,
+  dict,
 }: NominationGridProps) {
   const [nominatedGameIds, setNominatedGameIds] = useState<number[]>([]);
   const [processingGameId, setProcessingGameId] = useState<number | null>(null);
@@ -69,7 +71,7 @@ export default function NominationGrid({
       {/* Header */}
       <div className="mb-6 text-center">
         <h2 className="text-2xl font-bold text-white">
-          Votez pour vos jeux favoris
+          {dict?.category?.nomination?.title || 'Votez pour vos jeux favoris'}
         </h2>
         <div className="text-sm text-gray-400 mt-2">
           {nominatedGameIds.length} / {maxNominations} nominations
@@ -86,7 +88,7 @@ export default function NominationGrid({
       {/* Message si pas de jeux */}
       {eligibleGames.length === 0 && (
         <div className="text-center py-12 text-gray-400">
-          Aucun jeu validé disponible pour cette catégorie
+          {dict?.category?.nomination?.noValidatedGames || 'Aucun jeu validé disponible pour cette catégorie'}
         </div>
       )}
 
@@ -118,7 +120,7 @@ export default function NominationGrid({
                   />
                 ) : (
                   <div className="w-full h-full flex items-center justify-center text-gray-500">
-                    Pas d'image
+                    {dict?.common?.noImage || 'Pas d\'image'}
                   </div>
                 )}
 

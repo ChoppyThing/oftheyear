@@ -1,5 +1,6 @@
 import { Type } from 'class-transformer';
-import { IsString, IsInt, Min, IsNotEmpty, IsOptional, IsEnum } from 'class-validator';
+import { IsString, IsInt, Min, IsNotEmpty, IsOptional, IsEnum, IsObject, ValidateNested } from 'class-validator';
+import { Type as CT } from 'class-transformer';
 import { CategoryPhase } from '../category-phase.enum';
 
 export class AdminCreateCategoryDto {
@@ -14,6 +15,20 @@ export class AdminCreateCategoryDto {
   @IsOptional()
   @IsEnum(CategoryPhase)
   phase?: CategoryPhase;
+
+  @IsOptional()
+  @Type(() => Number)
+  @IsInt()
+  sort?: number = 0;
+
+  @IsOptional()
+  @IsObject()
+  translations?: {
+    fr?: { title?: string; description?: string };
+    en?: { title?: string; description?: string };
+    es?: { title?: string; description?: string };
+    zh?: { title?: string; description?: string };
+  };
 }
 
 export class AdminUpdateCategoryDto {
@@ -29,6 +44,20 @@ export class AdminUpdateCategoryDto {
   @IsOptional()
   @IsEnum(CategoryPhase)
   phase?: CategoryPhase;
+
+  @IsOptional()
+  @Type(() => Number)
+  @IsInt()
+  sort?: number;
+
+  @IsOptional()
+  @IsObject()
+  translations?: {
+    fr?: { title?: string; description?: string };
+    en?: { title?: string; description?: string };
+    es?: { title?: string; description?: string };
+    zh?: { title?: string; description?: string };
+  };
 }
 
 export class AdminListCategoryDto {
@@ -55,7 +84,7 @@ export class AdminListCategoryDto {
 
   @IsOptional()
   @IsString()
-  sortBy?: 'name' | 'year' | 'createdAt' = 'createdAt';
+  sortBy?: 'name' | 'year' | 'createdAt' | 'sort' = 'createdAt';
 
   @IsOptional()
   @IsString()

@@ -1,5 +1,6 @@
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
+import { ResultsModule } from './results/results.module';
 import { AppService } from './app.service';
 import { AuthModule } from './auth/auth.module';
 import { UserModule } from './user/user.module';
@@ -45,6 +46,7 @@ import { FinalVote } from './category-nominee/final-vote.entity';
     CategoryModule,
     CategoryVoteModule,
     CategoryNomineeModule,
+    ResultsModule,
   ],
   controllers: [AppController],
   providers: [AppService],

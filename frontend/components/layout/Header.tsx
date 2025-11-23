@@ -1,15 +1,19 @@
 'use client';
 
 import Link from 'next/link';
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import AnimatedBackground from './AnimatedBackground';
 import UserButton from '../UserButton';
 import { Locale, defaultLocale } from '@/i18n.config';
 import LanguageSwitcher from '../LanguageSwitcher';
+import { getPhaseInfo } from '@/lib/phases';
 
 export default function Header({ locale, dict }: { locale: Locale; dict: any }) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const prefix = locale === defaultLocale ? '' : `/${locale}`;
+  
+  // Calculer la phase actuelle
+  const phaseInfo = useMemo(() => getPhaseInfo(dict), [dict]);
 
   return (
     <header className="sticky top-0 z-50 w-full bg-[#0062bd] shadow-lg backdrop-blur-sm uppercase font-bold">
@@ -19,7 +23,6 @@ export default function Header({ locale, dict }: { locale: Locale; dict: any }) 
 
       <nav className="container mx-auto px-4">
         <div className="flex h-22 items-center justify-between">
-          {/* Spacer for alignment */}
           <div className="flex-1 md:block hidden"></div>
 
           {/* Navigation Links - Center (Desktop) */}
@@ -36,15 +39,16 @@ export default function Header({ locale, dict }: { locale: Locale; dict: any }) 
             >
               {dict.header.about}
             </Link>
+            
+            {/* Lien dynamique selon la phase */}
             <Link 
-              href={`${prefix}/category`}
+              href={`${prefix}/${phaseInfo.link}`}
               className="text-white hover:text-blue-200 transition-colors duration-350 text-lg tracking-wider"
             >
-              {dict.header.categories}
+              {phaseInfo.label}
             </Link>
           </div>
 
-          {/* Login Button - Right (Desktop) */}
           <div className="hidden md:flex items-center flex-1 justify-end">
             <LanguageSwitcher currentLocale={locale} />
             <UserButton dict={dict} />
@@ -92,13 +96,16 @@ export default function Header({ locale, dict }: { locale: Locale; dict: any }) 
               >
                 {dict.header.about}
               </Link>
+              
+              {/* Lien dynamique mobile */}
               <Link 
-                href={`${prefix}/categories`}
+                href={`${prefix}/${phaseInfo.link}`}
                 className="text-white hover:text-blue-200 transition-colors duration-200 font-medium py-2"
                 onClick={() => setIsMenuOpen(false)}
               >
-                {dict.header.categories}
+                {phaseInfo.label}
               </Link>
+              
               <div className="pt-2">
                 <LanguageSwitcher currentLocale={locale} />
                 <UserButton dict={dict} />
