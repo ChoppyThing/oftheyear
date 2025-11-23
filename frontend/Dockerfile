@@ -1,16 +1,13 @@
 # frontend/Dockerfile - multi-stage build for Next.js
-FROM node:20-alpine AS deps
-WORKDIR /app
-COPY package.json package-lock.json ./
-RUN npm ci --production
-
 FROM node:20-alpine AS builder
 WORKDIR /app
-COPY . .
-COPY --from=deps /app/node_modules ./node_modules
+# Install all deps (including dev) for build
+COPY package.json package-lock.json ./
 ARG NEXT_PUBLIC_API_URL
 ENV NEXT_PUBLIC_API_URL=${NEXT_PUBLIC_API_URL}
-RUN npm ci && npm run build
+RUN npm ci
+COPY . .
+RUN npm run build
 
 FROM node:20-alpine AS runner
 WORKDIR /app
