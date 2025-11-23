@@ -1,16 +1,16 @@
 # backend/Dockerfile - multi-stage build for NestJS
-FROM node:18-alpine AS deps
+FROM node:20-alpine AS deps
 WORKDIR /app
-COPY package.json package-lock.json ./
-RUN npm ci --production
+COPY package.json yarn.lock ./
+RUN corepack enable && yarn install --production --frozen-lockfile
 
-FROM node:18-alpine AS builder
+FROM node:20-alpine AS builder
 WORKDIR /app
 COPY . .
 COPY --from=deps /app/node_modules ./node_modules
-RUN npm ci && npm run build
+RUN corepack enable && yarn install --frozen-lockfile && yarn build
 
-FROM node:18-alpine AS runner
+FROM node:20-alpine AS runner
 WORKDIR /app
 ENV NODE_ENV=production
 COPY --from=builder /app/dist ./dist
