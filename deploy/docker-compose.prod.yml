@@ -10,8 +10,9 @@ services:
     restart: always
     environment:
       - NODE_ENV=production
+    # bind to localhost:6000 on the host to avoid collision with existing services
     ports:
-      - "3000:3000"
+      - "127.0.0.1:6000:3000"
     networks:
       - web
 
@@ -24,8 +25,9 @@ services:
     environment:
       - NODE_ENV=production
       - DATABASE_URL=${DATABASE_URL}
+    # bind to localhost:6001 on the host to avoid collision with existing services
     ports:
-      - "3001:3001"
+      - "127.0.0.1:6001:3001"
     networks:
       - web
 
