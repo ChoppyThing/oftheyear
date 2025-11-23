@@ -87,7 +87,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Diagnose: show frontend tree and config
+      - name: Diagnose - show frontend tree and config
         run: |
           printf '=== node & npm versions ===\n'
           node -v || true
