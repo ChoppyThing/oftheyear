@@ -10,13 +10,6 @@ jobs:
     if: ${{ github.event.workflow_run.conclusion == 'success' }}
     runs-on: ubuntu-latest
     steps:
-      - name: Prepare tags
-        run: |
-          echo "FRONT_TAG=ghcr.io/choppything/oftheyear-frontend:sha-${{ github.event.workflow_run.head_sha }}" > tags.env
-          echo "BACK_TAG=ghcr.io/choppything/oftheyear-backend:sha-${{ github.event.workflow_run.head_sha }}" >> tags.env
-          cat tags.env
-        shell: bash
-
       - name: Deploy on server via SSH
         uses: appleboy/ssh-action@master
         with:
@@ -27,13 +20,15 @@ jobs:
           script: |
             set -e
             cd /opt/oftheyear
-            # load tags from runner
-            FRONT_TAG=$(grep '^FRONT_TAG' tags.env | cut -d'=' -f2-)
-            BACK_TAG=$(grep '^BACK_TAG' tags.env | cut -d'=' -f2-)
-            echo "Replacing frontend tag with $FRONT_TAG"
-            sed -i -E "s#ghcr.io/choppything/oftheyear-frontend:.*#$FRONT_TAG#g" docker-compose.yml || true
-            echo "Replacing backend tag with $BACK_TAG"
-            sed -i -E "s#ghcr.io/choppything/oftheyear-backend:.*#$BACK_TAG#g" docker-compose.yml || true
-            docker login ghcr.io -u ${{ secrets.SERVER_GH_USER }} -p ${{ secrets.SERVER_GHCR_PAT }} || true
-            docker compose pull
-            docker compose up -d
+            
+            # Update image tags in docker-compose.yml
+            FRONT_TAG="ghcr.io/choppything/oftheyear-frontend:sha-${{ github.event.workflow_run.head_sha }}"
+            BACK_TAG="ghcr.io/choppything/oftheyear-backend:sha-${{ github.event.workflow_run.head_sha }}"
+            
+            echo "Updating docker-compose.yml with new tags..."
+            sed -i -E "s#ghcr.io/choppything/oftheyear-frontend:.*#$FRONT_TAG#g" docker-compose.yml
+            sed -i -E "s#ghcr.io/choppything/oftheyear-backend:.*#$BACK_TAG#g" docker-compose.yml
+            
+            # Run deploy script
+            echo "Running deploy.sh..."
+            ./deploy.sh
