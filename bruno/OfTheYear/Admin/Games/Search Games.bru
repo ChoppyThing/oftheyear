@@ -1,0 +1,24 @@
+meta {
+  name: Search Games
+  type: http
+  seq: 4
+}
+
+get {
+  url: {{url}}/admin/games?search=zelda
+  body: none
+  auth: none
+}
+
+headers {
+  Content-Type: application/json
+  Authorization: Bearer {{token}}
+}
+
+params:query {
+  search: zelda
+}
+
+docs {
+  Recherche dans name, developer, editor
+}

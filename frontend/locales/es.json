@@ -7,7 +7,17 @@
     "home": "Inicio",
     "about": "Acerca de",
     "categories": "Categorías",
-    "login": "Iniciar sesión"
+    "login": "Iniciar sesión",
+    "vote": "Votar",
+    "results": "Resultados"
+  },
+  "results": {
+    "page": {
+      "title": "Resultados",
+      "description": "Los juegos elegidos por categoría para este año."
+    },
+    "noResults": "Todavía no hay resultados",
+    "noWinner": "Sin ganador"
   },
   "home": {
     "title": "Game of the Year",
@@ -48,6 +58,9 @@
     "welcome": "Bienvenido",
     "proposeGame": "Proponer un juego",
     "proposeCategory": "Proponer una categoría",
+    "proposeCategoryDescription": "Sugiere una nueva categoría de votación para la comunidad",
+    "myProposals": "Mis propuestas",
+    "myProposalsDescription": "Sigue el estado de tus propuestas de categorías",
     "logout": "Cerrar sesión"
   },
   "register": {
@@ -243,5 +256,51 @@
   "footer": {
     "rights": "Todos los derechos reservados",
     "legal": "Aviso legal"
+  }
+  ,"common": {
+    "loading": "Cargando...",
+    "noImage": "Sin imagen",
+    "error": "Ocurrió un error",
+    "backToCategories": "Volver a categorías"
+  },
+
+  "category": {
+    "index": {
+      "title": "Categorías de voto",
+      "description": "Descubre todas las categorías disponibles para votar por tus juegos favoritos",
+      "empty": "No hay categorías disponibles para {year}"
+    },
+    "card": {
+      "see": "Ver →"
+    },
+    "phase": {
+      "vote": "Votación",
+      "nomination": "Nominación",
+      "closed": "Archivado"
+    },
+    "nomination": {
+      "title": "Vota por tus juegos favoritos",
+      "noValidatedGames": "No hay juegos validados disponibles para esta categoría",
+      "maxNominationsReached": "Máximo {max} nominaciones alcanzado"
+    },
+    "vote": {
+      "skipButton": "Saltar esta categoría →",
+      "voteForThis": "Votar por este juego",
+      "removeVote": "Quitar mi voto",
+      "noFinalists": "No hay juegos finalizados para esta categoría",
+      "votedBadge": "Votado",
+      "notFound": "Categoría no encontrada",
+      "searchingNext": "Buscando la siguiente categoría...",
+      "noAvailable": "No hay categorías disponibles para votar",
+      "congrats": "¡Felicidades!",
+      "oops": "¡Vaya!"
+    }
+  },
+
+  "navigation": {
+    "next": "Siguiente",
+    "prev": "Anterior",
+    "nextAria": "Ir a la siguiente categoría",
+    "prevAria": "Volver a la categoría anterior"
   }
 }

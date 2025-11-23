@@ -10,6 +10,6 @@ import { UserAdminController } from './admin/user-admin.controller';
   imports: [TypeOrmModule.forFeature([User])],
   controllers: [UserController, UserAdminController],
   providers: [UserService, UserAdminService],
-  exports: [UserService],
+  exports: [TypeOrmModule, UserService],
 })
 export class UserModule {}

@@ -14,7 +14,6 @@ import {
 import { Status } from './status.enum';
 import { v4 as uuidv4 } from 'uuid';
 import { User } from 'src/user/user.entity';
-import { Category } from 'src/category/category.entity';
 
 @Entity()
 @Unique(['name'])
@@ -25,13 +24,16 @@ export class Game {
   @Column()
   name: string;
 
-  @Column()
+  @Column('text', { nullable: true })
+  description?: string;
+
+  @Column({ nullable: true })
   image: string;
 
-  @Column()
+  @Column({ nullable: true })
   developer: string;
 
-  @Column({ select: false })
+  @Column({ select: false, nullable: true })
   editor: string;
 
   @Column({
@@ -41,11 +43,11 @@ export class Game {
   })
   status: Status;
 
+  @Column()
+  year: number;
+
   @ManyToOne(() => User, { nullable: false })
   author: User;
-
-  @ManyToMany(() => Category, (category) => category.games)
-  categories: Category[];
 
   @CreateDateColumn({
     type: 'timestamptz',

@@ -6,10 +6,14 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { UserProvider, useUser } from '@/contexts/UserContext';
 import AdminGuard from '@/components/admin/AdminGuard';
+import { LuGamepad2 } from 'react-icons/lu';
+import { IoIosStats } from 'react-icons/io';
 
 const menuItems = [
   { href: '/admin', icon: FiHome, label: 'Dashboard' },
-  { href: '/admin/games', icon: FiGrid, label: 'Jeux' },
+  { href: '/admin/games', icon: LuGamepad2, label: 'Jeux' },
+  { href: '/admin/category', icon: FiGrid, label: 'Categories' },
+  { href: '/admin/category-stats', icon: IoIosStats, label: 'Categories Stats' },
   { href: '/admin/validation', icon: FiCheckCircle, label: 'Validation' },
   { href: '/admin/users', icon: FiUsers, label: 'Utilisateurs' },
   { href: '/admin/settings', icon: FiSettings, label: 'Paramètres' },
@@ -77,7 +81,7 @@ function AdminLayoutContent({ children }: { children: ReactNode }) {
       {/* Main content */}
       <main className="flex-1 overflow-y-auto">
         {/* Content */}
-        <div>
+        <div className="p-4">
           {children}
         </div>
       </main>

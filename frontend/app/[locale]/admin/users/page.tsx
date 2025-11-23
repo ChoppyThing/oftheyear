@@ -110,7 +110,7 @@ export default function AdminUsersPage() {
   };
 
   return (
-    <div className="p-8 max-w-7xl mx-auto">
+    <div className="max-w-7xl mx-auto">
       {/* Header */}
       <header className="bg-white shadow-sm mb-5">
         <div className="px-8 py-4">

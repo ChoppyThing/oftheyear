@@ -7,7 +7,17 @@
     "home": "Home",
     "about": "About",
     "categories": "Categories",
-    "login": "Sign In"
+    "login": "Sign In",
+    "vote": "Vote",
+    "results": "Results"
+  },
+  "results": {
+    "page": {
+      "title": "Results",
+      "description": "The games elected by category for this year."
+    },
+    "noResults": "No results yet",
+    "noWinner": "No winner"
   },
   "home": {
     "title": "Game of the Year",
@@ -48,6 +58,9 @@
     "welcome": "Welcome",
     "proposeGame": "Propose a game",
     "proposeCategory": "Propose a category",
+    "proposeCategoryDescription": "Suggest a new voting category for the community",
+    "myProposals": "My proposals",
+    "myProposalsDescription": "Track the status of your category proposals",
     "logout": "Sign out"
   },
   "register": {
@@ -240,4 +253,52 @@
       "description": "For any questions regarding this legal notice or your personal data:"
     }
   }
+
+  ,"common": {
+    "loading": "Loading...",
+    "noImage": "No image",
+    "error": "An error occurred",
+    "backToCategories": "Back to categories"
+  },
+
+  "category": {
+    "index": {
+      "title": "Voting categories",
+      "description": "Discover all available categories to vote for your favorite games",
+      "empty": "No categories available for {year}"
+    },
+    "card": {
+      "see": "See →"
+    },
+    "phase": {
+      "vote": "Vote",
+      "nomination": "Nomination",
+      "closed": "Archived"
+    },
+    "nomination": {
+      "title": "Vote for your favorite games",
+      "noValidatedGames": "No validated games available for this category",
+      "maxNominationsReached": "Maximum {max} nominations reached"
+    },
+    "vote": {
+      "skipButton": "Skip this category →",
+      "voteForThis": "Vote for this game",
+      "removeVote": "Remove my vote",
+      "noFinalists": "No finalized game for this category",
+      "votedBadge": "Voted",
+      "notFound": "Category not found",
+      "searchingNext": "Searching next category...",
+      "noAvailable": "No category available to vote",
+      "congrats": "Congratulations!",
+      "oops": "Oops!"
+    }
+  },
+
+  "navigation": {
+    "next": "Next",
+    "prev": "Previous",
+    "nextAria": "Go to next category",
+    "prevAria": "Go to previous category"
+  }
+ 
 }

@@ -1,10 +1,22 @@
 import { Type } from 'class-transformer';
-import { IsString, IsNotEmpty, IsUrl, IsOptional, IsInt, Min, Max } from 'class-validator';
+import {
+  IsString,
+  IsNotEmpty,
+  IsUrl,
+  IsOptional,
+  IsInt,
+  Min,
+  Max,
+} from 'class-validator';
 
 export class CreateGameDto {
   @IsString()
   @IsNotEmpty()
   name: string;
+
+  @IsString()
+  @IsOptional()
+  description: string;
 
   @IsUrl()
   @IsNotEmpty()

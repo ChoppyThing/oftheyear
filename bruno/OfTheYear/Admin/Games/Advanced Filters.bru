@@ -1,0 +1,30 @@
+meta {
+  name: Advanced Filters
+  type: http
+  seq: 5
+}
+
+get {
+  url: {{url}}/admin/games?developer=nintendo&status=validated&sortBy=name&sortOrder=ASC
+  body: none
+  auth: none
+}
+
+params:query {
+  developer: nintendo
+  status: validated
+  sortBy: name
+  sortOrder: ASC
+}
+
+headers {
+  Content-Type: application/json
+  Authorization: Bearer {{token}}
+}
+
+docs {
+  Combine plusieurs filtres :
+  - Par développeur
+  - Par statut
+  - Tri personnalisé
+}

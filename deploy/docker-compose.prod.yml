@@ -1,0 +1,50 @@
+version: "3.8"
+services:
+  frontend:
+    build:
+      context: ../frontend
+      dockerfile: Dockerfile
+      args:
+        NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL}
+    image: ghcr.io/choppything/oftheyear-frontend:${TAG:-latest}
+    restart: always
+    environment:
+      - NODE_ENV=production
+    # Bind to localhost on port 6000 to avoid colliding with existing services
+    ports:
+      - "127.0.0.1:6000:3000"
+    networks:
+      - web
+
+  backend:
+    build:
+      context: ../backend
+      dockerfile: Dockerfile
+    image: ghcr.io/choppything/oftheyear-backend:${TAG:-latest}
+    restart: always
+    environment:
+      - NODE_ENV=production
+      - DATABASE_URL=${DATABASE_URL}
+    # Bind to localhost on port 6001 to avoid colliding with existing services
+    ports:
+      - "127.0.0.1:6001:3001"
+    networks:
+      - web
+
+  db:
+    image: postgres:15
+    restart: always
+    environment:
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_DB=${POSTGRES_DB}
+    volumes:
+      - /opt/oftheyear/postgres_data:/var/lib/postgresql/data
+    networks:
+      - web
+
+
+
+networks:
+  web:
+    driver: bridge

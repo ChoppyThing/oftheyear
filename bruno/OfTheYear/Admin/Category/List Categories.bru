@@ -1,0 +1,16 @@
+meta {
+  name: List Categories (Admin)
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{url}}/admin/category?page=1&limit=10&search=RPG&year=2024&sortBy=name&sortOrder=ASC
+  body: none
+  auth: none
+}
+
+headers {
+  Content-Type: application/json
+  Authorization: Bearer {{token}}
+}

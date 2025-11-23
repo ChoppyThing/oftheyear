@@ -1,0 +1,26 @@
+meta {
+  name: Vote for Game
+  type: http
+  seq: 2
+}
+
+post {
+  url: {{url}}/category-vote/category/aaaqsd-4bdf83e9/vote?year=2025
+  body: json
+  auth: none
+}
+
+params:query {
+  year: 2025
+}
+
+headers {
+  Content-Type: application/json
+  Authorization: Bearer {{token}}
+}
+
+body:json {
+  {
+    "gameId": 123
+  }
+}

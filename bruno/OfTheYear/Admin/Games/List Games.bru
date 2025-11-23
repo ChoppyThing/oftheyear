@@ -1,0 +1,20 @@
+meta {
+  name: List Games
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{url}}/admin/games
+  body: none
+  auth: none
+}
+
+headers {
+  Content-Type: application/json
+  Authorization: Bearer {{token}}
+}
+
+docs {
+  Liste tous les jeux avec pagination par défaut
+}

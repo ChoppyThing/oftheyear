@@ -1,0 +1,20 @@
+meta {
+  name: Vote Phase Stats by Year
+  type: http
+  seq: 8
+}
+
+get {
+  url: {{url}}/admin/category/stats/vote-phase?year=2024
+  body: none
+  auth: none
+}
+
+params:query {
+  year: 2024
+}
+
+headers {
+  Content-Type: application/json
+  Authorization: Bearer {{token}}
+}

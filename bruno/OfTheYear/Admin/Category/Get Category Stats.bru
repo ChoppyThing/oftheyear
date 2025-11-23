@@ -1,0 +1,16 @@
+meta {
+  name: Get Category Stats (Admin)
+  type: http
+  seq: 4
+}
+
+get {
+  url: {{url}}/admin/category/2/stats
+  body: none
+  auth: none
+}
+
+headers {
+  Content-Type: application/json
+  Authorization: Bearer {{token}}
+}

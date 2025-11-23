@@ -1,0 +1,19 @@
+meta {
+  name: Get Vote Stats for Category
+  type: http
+  seq: 6
+}
+
+get {
+  url: {{url}}/category-vote/category/best-game/stats?year=2024
+  body: none
+  auth: none
+}
+
+headers {
+  Content-Type: application/json
+}
+
+params:query {
+  year: 2024
+}

@@ -1,0 +1,16 @@
+meta {
+  name: Vote Phase Stats
+  type: http
+  seq: 7
+}
+
+get {
+  url: {{url}}/admin/category/stats/vote-phase
+  body: none
+  auth: none
+}
+
+headers {
+  Content-Type: application/json
+  Authorization: Bearer {{token}}
+}

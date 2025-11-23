@@ -1,0 +1,20 @@
+meta {
+  name: Reject Game
+  type: http
+  seq: 10
+}
+
+post {
+  url: {{url}}/admin/games/1/reject
+  body: none
+  auth: none
+}
+
+headers {
+  Content-Type: application/json
+  Authorization: Bearer {{token}}
+}
+
+docs {
+  Raccourci pour rejeter un jeu (status → rejected)
+}

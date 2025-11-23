@@ -1,0 +1,20 @@
+meta {
+  name: Get Category Finalists
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{url}}/category-nominee/category/aaaqsd-4bdf83e9/finalists?year=2025
+  body: none
+  auth: none
+}
+
+params:query {
+  year: 2025
+}
+
+headers {
+  Content-Type: application/json
+  Authorization: Bearer {{token}}
+}

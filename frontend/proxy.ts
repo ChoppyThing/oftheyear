@@ -22,7 +22,7 @@ function getLocale(request: NextRequest): string {
 export function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
-  // Ignorer les fichiers statiques
+  // ========== 1. IGNORER LES FICHIERS STATIQUES ==========
   if (
     pathname.startsWith('/_next') ||
     pathname.startsWith('/api') ||
@@ -32,6 +32,24 @@ export function proxy(request: NextRequest) {
     return NextResponse.next();
   }
 
+  // ========== 2. PROTECTION DES ROUTES /user ==========
+  const token = request.cookies.get('authToken')?.value;
+  
+  // Extraire la locale du pathname si présente
+  const pathnameWithoutLocale = locales.some(
+    (locale) => pathname.startsWith(`/${locale}/`) || pathname === `/${locale}`
+  )
+    ? pathname.split('/').slice(2).join('/') // Enlever la locale
+    : pathname;
+
+  // Si chemin commence par /user et pas de token → rediriger vers login
+  if (pathnameWithoutLocale.startsWith('user') && !token) {
+    const locale = getLocale(request);
+    return NextResponse.redirect(new URL(`/${locale}/login`, request.url));
+  }
+
+  // ========== 3. GESTION I18N ==========
+  
   // Vérifier si le pathname a déjà une locale
   const pathnameHasLocale = locales.some(
     (locale) => pathname.startsWith(`/${locale}/`) || pathname === `/${locale}`

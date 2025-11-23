@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Roboto } from "next/font/google";
 import "./globals.css";
 import AnimatedBackground from "@/components/layout/AnimatedBackground";
+import { ToastProvider } from "@/components/providers/ToastProvider";
 
 const roboto = Roboto({
   weight: "400",
@@ -23,6 +24,7 @@ export default function RootLayout({
       <body className={`${roboto.className} antialiased`}>
         <AnimatedBackground />
         {children}
+        <ToastProvider />
       </body>
     </html>
   );
