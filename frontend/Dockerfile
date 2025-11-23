@@ -5,7 +5,8 @@ WORKDIR /app
 COPY package.json yarn.lock ./
 ARG NEXT_PUBLIC_API_URL
 ENV NEXT_PUBLIC_API_URL=${NEXT_PUBLIC_API_URL}
-RUN corepack enable && yarn install --frozen-lockfile
+RUN apk add --no-cache python3 make g++ ca-certificates && \
+	corepack enable && yarn install --frozen-lockfile
 COPY . .
 RUN corepack enable && yarn build
 

@@ -2,7 +2,8 @@
 FROM node:20-alpine AS deps
 WORKDIR /app
 COPY package.json yarn.lock ./
-RUN corepack enable && yarn install --production --frozen-lockfile
+RUN apk add --no-cache python3 make g++ ca-certificates && \
+	corepack enable && yarn install --production --frozen-lockfile
 
 FROM node:20-alpine AS builder
 WORKDIR /app
