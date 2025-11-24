@@ -42,7 +42,14 @@ export class ImageService {
       await fs.rename(tempPath, outputPath);
     }
 
-    return outputPath.replace(`${UPLOADS_DIR}/`, '');
+    // Retourner le chemin relatif pour l'URL (uploads/games/xxx.webp)
+    // En production UPLOADS_DIR=/data/uploads, donc on extrait la partie après /data/
+    // En dev UPLOADS_DIR=./uploads, donc on enlève le ./
+    const relativePath = outputPath
+      .replace(/^\.\//, '') // Enlever ./ du début
+      .replace(/^.*\/data\//, ''); // Enlever tout avant /data/ (garde uploads/...)
+    
+    return relativePath;
   }
 
   /**
