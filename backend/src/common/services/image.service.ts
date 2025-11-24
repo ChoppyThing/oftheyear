@@ -43,11 +43,14 @@ export class ImageService {
     }
 
     // Retourner le chemin relatif pour l'URL (uploads/games/xxx.webp)
-    // En production UPLOADS_DIR=/data/uploads, donc on extrait la partie après /data/
-    // En dev UPLOADS_DIR=./uploads, donc on enlève le ./
-    const relativePath = outputPath
-      .replace(/^\.\//, '') // Enlever ./ du début
-      .replace(/^.*\/data\//, ''); // Enlever tout avant /data/ (garde uploads/...)
+    // En production UPLOADS_DIR=/data/uploads → /data/uploads/games/xxx.webp → uploads/games/xxx.webp
+    // En dev UPLOADS_DIR=./uploads → ./uploads/games/xxx.webp → uploads/games/xxx.webp
+    let relativePath = outputPath.replace(/^\.\//, ''); // Enlever ./ du début
+    
+    // Si le chemin contient /data/, extraire à partir de "uploads"
+    if (relativePath.includes('/data/uploads/')) {
+      relativePath = relativePath.substring(relativePath.indexOf('uploads/'));
+    }
     
     return relativePath;
   }
