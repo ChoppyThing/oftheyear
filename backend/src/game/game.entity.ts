@@ -27,8 +27,20 @@ export class Game {
   @Column('text', { nullable: true })
   description?: string;
 
-  @Column({ nullable: true })
-  image: string;
+  @Column({ nullable: true, name: 'image' })
+  private _image: string;
+
+  // Getter qui garantit toujours que l'image commence par "uploads/"
+  get image(): string {
+    if (!this._image) return null;
+    if (this._image.startsWith('uploads/')) return this._image;
+    return `uploads/${this._image}`;
+  }
+
+  // Setter pour permettre l'assignation
+  set image(value: string) {
+    this._image = value;
+  }
 
   @Column({ nullable: true })
   developer: string;
