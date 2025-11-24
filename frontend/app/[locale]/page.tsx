@@ -48,7 +48,7 @@ export default async function Home({
       <div className="relative z-10">
         <header className="grid grid-cols-1 md:grid-cols-2 p-10">
           <div className="text-center m-auto">
-            <Image src="/logo/logo.png" width="350" height="350" alt="Logo" />
+            <Image src="/logo/logo.png" width="350" height="350" alt="Logo" priority />
           </div>
           <div className="text-white text-4xl md:text-5xl text-center m-auto uppercase font-bold">
             <p id="stars" className="text-yellow-400 mb-2">
