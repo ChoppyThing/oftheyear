@@ -232,7 +232,7 @@ export default function CategoryVoteClient({
                 <div className="relative aspect-3/4 bg-gray-700 overflow-hidden">
                   {game.image ? (
                     <img
-                      src={"http://localhost:3000/" + game.image}
+                      src={`${process.env.NEXT_PUBLIC_API_URL}/${game.image}`}
                       alt={game.name}
                       className="absolute inset-0 w-full h-full object-cover"
                     />

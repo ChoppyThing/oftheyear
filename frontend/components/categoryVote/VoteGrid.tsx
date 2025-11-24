@@ -113,7 +113,7 @@ export default function VoteGrid({
               <div className="relative aspect-[3/4] bg-gray-800">
                 {game.image ? (
                   <img
-                    src={`http://localhost:3000/${game.image}`}
+                    src={`${process.env.NEXT_PUBLIC_API_URL}/${game.image}`}
                     alt={game.name}
                     className="w-full h-full object-cover"
                   />

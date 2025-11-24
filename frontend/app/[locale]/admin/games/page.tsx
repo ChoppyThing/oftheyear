@@ -160,7 +160,7 @@ export default function AdminGamesPage() {
                         <td className="px-6 py-4 whitespace-nowrap">
                           <div className="flex items-center">
                             <img
-                              src={"http://localhost:3000/" + game.image}
+                              src={`${process.env.NEXT_PUBLIC_API_URL}/${game.image}`}
                               alt={game.name}
                               className="h-12 w-12 rounded object-cover"
                             />
