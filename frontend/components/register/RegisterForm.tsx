@@ -6,6 +6,7 @@ import AnimatedBackground from "@/components/layout/AnimatedBackground";
 import Image from "next/image";
 import { Locale } from "@/i18n.config";
 import { z } from "zod";
+import { useRecaptcha } from "@/hooks/useRecaptcha";
 
 // Schéma de validation Zod
 const registerSchema = z.object({
@@ -37,6 +38,7 @@ export default function RegisterForm({
   locale: Locale;
   dict: any;
 }) {
+  const { executeRecaptcha } = useRecaptcha();
   const [formData, setFormData] = useState<RegisterFormData>({
     email: "",
     firstName: "",
@@ -69,6 +71,12 @@ export default function RegisterForm({
       // Validation avec Zod
       const validatedData = registerSchema.parse(formData);
 
+      // Obtenir le token reCAPTCHA
+      const recaptchaToken = await executeRecaptcha('register');
+      if (!recaptchaToken) {
+        throw new Error('Échec de la vérification reCAPTCHA. Veuillez réessayer.');
+      }
+
       const response = await fetch(
         `${process.env.NEXT_PUBLIC_API_URL}/auth/register`,
         {
@@ -83,6 +91,7 @@ export default function RegisterForm({
             nickname: validatedData.nickname,
             password: validatedData.password,
             locale: locale,
+            recaptchaToken,
           }),
         }
       );

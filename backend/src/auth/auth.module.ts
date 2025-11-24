@@ -7,6 +7,7 @@ import { User } from 'src/user/user.entity';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { MailModule } from 'src/mail/mail.module';
 import { JwtAuthGuard } from './jwt-auth.guard';
+import { RecaptchaService } from './recaptcha.service';
 
 @Module({
   imports: [
@@ -22,7 +23,7 @@ import { JwtAuthGuard } from './jwt-auth.guard';
     MailModule,
   ],
   controllers: [AuthController],
-  providers: [AuthService, JwtAuthGuard],
+  providers: [AuthService, JwtAuthGuard, RecaptchaService],
   exports: [AuthService, JwtAuthGuard],
 })
 export class AuthModule {}

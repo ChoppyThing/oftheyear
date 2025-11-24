@@ -38,6 +38,7 @@ jobs:
           build-args: |
             NEXT_PUBLIC_API_URL=https://api.oftheyear.eu
             NEXT_PUBLIC_HOST=https://oftheyear.eu
+            NEXT_PUBLIC_RECAPTCHA_SITE_KEY=${{ secrets.NEXT_PUBLIC_RECAPTCHA_SITE_KEY }}
 
       - name: Build and push backend
         uses: docker/build-push-action@v4

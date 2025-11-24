@@ -5,6 +5,7 @@ import Link from "next/link";
 import AnimatedBackground from "@/components/layout/AnimatedBackground";
 import Image from "next/image";
 import { Locale } from "@/i18n.config";
+import { useRecaptcha } from "@/hooks/useRecaptcha";
 
 export default function LoginForm({
   locale,
@@ -13,6 +14,7 @@ export default function LoginForm({
   locale: Locale;
   dict: any;
 }) {
+  const { executeRecaptcha } = useRecaptcha();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -24,6 +26,12 @@ export default function LoginForm({
     setIsLoading(true);
 
     try {
+      // Obtenir le token reCAPTCHA
+      const recaptchaToken = await executeRecaptcha('login');
+      if (!recaptchaToken) {
+        throw new Error('Échec de la vérification reCAPTCHA. Veuillez réessayer.');
+      }
+
       const response = await fetch(
         `${process.env.NEXT_PUBLIC_API_URL}/auth/login`,
         {
@@ -31,7 +39,7 @@ export default function LoginForm({
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({ email, password }),
+          body: JSON.stringify({ email, password, recaptchaToken }),
         }
       );
 

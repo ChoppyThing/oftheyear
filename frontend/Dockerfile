@@ -4,7 +4,11 @@ WORKDIR /app
 # Install all deps (including dev) for build using Yarn
 COPY package.json yarn.lock ./
 ARG NEXT_PUBLIC_API_URL
+ARG NEXT_PUBLIC_HOST
+ARG NEXT_PUBLIC_RECAPTCHA_SITE_KEY
 ENV NEXT_PUBLIC_API_URL=${NEXT_PUBLIC_API_URL}
+ENV NEXT_PUBLIC_HOST=${NEXT_PUBLIC_HOST}
+ENV NEXT_PUBLIC_RECAPTCHA_SITE_KEY=${NEXT_PUBLIC_RECAPTCHA_SITE_KEY}
 RUN apk add --no-cache python3 make g++ ca-certificates && \
 	corepack enable && yarn install --frozen-lockfile
 COPY . .

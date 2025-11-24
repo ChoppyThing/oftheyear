@@ -37,6 +37,10 @@ export class CreateUserDto {
   @IsString()
   @IsOptional()
   locale?: string;
+
+  @IsString()
+  @IsNotEmpty()
+  recaptchaToken: string;
 }
 
 export class LoginDto {
@@ -47,6 +51,10 @@ export class LoginDto {
   @IsString()
   @IsNotEmpty()
   password: string;
+
+  @IsString()
+  @IsNotEmpty()
+  recaptchaToken: string;
 }
 
 export class UpdateUserDto {
