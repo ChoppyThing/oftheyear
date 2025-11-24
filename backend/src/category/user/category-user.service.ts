@@ -25,11 +25,15 @@ export class CategoryUserService {
    * Proposer une nouvelle catégorie
    */
   async createProposal(user: User, dto: CreateCategoryProposalDto) {
-    const alreadyProposed = await this.hasAlreadyProposed(user.id, dto.year);
-    if (alreadyProposed) {
-      throw new ForbiddenException(
-        'Vous avez déjà proposé une catégorie pour cette année',
-      );
+    // Vérifier si l'utilisateur a déjà proposé une catégorie (sauf s'il est admin)
+    const isAdmin = user.roles.includes('ADMIN');
+    if (!isAdmin) {
+      const alreadyProposed = await this.hasAlreadyProposed(user.id, dto.year);
+      if (alreadyProposed) {
+        throw new ForbiddenException(
+          'Vous avez déjà proposé une catégorie pour cette année',
+        );
+      }
     }
 
     const existing = await this.categoryRepository.findOne({
