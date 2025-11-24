@@ -44,21 +44,11 @@ export class MailService {
     const subject =
       validationEmailSubjects.validation[locale] || validationEmailSubjects.validation['en'];
 
-    const mail = {
-      from: this.config.get('MAIL_FROM') || 'no-reply@example.com',
+    await this.sendMail({
       to,
       subject,
       html,
-    };
-
-    try {
-      const info = await this.transporter.sendMail(mail);
-      this.logger.log(`Sent verification email to ${to}: ${info.messageId}`);
-      return info;
-    } catch (err) {
-      this.logger.error('Failed to send verification email', err as any);
-      throw err;
-    }
+    });
   }
 
   async sendPasswordResetEmail(
@@ -73,24 +63,84 @@ export class MailService {
     const subject =
       emailSubjects.resetPassword[locale] || emailSubjects.resetPassword['en'];
 
-    const mail = {
-      from: this.config.get('MAIL_FROM') || 'no-reply@example.com',
+    await this.sendMail({
       to,
       subject,
       html,
-    };
-
-    try {
-      const info = await this.transporter.sendMail(mail);
-      this.logger.log(`Sent password reset email to ${to}: ${info.messageId}`);
-      return info;
-    } catch (err) {
-      this.logger.error('Failed to send password reset email', err as any);
-      throw err;
-    }
+    });
   }
 
-  async sendMail(opts: nodemailer.SendMailOptions) {
-    return this.transporter.sendMail(opts as any);
+  /**
+   * In production, send mail via Brevo REST API
+   * SMTP ports 25, 465, 587 are blocked through many cloud providers for security reasons
+   */
+  private async sendMail(options: {
+    to: string;
+    subject: string;
+    html: string;
+    replyTo?: string;
+  }) {
+    const nodeEnv = this.config.get('NODE_ENV');
+    
+    if (nodeEnv === 'production') {
+      const brevoApiKey = this.config.get('BREVO_API_KEY');
+      const mailFromName = this.config.get('MAIL_FROM_NAME') || 'OfTheYear';
+      const mailFromAddress = this.config.get('MAIL_FROM_ADDRESS') || this.config.get('MAIL_FROM') || 'no-reply@oftheyear.eu';
+
+      if (!brevoApiKey) {
+        this.logger.error('BREVO_API_KEY is not configured in production');
+        throw new Error('Email service not configured');
+      }
+
+      try {
+        const response = await fetch('https://api.brevo.com/v3/smtp/email', {
+          method: 'POST',
+          headers: {
+            accept: 'application/json',
+            'api-key': brevoApiKey,
+            'content-type': 'application/json',
+          },
+          body: JSON.stringify({
+            sender: {
+              name: mailFromName,
+              email: mailFromAddress,
+            },
+            to: [{ email: options.to }],
+            subject: options.subject,
+            htmlContent: options.html,
+            ...(options.replyTo && { replyTo: { email: options.replyTo } }),
+          }),
+        });
+
+        if (!response.ok) {
+          const errorText = await response.text();
+          this.logger.error(`Brevo API error: ${response.status} ${errorText}`);
+          throw new Error(`Failed to send email via Brevo: ${response.status}`);
+        }
+
+        const result = await response.json();
+        this.logger.log(`Sent email to ${options.to} via Brevo: ${result.messageId}`);
+      } catch (err) {
+        this.logger.error('Failed to send email via Brevo', err as any);
+        throw err;
+      }
+    } else {
+      // Development: use nodemailer SMTP
+      const mail = {
+        from: this.config.get('MAIL_FROM') || 'no-reply@example.com',
+        to: options.to,
+        subject: options.subject,
+        html: options.html,
+        ...(options.replyTo && { replyTo: options.replyTo }),
+      };
+
+      try {
+        const info = await this.transporter.sendMail(mail as any);
+        this.logger.log(`Sent email to ${options.to}: ${info.messageId}`);
+      } catch (err) {
+        this.logger.error('Failed to send email via SMTP', err as any);
+        throw err;
+      }
+    }
   }
 }
