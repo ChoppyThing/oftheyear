@@ -67,6 +67,12 @@ export class CreateGameAdminDto {
   @IsString()
   editor?: string;
 
+  @IsNotEmpty()
+  @Type(() => Number)
+  @IsInt()
+  @Min(1980)
+  year: number;
+
   @IsOptional()
   @IsEnum(Status)
   status?: Status;
@@ -102,6 +108,12 @@ export class UpdateGameAdminDto {
   @IsOptional()
   @IsString()
   editor?: string;
+
+  @IsOptional()
+  @Type(() => Number)
+  @IsInt()
+  @Min(1980)
+  year?: number;
 
   @IsOptional()
   @IsEnum(Status)

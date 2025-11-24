@@ -79,13 +79,21 @@ export default function AdminGamesPage() {
     <div className="min-h-screen bg-gray-50 p-8">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">
-            Gestion des jeux
-          </h1>
-          <p className="text-gray-600">
-            {data?.pagination?.total || 0} jeux au total
-          </p>
+        <div className="mb-8 flex justify-between items-center">
+          <div>
+            <h1 className="text-3xl font-bold text-gray-900 mb-2">
+              Gestion des jeux
+            </h1>
+            <p className="text-gray-600">
+              {data?.pagination?.total || 0} jeux au total
+            </p>
+          </div>
+          <button
+            onClick={() => setEditGame({} as Game)}
+            className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg font-medium transition-colors"
+          >
+            + Ajouter un jeu
+          </button>
         </div>
 
         {/* Filtres */}

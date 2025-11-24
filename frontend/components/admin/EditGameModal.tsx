@@ -14,15 +14,17 @@ interface EditGameModalProps {
 }
 
 export default function EditGameModal({ game, isOpen, onClose, onSuccess }: EditGameModalProps) {
+  const isCreating = !game.id;
   const [loading, setLoading] = useState(false);
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [removeImage, setRemoveImage] = useState(false);
   const [formData, setFormData] = useState({
-    name: game.name,
+    name: game.name || '',
     developer: game.developer || '',
     editor: game.editor || '',
     description: game.description || '',
-    status: game.status,
+    year: game.year || new Date().getFullYear(),
+    status: game.status || 'sent',
   });
 
   if (!isOpen) return null;
@@ -34,6 +36,7 @@ export default function EditGameModal({ game, isOpen, onClose, onSuccess }: Edit
     try {
       const submitData = new FormData();
       submitData.append('name', formData.name);
+      submitData.append('year', formData.year.toString());
       if (formData.developer) submitData.append('developer', formData.developer);
       if (formData.editor) submitData.append('editor', formData.editor);
       if (formData.description) submitData.append('description', formData.description);
@@ -41,16 +44,22 @@ export default function EditGameModal({ game, isOpen, onClose, onSuccess }: Edit
 
       if (imageFile) {
         submitData.append('image', imageFile);
-      } else if (removeImage) {
+      } else if (removeImage && !isCreating) {
         submitData.append('removeImage', 'true');
       }
 
-      await gameAdminService.update(game.id, submitData);
-      alert('Jeu modifié avec succès');
+      if (isCreating) {
+        await gameAdminService.create(submitData);
+        alert('Jeu créé avec succès');
+      } else {
+        await gameAdminService.update(game.id, submitData);
+        alert('Jeu modifié avec succès');
+      }
+      
       onSuccess();
       onClose();
     } catch (error) {
-      alert('Erreur lors de la modification');
+      alert(isCreating ? 'Erreur lors de la création' : 'Erreur lors de la modification');
       console.error(error);
     } finally {
       setLoading(false);
@@ -61,7 +70,9 @@ export default function EditGameModal({ game, isOpen, onClose, onSuccess }: Edit
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
       <div className="bg-white rounded-lg shadow-xl max-w-2xl w-full mx-4 max-h-[90vh] overflow-y-auto">
         <div className="flex items-center justify-between p-6 border-b">
-          <h2 className="text-xl font-bold">Modifier le jeu</h2>
+          <h2 className="text-xl font-bold">
+            {isCreating ? 'Créer un jeu' : 'Modifier le jeu'}
+          </h2>
           <button
             onClick={onClose}
             className="text-gray-500 hover:text-gray-700 transition-colors"
@@ -124,6 +135,22 @@ export default function EditGameModal({ game, isOpen, onClose, onSuccess }: Edit
                 className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
             </div>
+          </div>
+
+          <div>
+            <label htmlFor="year" className="block text-sm font-medium text-gray-700 mb-1">
+              Année *
+            </label>
+            <input
+              id="year"
+              type="number"
+              value={formData.year}
+              onChange={(e) => setFormData({ ...formData, year: parseInt(e.target.value) })}
+              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              required
+              min="1980"
+              max={new Date().getFullYear() + 2}
+            />
           </div>
 
           <ImageUpload

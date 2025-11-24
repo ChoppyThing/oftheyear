@@ -50,6 +50,10 @@ export class GameAdminController {
     @CurrentUser() user: User,
     @UploadedFile() image?: Express.Multer.File,
   ) {
+    // Transform year from string to number if needed (FormData sends strings)
+    if (typeof createGameDto.year === 'string') {
+      createGameDto.year = parseInt(createGameDto.year, 10);
+    }
     return this.gameAdminService.createGame(createGameDto, user, image);
   }
 
@@ -64,6 +68,10 @@ export class GameAdminController {
     @Body() dto: UpdateGameAdminDto,
     @UploadedFile() image?: Express.Multer.File,
   ) {
+    // Transform year from string to number if needed (FormData sends strings)
+    if (dto.year && typeof dto.year === 'string') {
+      dto.year = parseInt(dto.year, 10);
+    }
     return this.gameAdminService.updateGame(id, dto, image);
   }
 
