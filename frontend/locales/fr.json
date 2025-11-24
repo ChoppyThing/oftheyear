@@ -30,8 +30,7 @@
       "description": "Ici, chacun peut voter pour son jeu préféré de l'année — le jeu qui l'a le plus fait vibrer, surpris ou rassemblé. L'idée : une communauté qui partage ses coups de cœur et élit le meilleur jeu."
     },
     "latestGames": {
-      "title": "Derniers jeux ajoutés",
-      "template": "(template - remplacé par l'API plus tard)"
+      "title": "Derniers jeux ajoutés"
     },
     "currentLocale": "Langue actuelle :"
   },
