@@ -1,8 +1,6 @@
 import { MetadataRoute } from 'next';
 
 export default function robots(): MetadataRoute.Robots {
-  const BASE_URL = process.env.NEXT_PUBLIC_HOST || 'https://oftheyear.eu';
-
   return {
     rules: [
       {
@@ -16,6 +14,6 @@ export default function robots(): MetadataRoute.Robots {
         ],
       },
     ],
-    sitemap: `${BASE_URL}/sitemap.xml`,
+    sitemap: 'https://game.oftheyear.eu/sitemap.xml',
   };
 }

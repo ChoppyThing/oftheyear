@@ -1,6 +1,6 @@
 import { MetadataRoute } from 'next';
 
-const BASE_URL = process.env.NEXT_PUBLIC_HOST || 'https://oftheyear.eu';
+const BASE_URL = 'https://game.oftheyear.eu';
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'https://api.oftheyear.eu';
 
 async function getCategories() {
