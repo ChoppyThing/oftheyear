@@ -3,6 +3,29 @@ import { Locale } from "@/i18n.config";
 import GameCard from "@/components/GameCard";
 import Image from "next/image";
 
+const API_URL = process.env.NEXT_PUBLIC_API_URL || 'https://api.oftheyear.eu';
+
+interface Game {
+  id: number;
+  name: string;
+  image?: string;
+  year: number;
+  publishAt: string;
+}
+
+async function getLatestGames(): Promise<Game[]> {
+  try {
+    const response = await fetch(`${API_URL}/game/latest?limit=3`, {
+      next: { revalidate: 300 }, // Revalider toutes les 5 minutes
+    });
+    if (!response.ok) return [];
+    return await response.json();
+  } catch (error) {
+    console.error('Failed to fetch latest games:', error);
+    return [];
+  }
+}
+
 export default async function Home({
   params,
 }: {
@@ -10,6 +33,7 @@ export default async function Home({
 }) {
   const { locale } = await params;
   const dict = await getDictionary(locale);
+  const latestGames = await getLatestGames();
 
   return (
     <div className="relative min-h-screen text-gray-100">
@@ -64,33 +88,21 @@ export default async function Home({
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-              {[
-                {
-                  id: 1,
-                  title: "Aurora Drift",
-                  image: "/logo/logo.png",
-                  releaseDate: "2025-09-12",
-                },
-                {
-                  id: 2,
-                  title: "Shadow Garden",
-                  image: "/logo/logo.png",
-                  releaseDate: "2024-11-03",
-                },
-                {
-                  id: 3,
-                  title: "Neon Rally",
-                  image: "/logo/logo.png",
-                  releaseDate: "2023-06-21",
-                },
-              ].map((g) => (
-                <GameCard
-                  key={g.id}
-                  image={g.image}
-                  title={g.title}
-                  releaseDate={g.releaseDate}
-                />
-              ))}
+              {latestGames.length > 0 ? (
+                latestGames.map((game) => (
+                  <GameCard
+                    key={game.id}
+                    image={game.image ? `${API_URL}/${game.image}` : "/logo/logo.png"}
+                    title={game.name}
+                    year={game.year}
+                    releaseDate={game.publishAt}
+                  />
+                ))
+              ) : (
+                <p className="col-span-3 text-center text-gray-400">
+                  {dict.home.latestGames.noGames || "Aucun jeu disponible pour le moment"}
+                </p>
+              )}
             </div>
           </section>
         </main>

@@ -21,6 +21,16 @@ export class GameController {
   }
 
   /**
+   * Récupère les derniers jeux validés
+   * GET /game/latest?limit=3
+   */
+  @Public()
+  @Get('latest')
+  async getLatest(@Query('limit') limit?: number): Promise<Game[]> {
+    return await this.gameService.findLatest(limit || 3);
+  }
+
+  /**
    * Permet à un utilisateur de proposer un jeu
    * POST /game
    * Nécessite une authentification

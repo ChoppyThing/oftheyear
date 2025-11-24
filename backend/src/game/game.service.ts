@@ -27,6 +27,16 @@ export class GameService {
     return await query.getMany();
   }
 
+  async findLatest(limit: number = 3): Promise<Game[]> {
+    return await this.gameRepository
+      .createQueryBuilder('game')
+      .leftJoinAndSelect('game.author', 'author')
+      .where('game.status = :status', { status: Status.Validated })
+      .orderBy('game.publishAt', 'DESC')
+      .limit(limit)
+      .getMany();
+  }
+
   async proposeGame(createGameDto: CreateGameDto, user: User): Promise<Game> {
     console.log(user);
     const game = this.gameRepository.create({
