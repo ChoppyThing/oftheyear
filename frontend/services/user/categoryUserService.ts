@@ -60,7 +60,7 @@ export const categoryUserService = {
     return apiClient.get("/category/user/stats");
   },
 
-  async hasProposed(year: number): Promise<boolean> {
+  async hasProposed(year: number): Promise<{ hasProposed: boolean }> {
     return await apiClient.get(
       `/category/user/has-proposed/${year}`
     );

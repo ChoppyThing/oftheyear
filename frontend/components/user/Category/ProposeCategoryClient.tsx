@@ -26,8 +26,8 @@ export default function ProposeCategoryClient() {
 
   const checkProposal = async () => {
     try {
-      const hasProposed = await categoryUserService.hasProposed(currentYear);
-      setAlreadyProposed(hasProposed);
+      const response = await categoryUserService.hasProposed(currentYear);
+      setAlreadyProposed(response.hasProposed);
     } catch (error) {
       console.error('Erreur vérification:', error);
     } finally {
