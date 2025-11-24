@@ -14,6 +14,7 @@ import {
 import { Status } from '../status.enum';
 import { User } from 'src/user/user.entity';
 import { ImageService } from 'src/common/services/image.service';
+import { RevalidationService } from 'src/common/services/revalidation.service';
 
 @Injectable()
 export class GameAdminService {
@@ -21,6 +22,7 @@ export class GameAdminService {
     @InjectRepository(Game)
     private readonly gameRepository: Repository<Game>,
     private readonly imageService: ImageService,
+    private readonly revalidationService: RevalidationService,
   ) {}
 
   /**
@@ -213,7 +215,12 @@ export class GameAdminService {
     game.status = Status.Validated;
     game.publishAt = new Date(); // ✅ Définir la date de publication
 
-    return await this.gameRepository.save(game);
+    const savedGame = await this.gameRepository.save(game);
+    
+    // Revalider la page d'accueil pour afficher le nouveau jeu
+    await this.revalidationService.revalidateHome();
+    
+    return savedGame;
   }
 
   /**

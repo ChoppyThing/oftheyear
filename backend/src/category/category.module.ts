@@ -13,6 +13,7 @@ import { UserModule } from 'src/user/user.module';
 import { FinalVote } from 'src/category-nominee/final-vote.entity';
 import { CategoryUserController } from './user/category-user.controller';
 import { CategoryUserService } from './user/category-user.service';
+import { RevalidationService } from 'src/common/services/revalidation.service';
 
 @Module({
   imports: [
@@ -22,7 +23,7 @@ import { CategoryUserService } from './user/category-user.service';
     UserModule,
   ],
   controllers: [CategoryController, CategoryAdminController, CategoryUserController],
-  providers: [CategoryService, CategoryAdminService, CategoryUserService],
+  providers: [CategoryService, CategoryAdminService, CategoryUserService, RevalidationService],
   exports: [CategoryService, CategoryAdminService],
 })
 export class CategoryModule {}

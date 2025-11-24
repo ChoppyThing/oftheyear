@@ -16,6 +16,7 @@ import { CategoryVoteStats, VotePhaseOverview } from '../category.dto';
 import { CategoryPhase } from '../category-phase.enum';
 import { CategoryNominee } from 'src/category-nominee/category-nominee.entity';
 import { FinalVote } from 'src/category-nominee/final-vote.entity';
+import { RevalidationService } from 'src/common/services/revalidation.service';
 
 @Injectable()
 export class CategoryAdminService {
@@ -28,6 +29,8 @@ export class CategoryAdminService {
 
     @InjectRepository(FinalVote)
     private readonly finalVoteRepository: Repository<FinalVote>,
+    
+    private readonly revalidationService: RevalidationService,
   ) {}
 
   async list(filters: AdminListCategoryDto) {
@@ -106,7 +109,12 @@ export class CategoryAdminService {
       author,
     });
 
-    return this.categoryRepository.save(category);
+    const savedCategory = await this.categoryRepository.save(category);
+    
+    // Revalider le sitemap car une nouvelle catégorie est ajoutée
+    await this.revalidationService.revalidateSitemap();
+    
+    return savedCategory;
   }
 
   async update(
@@ -132,7 +140,13 @@ export class CategoryAdminService {
     }
 
     Object.assign(category, updateDto);
-    return this.categoryRepository.save(category);
+    const savedCategory = await this.categoryRepository.save(category);
+    
+    // Revalider la page de la catégorie et le sitemap
+    await this.revalidationService.revalidateCategory(savedCategory.slug);
+    await this.revalidationService.revalidateSitemap();
+    
+    return savedCategory;
   }
 
   async delete(id: number): Promise<void> {

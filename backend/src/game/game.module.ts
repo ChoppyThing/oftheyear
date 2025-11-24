@@ -10,6 +10,7 @@ import { CategoryModule } from 'src/category/category.module';
 import { GameAdminController } from './admin/game-admin.controller';
 import { GameAdminService } from './admin/game-admin.service';
 import { ImageService } from 'src/common/services/image.service';
+import { RevalidationService } from 'src/common/services/revalidation.service';
 import { GameUserController } from './user/game-user.controller';
 import { GameUserService } from './user/game-user.service';
 import { UserModule } from 'src/user/user.module';
@@ -29,7 +30,7 @@ import { UserModule } from 'src/user/user.module';
     }),
   ],
   controllers: [GameController, GameAdminController, GameUserController],
-  providers: [GameService, GameAdminService, GameUserService, ImageService],
+  providers: [GameService, GameAdminService, GameUserService, ImageService, RevalidationService],
   exports: [GameService, GameUserService],
 })
 export class GameModule {}
