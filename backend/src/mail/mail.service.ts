@@ -38,8 +38,8 @@ export class MailService {
     token: string,
     locale: string = 'en',
   ) {
-    const baseUrl = this.config.get('APP_URL') || 'http://localhost:3000';
-    const verifyUrl = `${baseUrl}/${locale}/verify-email?token=${encodeURIComponent(token)}`;
+    const baseUrl = this.config.get('FRONTEND_URL') || 'https://oftheyear.eu';
+    const verifyUrl = `${baseUrl}/${locale}/verify?token=${encodeURIComponent(token)}`;
     const html = validationEmail(firstName, verifyUrl, locale);
     const subject =
       validationEmailSubjects.validation[locale] || validationEmailSubjects.validation['en'];
@@ -57,7 +57,7 @@ export class MailService {
     token: string,
     locale: string = 'en',
   ) {
-    const baseUrl = this.config.get('APP_URL') || 'http://localhost:3000';
+    const baseUrl = this.config.get('FRONTEND_URL') || 'https://oftheyear.eu';
     const resetUrl = `${baseUrl}/${locale}/reset-password?token=${encodeURIComponent(token)}`;
     const html = resetPasswordEmail(firstName, resetUrl, locale);
     const subject =
