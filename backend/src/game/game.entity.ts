@@ -33,7 +33,7 @@ export class Game {
   @Column({ nullable: true })
   developer: string;
 
-  @Column({ select: false, nullable: true })
+  @Column({ nullable: true })
   editor: string;
 
   @Column({
