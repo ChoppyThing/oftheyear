@@ -15,10 +15,13 @@ import { RecaptchaService } from './recaptcha.service';
     JwtModule.registerAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
-      useFactory: async (configService: ConfigService) => ({
-        secret: configService.get<string>('JWT_SECRET'),
-        signOptions: { expiresIn: configService.get<string>('JWT_EXPIRES') as any },
-      }),
+      useFactory: async (configService: ConfigService) => {
+        const maxAgeMinutes = configService.get<number>('JWT_MAX_AGE') || 60;
+        return {
+          secret: configService.get<string>('JWT_SECRET'),
+          signOptions: { expiresIn: `${maxAgeMinutes}m` },
+        };
+      },
     }),
     MailModule,
   ],

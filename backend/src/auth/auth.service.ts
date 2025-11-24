@@ -122,14 +122,11 @@ export class AuthService {
       roles: user.roles,
     };
 
-    const jwtExpires = process.env.JWT_EXPIRES || '1h';
-    const expiresInSeconds = parseInt(
-      process.env.JWT_EXPIRES_SECONDS || '3600',
-      10,
-    );
+    const jwtMaxAgeMinutes = parseInt(process.env.JWT_MAX_AGE || '60', 10);
+    const expiresInSeconds = jwtMaxAgeMinutes * 60;
 
     const token = this.jwtService.sign(payload as any, {
-      expiresIn: jwtExpires as any,
+      expiresIn: `${jwtMaxAgeMinutes}m`,
     });
 
     return {
@@ -190,14 +187,11 @@ export class AuthService {
       roles: user.roles,
     };
 
-    const jwtExpires = process.env.JWT_EXPIRES || '1h';
-    const expiresInSeconds = parseInt(
-      process.env.JWT_EXPIRES_SECONDS || '3600',
-      10,
-    );
+    const jwtMaxAgeMinutes = parseInt(process.env.JWT_MAX_AGE || '60', 10);
+    const expiresInSeconds = jwtMaxAgeMinutes * 60;
 
     const jwtToken = this.jwtService.sign(payload as any, {
-      expiresIn: jwtExpires as any,
+      expiresIn: `${jwtMaxAgeMinutes}m`,
     });
 
     return {
