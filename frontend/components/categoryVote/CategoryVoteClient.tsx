@@ -229,7 +229,7 @@ export default function CategoryVoteClient({
                 className="group relative bg-gray-800 rounded-lg overflow-hidden hover:scale-105 transition-transform disabled:opacity-50"
               >
                 {/* Image */}
-                <div className="relative aspect-3/4 bg-gray-700 overflow-hidden">
+                <div className="relative aspect-[4/3] bg-gray-700 overflow-hidden">
                   {game.image ? (
                     <img
                       src={`${process.env.NEXT_PUBLIC_API_URL}/${game.image}`}

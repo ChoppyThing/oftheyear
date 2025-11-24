@@ -10,7 +10,7 @@ type Props = {
 export default function GameCard({ image, title, year, releaseDate }: Props) {
   return (
     <article className="bg-gray-800/60 rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow">
-      <div className="w-full h-48 relative bg-gray-700/40">
+      <div className="w-full aspect-[4/3] relative bg-gray-700/40">
         <Image 
           src={image} 
           alt={title} 

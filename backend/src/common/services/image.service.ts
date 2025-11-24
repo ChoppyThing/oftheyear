@@ -27,7 +27,7 @@ export class ImageService {
     await sharp(filePath)
       .resize(800, 600, {
         fit: 'cover',
-        position: 'center',
+        position: 'attention',
       })
       .webp({ quality: 85 })
       .toFile(tempPath);

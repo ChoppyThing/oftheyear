@@ -111,7 +111,7 @@ export default function NominationGrid({
               `}
             >
               {/* Image */}
-              <div className="relative aspect-3/4 bg-gray-800">
+              <div className="relative aspect-[4/3] bg-gray-800">
                 {game.image ? (
                   <img
                     src={`${process.env.NEXT_PUBLIC_API_URL}/${game.image}`}
