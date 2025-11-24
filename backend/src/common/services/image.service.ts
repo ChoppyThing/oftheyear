@@ -17,17 +17,27 @@ export class ImageService {
       `${parsedPath.name}.webp`,
     );
 
+    // Si le fichier est déjà en webp, utiliser un fichier temporaire
+    const tempPath = filePath === outputPath 
+      ? path.join(parsedPath.dir, `${parsedPath.name}_temp.webp`)
+      : outputPath;
+
     await sharp(filePath)
       .resize(800, 600, {
         fit: 'cover',
         position: 'center',
       })
       .webp({ quality: 85 })
-      .toFile(outputPath);
+      .toFile(tempPath);
 
     // Supprimer l'image originale
     if (filePath !== outputPath) {
       await fs.unlink(filePath);
+    }
+
+    // Si on a utilisé un fichier temporaire, le renommer
+    if (tempPath !== outputPath) {
+      await fs.rename(tempPath, outputPath);
     }
 
     return outputPath.replace('./uploads/', '');
