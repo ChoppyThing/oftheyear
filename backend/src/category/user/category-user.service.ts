@@ -28,8 +28,14 @@ export class CategoryUserService {
   async createProposal(user: User, dto: CreateCategoryProposalDto) {
     // Vérifier si l'utilisateur a déjà proposé une catégorie (sauf s'il est admin)
     const isAdmin = user.roles.includes(Role.Admin);
+    
+    console.log('[CategoryUserService] User:', user.id, 'Email:', user.email, 'Roles:', user.roles);
+    console.log('[CategoryUserService] Is admin?', isAdmin);
+    
     if (!isAdmin) {
       const alreadyProposed = await this.hasAlreadyProposed(user.id, dto.year);
+      console.log('[CategoryUserService] Already proposed?', alreadyProposed);
+      
       if (alreadyProposed) {
         throw new ForbiddenException(
           'Vous avez déjà proposé une catégorie pour cette année',
@@ -134,12 +140,21 @@ export class CategoryUserService {
   }
 
   async hasAlreadyProposed(userId: number, year: number): Promise<boolean> {
-    const count = await this.categoryRepository.count({
+    const categories = await this.categoryRepository.find({
       where: {
         author: { id: userId },
         year,
       },
+      relations: ['author'],
     });
-    return count > 0;
+    
+    console.log('[CategoryUserService] hasAlreadyProposed - userId:', userId, 'year:', year);
+    console.log('[CategoryUserService] Found categories:', categories.length);
+    
+    if (categories.length > 0) {
+      console.log('[CategoryUserService] Categories found:', categories.map(c => ({ id: c.id, name: c.name, authorId: c.author.id })));
+    }
+    
+    return categories.length > 0;
   }
 }
