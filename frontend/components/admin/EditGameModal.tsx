@@ -18,12 +18,15 @@ export default function EditGameModal({ game, isOpen, onClose, onSuccess }: Edit
   const [loading, setLoading] = useState(false);
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [removeImage, setRemoveImage] = useState(false);
+  
+  const currentYear = new Date().getFullYear();
+  
   const [formData, setFormData] = useState({
     name: game.name || '',
     developer: game.developer || '',
     editor: game.editor || '',
     description: game.description || '',
-    year: game.year || new Date().getFullYear(),
+    year: game.year || currentYear,
     status: game.status || 'sent',
   });
 

@@ -61,7 +61,7 @@ export function validationEmail(firstName: string, verifyUrl: string, locale: st
       <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="max-width:600px;margin:0 auto;background:#ffffff;border-radius:12px;overflow:hidden;">
         <tr>
           <td style="padding:32px 32px 0 32px; text-align:center;">
-            <img src="https://www.gameofthyear.fr/images/logo.png" alt="Game of the year" width="240" style="display:block;margin:0 auto 16px auto;" />
+            <img src="https://game.oftheyear.eu/logo/logo.png" alt="Game of the year" width="240" style="display:block;margin:0 auto 16px auto;" />
           </td>
         </tr>
 
