@@ -42,4 +42,8 @@ export const categoryAdminService = {
     const params = year ? { year } : {};
     return await apiClient.get('/admin/category/stats/vote-phase', { params });
   },
+
+  getGlobalStats: async (): Promise<{ total: number; nomination: number; vote: number; closed: number }> => {
+    return apiClient.get('/admin/category/stats/global');
+  },
 };

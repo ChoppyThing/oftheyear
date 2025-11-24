@@ -41,6 +41,17 @@ export class GameUserController {
   }
 
   /**
+   * Rechercher des jeux existants par nom
+   */
+  @Get('search')
+  async searchGames(@Query('query') query: string) {
+    if (!query || query.length < 5) {
+      return [];
+    }
+    return this.gameUserService.searchExistingGames(query);
+  }
+
+  /**
    * Créer une proposition de jeu
    */
   @Post()

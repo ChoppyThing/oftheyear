@@ -148,9 +148,11 @@ export default function CategoryStatsClient({ initialYear }: Props) {
       <div className="space-y-4">
         {stats.categories.map((category) => {
           const currentTab = activeTab[category.categoryId] || "all";
-          const games = category.games || []; // Protection contre undefined
-          const displayGames =
-            currentTab === "top5" ? games.slice(0, 5) : games;
+          // Pour "Tous les jeux" : afficher nominationVotes si disponible, sinon nominees
+          // Pour "Top 5" : toujours afficher nominees (les votes finaux)
+          const allGames = category.nominationVotes || category.nominees || [];
+          const top5Games = category.nominees || [];
+          const displayGames = currentTab === "top5" ? top5Games : allGames;
 
           return (
             <div
@@ -166,14 +168,6 @@ export default function CategoryStatsClient({ initialYear }: Props) {
                     <p className="text-sm text-gray-500">
                       Phase : {category.phase} • {category.totalVotes} votes
                     </p>
-                  </div>
-                  <div className="flex gap-2">
-                    <span className="px-3 py-1 text-sm bg-gray-100 text-gray-700 rounded-full">
-                      {category.nominationVotes} nominations
-                    </span>
-                    <span className="px-3 py-1 text-sm bg-blue-100 text-blue-700 rounded-full">
-                      {category.finalVotes} votes finaux
-                    </span>
                   </div>
                 </div>
               </div>

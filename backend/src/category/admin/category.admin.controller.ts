@@ -33,6 +33,18 @@ export class CategoryAdminController {
     return this.categoryAdminService.list(filters);
   }
 
+  @Get('stats/global')
+  async getGlobalStats() {
+    return this.categoryAdminService.getGlobalStats();
+  }
+
+  @Get('stats/vote-phase')
+  async getVotePhaseStats(
+    @Query('year', new ParseIntPipe({ optional: true })) year?: number,
+  ) {
+    return this.categoryAdminService.getVotePhaseStats(year);
+  }
+
   @Get(':id')
   async findOne(@Param('id', ParseIntPipe) id: number) {
     return this.categoryAdminService.findOne(id);
@@ -63,12 +75,5 @@ export class CategoryAdminController {
   async delete(@Param('id', ParseIntPipe) id: number) {
     await this.categoryAdminService.delete(id);
     return { message: 'Category deleted successfully' };
-  }
-
-  @Get('stats/vote-phase')
-  async getVotePhaseStats(
-    @Query('year', new ParseIntPipe({ optional: true })) year?: number,
-  ) {
-    return this.categoryAdminService.getVotePhaseStats(year);
   }
 }

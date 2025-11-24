@@ -185,19 +185,47 @@ export class CategoryAdminService {
   async getVotePhaseStats(year?: number): Promise<VotePhaseOverview> {
     const currentYear = year || new Date().getFullYear();
 
+    // Récupérer les catégories en phase Nomination ET Vote
     const categories = await this.categoryRepository.find({
-      where: {
-        year: currentYear,
-        phase: CategoryPhase.Vote,
-      },
-      relations: ['nominees', 'nominees.game'],
+      where: [
+        { year: currentYear, phase: CategoryPhase.Nomination },
+        { year: currentYear, phase: CategoryPhase.Vote },
+      ],
+      relations: ['nominees', 'nominees.game', 'votes', 'votes.game'],
     });
 
     const categoriesStats: CategoryVoteStats[] = await Promise.all(
       categories.map(async (category) => {
+        // 1. Toujours récupérer les votes de nomination
+        const nominationVotes = category.votes || [];
+        const gameVotes = new Map<number, { id: number; name: string; count: number }>();
+
+        nominationVotes.forEach((vote) => {
+          if (vote.game) {
+            const current = gameVotes.get(vote.game.id) || { id: vote.game.id, name: vote.game.name, count: 0 };
+            current.count++;
+            gameVotes.set(vote.game.id, current);
+          }
+        });
+
+        const allNominations = Array.from(gameVotes.values())
+          .sort((a, b) => b.count - a.count)
+          .map((game) => ({
+            id: game.id,
+            gameId: game.id,
+            gameName: game.name,
+            voteCount: game.count,
+            percentage: 0,
+          }));
+
+        const totalNominationVotes = allNominations.reduce((sum, n) => sum + n.voteCount, 0);
+        allNominations.forEach((nom) => {
+          nom.percentage = totalNominationVotes > 0 ? Math.round((nom.voteCount / totalNominationVotes) * 100) : 0;
+        });
+
+        // 2. Toujours récupérer les votes finaux sur les nominees
         const nominees = await Promise.all(
-          category.nominees.map(async (nominee) => {
-            // ✅ Compter les votes finaux pour ce nominé
+          (category.nominees || []).map(async (nominee) => {
             const voteCount = await this.finalVoteRepository.count({
               where: {
                 nominee: { id: nominee.id },
@@ -206,29 +234,26 @@ export class CategoryAdminService {
 
             return {
               id: nominee.id,
-              gameId: nominee.game.id, // ✅ Accès via la relation
-              gameName: nominee.game.name, // ✅ Accès via la relation
+              gameId: nominee.game.id,
+              gameName: nominee.game.name,
               voteCount,
               percentage: 0,
             };
           }),
         );
 
-        const totalVotes = nominees.reduce((sum, n) => sum + n.voteCount, 0);
-
+        const totalFinalVotes = nominees.reduce((sum, n) => sum + n.voteCount, 0);
         nominees.forEach((nominee) => {
-          nominee.percentage =
-            totalVotes > 0
-              ? Math.round((nominee.voteCount / totalVotes) * 100)
-              : 0;
+          nominee.percentage = totalFinalVotes > 0 ? Math.round((nominee.voteCount / totalFinalVotes) * 100) : 0;
         });
-
         nominees.sort((a, b) => b.voteCount - a.voteCount);
 
         return {
           categoryId: category.id,
           categoryName: category.name,
-          totalVotes,
+          phase: category.phase,
+          totalVotes: Math.max(totalNominationVotes, totalFinalVotes),
+          nominationVotes: allNominations,
           nominees,
         };
       }),
@@ -243,6 +268,25 @@ export class CategoryAdminService {
       totalCategories: categories.length,
       totalVotes,
       categories: categoriesStats,
+    };
+  }
+
+  /**
+   * Statistiques globales des catégories
+   */
+  async getGlobalStats() {
+    const [total, nomination, vote, closed] = await Promise.all([
+      this.categoryRepository.count(),
+      this.categoryRepository.count({ where: { phase: CategoryPhase.Nomination } }),
+      this.categoryRepository.count({ where: { phase: CategoryPhase.Vote } }),
+      this.categoryRepository.count({ where: { phase: CategoryPhase.Closed } }),
+    ]);
+
+    return {
+      total,
+      nomination,
+      vote,
+      closed,
     };
   }
 }

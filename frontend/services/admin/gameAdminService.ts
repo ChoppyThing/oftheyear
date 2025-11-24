@@ -70,4 +70,8 @@ export const gameAdminService = {
   delete: async (id: number): Promise<void> => {
     return apiClient.delete(`/admin/games/${id}`);
   },
+
+  getStats: async (): Promise<{ total: number; validated: number; pending: number; rejected: number }> => {
+    return apiClient.get('/admin/games/stats');
+  },
 };

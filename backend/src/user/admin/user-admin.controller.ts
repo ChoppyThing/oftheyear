@@ -1,4 +1,4 @@
-import { Controller, Get, Patch, Delete, Body, Param, Query, UseGuards, HttpCode } from '@nestjs/common';
+import { Controller, Get, Patch, Delete, Body, Param, Query, UseGuards, HttpCode, ParseIntPipe } from '@nestjs/common';
 import { UserAdminService } from './user-admin.service';
 import { ListUsersQueryDto, UpdateUserAdminDto } from './user-admin.dto';
 import { AdminGuard } from '../../auth/guards/admin.guard';
@@ -18,11 +18,20 @@ export class UserAdminController {
   }
 
   /**
+   * Statistiques des utilisateurs
+   * GET /admin/users/stats
+   */
+  @Get('stats')
+  async getStats() {
+    return this.userAdminService.getStats();
+  }
+
+  /**
    * Récupérer un utilisateur par ID
    * GET /admin/users/:id
    */
   @Get(':id')
-  async getUserById(@Param('id') id: number) {
+  async getUserById(@Param('id', ParseIntPipe) id: number) {
     return this.userAdminService.getUserById(id);
   }
 
@@ -31,7 +40,7 @@ export class UserAdminController {
    * PATCH /admin/users/:id
    */
   @Patch(':id')
-  async updateUser(@Param('id') id: number, @Body() dto: UpdateUserAdminDto) {
+  async updateUser(@Param('id', ParseIntPipe) id: number, @Body() dto: UpdateUserAdminDto) {
     return this.userAdminService.updateUser(id, dto);
   }
 
@@ -41,7 +50,7 @@ export class UserAdminController {
    */
   @Delete(':id')
   @HttpCode(204)
-  async deleteUser(@Param('id') id: number) {
+  async deleteUser(@Param('id', ParseIntPipe) id: number) {
     await this.userAdminService.deleteUser(id);
   }
 }

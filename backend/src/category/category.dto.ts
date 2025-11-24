@@ -16,7 +16,15 @@ export class UpdateCategoryDto extends PartialType(CreateCategoryDto) {}
 export interface CategoryVoteStats {
   categoryId: number;
   categoryName: string;
+  phase: CategoryPhase;
   totalVotes: number;
+  nominationVotes?: {
+    id: number;
+    gameId: number;
+    gameName: string;
+    voteCount: number;
+    percentage: number;
+  }[];
   nominees: {
     id: number;
     gameId: number;

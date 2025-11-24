@@ -104,4 +104,18 @@ export class UserAdminService {
     const user = await this.getUserById(id);
     await this.userRepository.remove(user);
   }
+
+  async getStats() {
+    const [total, verified, unverified] = await Promise.all([
+      this.userRepository.count(),
+      this.userRepository.count({ where: { isVerified: true } }),
+      this.userRepository.count({ where: { isVerified: false } }),
+    ]);
+
+    return {
+      total,
+      verified,
+      unverified,
+    };
+  }
 }

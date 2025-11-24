@@ -35,6 +35,15 @@ export class GameAdminController {
   }
 
   /**
+   * Statistiques globales des jeux
+   * GET /admin/games/stats
+   */
+  @Get('stats')
+  async getStats() {
+    return this.gameAdminService.getStats();
+  }
+
+  /**
    * Récupérer un jeu par ID
    * GET /admin/games/:id
    */

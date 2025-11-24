@@ -12,6 +12,7 @@ import DeleteCategoryModal from '@/components/admin/category/DeleteCategoryModal
 
 export default function AdminCategoriesPage() {
   const [data, setData] = useState<CategoriesListResponse | null>(null);
+  const [stats, setStats] = useState<{ total: number; nomination: number; vote: number; closed: number } | null>(null);
   const [loading, setLoading] = useState(true);
   const [createOpen, setCreateOpen] = useState(false);
   const [editCategory, setEditCategory] = useState<Category | null>(null);
@@ -27,16 +28,20 @@ export default function AdminCategoriesPage() {
   const fetchCategories = async () => {
     setLoading(true);
     try {
-      const response = await categoryAdminService.list({
-        page,
-        limit,
-        search: search || undefined,
-        phase: phaseFilter || undefined,
-        year: yearFilter || undefined,
-        sortBy: 'createdAt',
-        sortOrder: 'DESC',
-      });
-      setData(response);
+      const [categoriesResponse, statsResponse] = await Promise.all([
+        categoryAdminService.list({
+          page,
+          limit,
+          search: search || undefined,
+          phase: phaseFilter || undefined,
+          year: yearFilter || undefined,
+          sortBy: 'createdAt',
+          sortOrder: 'DESC',
+        }),
+        categoryAdminService.getGlobalStats(),
+      ]);
+      setData(categoriesResponse);
+      setStats(statsResponse);
     } catch (error) {
       console.error('Erreur lors du chargement des catégories:', error);
       alert('Erreur lors du chargement des catégories');
@@ -80,6 +85,31 @@ export default function AdminCategoriesPage() {
             Nouvelle catégorie
           </button>
         </div>
+
+        {/* Statistiques */}
+        {stats && (
+          <div className="bg-white rounded-lg shadow-sm p-6 mb-6">
+            <h2 className="text-lg font-semibold text-gray-900 mb-4">Statistiques</h2>
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+              <div className="bg-blue-50 rounded-lg p-4">
+                <p className="text-sm text-blue-600 font-medium">Total</p>
+                <p className="text-2xl font-bold text-blue-900">{stats.total}</p>
+              </div>
+              <div className="bg-purple-50 rounded-lg p-4">
+                <p className="text-sm text-purple-600 font-medium">Nominations</p>
+                <p className="text-2xl font-bold text-purple-900">{stats.nomination}</p>
+              </div>
+              <div className="bg-green-50 rounded-lg p-4">
+                <p className="text-sm text-green-600 font-medium">Votes</p>
+                <p className="text-2xl font-bold text-green-900">{stats.vote}</p>
+              </div>
+              <div className="bg-gray-50 rounded-lg p-4">
+                <p className="text-sm text-gray-600 font-medium">Clôturées</p>
+                <p className="text-2xl font-bold text-gray-900">{stats.closed}</p>
+              </div>
+            </div>
+          </div>
+        )}
 
         {/* Filtres */}
         <div className="bg-white rounded-lg shadow-sm p-6 mb-6">

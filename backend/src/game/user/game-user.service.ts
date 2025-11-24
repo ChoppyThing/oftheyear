@@ -44,6 +44,20 @@ export class GameUserService {
   }
 
   /**
+   * Rechercher des jeux existants par nom (pour éviter les doublons)
+   */
+  async searchExistingGames(query: string): Promise<Game[]> {
+    return await this.gameRepository
+      .createQueryBuilder('game')
+      .where('LOWER(game.name) LIKE LOWER(:query)', { query: `%${query}%` })
+      .andWhere('game.status IN (:...statuses)', { statuses: [Status.Validated, Status.Sent] })
+      .select(['game.id', 'game.name', 'game.year', 'game.developer', 'game.editor', 'game.image'])
+      .orderBy('game.name', 'ASC')
+      .limit(5)
+      .getMany();
+  }
+
+  /**
    * Créer une proposition de jeu
    */
   async createGameProposal(

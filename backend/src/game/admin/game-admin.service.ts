@@ -237,4 +237,23 @@ export class GameAdminService {
 
     return await this.gameRepository.save(game);
   }
+
+  /**
+   * Obtenir les statistiques globales des jeux
+   */
+  async getStats() {
+    const [total, validated, sent, moderated] = await Promise.all([
+      this.gameRepository.count(),
+      this.gameRepository.count({ where: { status: Status.Validated } }),
+      this.gameRepository.count({ where: { status: Status.Sent } }),
+      this.gameRepository.count({ where: { status: Status.Moderated } }),
+    ]);
+
+    return {
+      total,
+      validated,
+      pending: sent,
+      rejected: moderated,
+    };
+  }
 }

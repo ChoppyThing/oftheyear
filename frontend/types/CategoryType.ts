@@ -92,7 +92,15 @@ export interface CategoryStats {
 export interface CategoryVoteStats {
   categoryId: number;
   categoryName: string;
+  phase: CategoryPhase;
   totalVotes: number;
+  nominationVotes?: {
+    id: number;
+    gameId: number;
+    gameName: string;
+    voteCount: number;
+    percentage: number;
+  }[];
   nominees: {
     id: number;
     gameId: number;
@@ -125,8 +133,7 @@ export interface VotePhaseStats {
 }
 
 export interface VotePhaseStatsResponse {
-  year: number;
   totalCategories: number;
   totalVotes: number;
-  categories: VotePhaseStats[];
+  categories: CategoryVoteStats[];
 }

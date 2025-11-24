@@ -54,6 +54,14 @@ export const gameUserService = {
     }*/);
   },
 
+  // Rechercher des jeux existants
+  async searchGames(query: string) {
+    const response = await apiClient.get<any[]>('/games/user/search', {
+      params: { query },
+    });
+    return response;
+  },
+
   // Obtenir mes propositions
   async getMyProposals(page: number = 1, limit: number = 10) {
     return apiClient.get('/games/user/my-proposals', {

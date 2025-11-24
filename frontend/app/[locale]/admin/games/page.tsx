@@ -11,6 +11,7 @@ import { formatDate } from '@/lib/date-utils';
 
 export default function AdminGamesPage() {
   const [data, setData] = useState<GamesListResponse | null>(null);
+  const [stats, setStats] = useState<{ total: number; validated: number; pending: number; rejected: number } | null>(null);
   const [loading, setLoading] = useState(true);
   const [editGame, setEditGame] = useState<Game | null>(null);
   const [deleteGame, setDeleteGame] = useState<Game | null>(null);
@@ -24,13 +25,17 @@ export default function AdminGamesPage() {
   const fetchGames = async () => {
     setLoading(true);
     try {
-      const response = await gameAdminService.list({
-        page,
-        limit,
-        search: search || undefined,
-        status: statusFilter || undefined,
-      });
-      setData(response);
+      const [gamesResponse, statsResponse] = await Promise.all([
+        gameAdminService.list({
+          page,
+          limit,
+          search: search || undefined,
+          status: statusFilter || undefined,
+        }),
+        gameAdminService.getStats(),
+      ]);
+      setData(gamesResponse);
+      setStats(statsResponse);
     } catch (error) {
       console.error('Erreur lors du chargement des jeux:', error);
       alert('Erreur lors du chargement des jeux');
@@ -95,6 +100,31 @@ export default function AdminGamesPage() {
             + Ajouter un jeu
           </button>
         </div>
+
+        {/* Statistiques */}
+        {stats && (
+          <div className="bg-white rounded-lg shadow-sm p-6 mb-6">
+            <h2 className="text-lg font-semibold text-gray-900 mb-4">Statistiques</h2>
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+              <div className="bg-blue-50 rounded-lg p-4">
+                <p className="text-sm text-blue-600 font-medium">Total</p>
+                <p className="text-2xl font-bold text-blue-900">{stats.total}</p>
+              </div>
+              <div className="bg-green-50 rounded-lg p-4">
+                <p className="text-sm text-green-600 font-medium">Validés</p>
+                <p className="text-2xl font-bold text-green-900">{stats.validated}</p>
+              </div>
+              <div className="bg-yellow-50 rounded-lg p-4">
+                <p className="text-sm text-yellow-600 font-medium">En attente</p>
+                <p className="text-2xl font-bold text-yellow-900">{stats.pending}</p>
+              </div>
+              <div className="bg-red-50 rounded-lg p-4">
+                <p className="text-sm text-red-600 font-medium">Rejetés</p>
+                <p className="text-2xl font-bold text-red-900">{stats.rejected}</p>
+              </div>
+            </div>
+          </div>
+        )}
 
         {/* Filtres */}
         <div className="bg-white rounded-lg shadow-sm p-6 mb-6">
@@ -167,11 +197,17 @@ export default function AdminGamesPage() {
                       <tr key={game.id} className="hover:bg-gray-50">
                         <td className="px-6 py-4 whitespace-nowrap">
                           <div className="flex items-center">
-                            <img
-                              src={`${process.env.NEXT_PUBLIC_API_URL}/${game.image}`}
-                              alt={game.name}
-                              className="h-12 w-12 rounded object-cover"
-                            />
+                            {game.image ? (
+                              <img
+                                src={`${process.env.NEXT_PUBLIC_API_URL}/${game.image}`}
+                                alt={game.name}
+                                className="h-12 w-12 rounded object-cover"
+                              />
+                            ) : (
+                              <div className="h-12 w-12 rounded bg-gray-200 flex items-center justify-center text-gray-400">
+                                <span className="text-xs">N/A</span>
+                              </div>
+                            )}
                             <div className="ml-4">
                               <div className="text-sm font-medium text-gray-900">
                                 {game.name}
