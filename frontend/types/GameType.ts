@@ -11,6 +11,7 @@ export interface Game {
   description?: string;
   developer?: string;
   editor?: string;
+  year?: number;
   status: GameStatus;
   slug: string;
   createdAt: string;
