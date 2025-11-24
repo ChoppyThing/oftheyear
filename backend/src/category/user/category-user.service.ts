@@ -9,6 +9,7 @@ import { Repository } from 'typeorm';
 import { Category } from '../category.entity';
 import { CategoryPhase } from '../category-phase.enum';
 import { User } from '../../user/user.entity';
+import { Role } from '../../user/role.enum';
 import {
   CategoryProposalFiltersDto,
   CreateCategoryProposalDto,
@@ -26,7 +27,7 @@ export class CategoryUserService {
    */
   async createProposal(user: User, dto: CreateCategoryProposalDto) {
     // Vérifier si l'utilisateur a déjà proposé une catégorie (sauf s'il est admin)
-    const isAdmin = user.roles.includes('ADMIN');
+    const isAdmin = user.roles.includes(Role.Admin);
     if (!isAdmin) {
       const alreadyProposed = await this.hasAlreadyProposed(user.id, dto.year);
       if (alreadyProposed) {
