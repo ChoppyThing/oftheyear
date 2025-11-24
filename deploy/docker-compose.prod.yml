@@ -1,8 +1,8 @@
 version: '3.8'
 
 services:
-  postgres:
-    image: postgres:15
+  db:
+    image: postgres:16-alpine
     restart: unless-stopped
     environment:
       POSTGRES_DB: ${POSTGRES_DB}
@@ -10,15 +10,29 @@ services:
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
     volumes:
       - ${POSTGRES_DATA_DIR}:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
   backend:
     image: ghcr.io/choppything/oftheyear-backend:sha-REPLACE_ME
     restart: unless-stopped
     env_file: .env
     depends_on:
-      - postgres
+      - db
     ports:
-      - "127.0.0.1:6001:3001"
+      - "127.0.0.1:7001:7001"
+    volumes:
+      - /opt/oftheyear/uploads:/app/uploads
+      - /opt/oftheyear/private:/app/private
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:7001/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
 
   frontend:
     image: ghcr.io/choppything/oftheyear-frontend:sha-REPLACE_ME
@@ -27,9 +41,17 @@ services:
     depends_on:
       - backend
     environment:
-      - PORT=3000
+      - PORT=7000
     ports:
-      - "127.0.0.1:6000:3000"
+      - "127.0.0.1:7000:7000"
+    tmpfs:
+      - /tmp
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:7000/"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
 
 networks:
   default:
