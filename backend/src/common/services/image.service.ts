@@ -3,9 +3,11 @@ import sharp from 'sharp';
 import * as fs from 'fs/promises';
 import * as path from 'path';
 
+const UPLOADS_DIR = process.env.UPLOADS_DIR || './uploads';
+
 @Injectable()
 export class ImageService {
-  private readonly uploadDir = './uploads/games';
+  private readonly uploadDir = `${UPLOADS_DIR}/games`;
 
   /**
    * Traiter une image : redimensionner + convertir en WebP
@@ -40,7 +42,7 @@ export class ImageService {
       await fs.rename(tempPath, outputPath);
     }
 
-    return outputPath.replace('./uploads/', '');
+    return outputPath.replace(`${UPLOADS_DIR}/`, '');
   }
 
   /**
@@ -48,7 +50,7 @@ export class ImageService {
    */
   async deleteImage(imagePath: string): Promise<void> {
     try {
-      const fullPath = path.join('./uploads', imagePath);
+      const fullPath = path.join(UPLOADS_DIR, imagePath);
       await fs.unlink(fullPath);
     } catch (error) {
       console.error('Failed to delete image:', error);

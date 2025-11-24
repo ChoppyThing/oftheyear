@@ -64,7 +64,9 @@ async function bootstrap() {
   const jwtGuard = app.get(JwtAuthGuard);
   app.useGlobalGuards(jwtGuard);
 
-    app.useStaticAssets(join(__dirname, '..', 'uploads'), {
+  // Serve static files from uploads directory
+  const uploadsDir = process.env.UPLOADS_DIR || join(__dirname, '..', 'uploads');
+  app.useStaticAssets(uploadsDir, {
     prefix: '/uploads/',
   });
 

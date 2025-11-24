@@ -3,9 +3,11 @@ import { extname } from 'path';
 import { v4 as uuidv4 } from 'uuid';
 import { BadRequestException } from '@nestjs/common';
 
+const UPLOADS_DIR = process.env.UPLOADS_DIR || './uploads';
+
 export const multerConfig = {
   storage: diskStorage({
-    destination: './uploads/games',
+    destination: `${UPLOADS_DIR}/games`,
     filename: (req, file, cb) => {
       const uniqueName = `${uuidv4()}${extname(file.originalname)}`;
       cb(null, uniqueName);
