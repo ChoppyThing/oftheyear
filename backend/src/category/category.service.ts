@@ -39,9 +39,27 @@ export class CategoryService {
   }
 
   async findAll(): Promise<Category[]> {
-    return await this.categoryRepository.find({
+    const categories = await this.categoryRepository.find({
       relations: ['author'],
-      order: { name: 'ASC' },
+    });
+
+    // Trier manuellement : phase Nomination = sort DESC, phase Vote/Closed = sort ASC
+    return categories.sort((a, b) => {
+      // Comparer par phase d'abord (Nomination < Vote < Closed)
+      const phaseOrder = { nomination: 0, vote: 1, closed: 2 };
+      const phaseA = phaseOrder[a.phase] ?? 999;
+      const phaseB = phaseOrder[b.phase] ?? 999;
+      
+      if (phaseA !== phaseB) {
+        return phaseA - phaseB;
+      }
+
+      // Ensuite trier par sort selon la phase
+      if (a.phase === CategoryPhase.Nomination) {
+        return b.sort - a.sort; // DESC pour Nomination
+      } else {
+        return a.sort - b.sort; // ASC pour Vote et Closed
+      }
     });
   }
 
