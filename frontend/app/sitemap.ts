@@ -1,4 +1,5 @@
 import { MetadataRoute } from 'next';
+import { locales } from '@/i18n.config';
 
 const BASE_URL = 'https://game.oftheyear.eu';
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'https://api.oftheyear.eu';
@@ -18,7 +19,6 @@ async function getCategories() {
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const categories = await getCategories();
-  const locales = ['fr', 'en'];
 
   // Pages statiques
   const staticPages = [
