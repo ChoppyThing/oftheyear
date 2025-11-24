@@ -16,7 +16,7 @@ interface Game {
 async function getLatestGames(): Promise<Game[]> {
   try {
     const response = await fetch(`${API_URL}/game/latest?limit=3`, {
-      next: { revalidate: 300 }, // Revalider toutes les 5 minutes
+      next: { revalidate: 0 }, // Dynamique - toujours à jour
     });
     if (!response.ok) return [];
     return await response.json();
