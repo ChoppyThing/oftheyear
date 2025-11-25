@@ -15,6 +15,7 @@ import {
 import { FileInterceptor } from '@nestjs/platform-express';
 import { GameAdminService } from './game-admin.service';
 import { CreateGameAdminDto, ListGamesAdminQueryDto, UpdateGameAdminDto } from './game-admin.dto';
+import { UpdateGameCategoryRestrictionsDto } from '../game.dto';
 import { AdminGuard } from '../../auth/guards/admin.guard';
 import { User } from 'src/user/user.entity';
 import { CurrentUser } from 'src/auth/current-user.decorator';
@@ -110,5 +111,26 @@ export class GameAdminController {
   @Post(':id/reject')
   async rejectGame(@Param('id') id: number) {
     return this.gameAdminService.rejectGame(id);
+  }
+
+  /**
+   * Récupérer les restrictions de catégories d'un jeu
+   * GET /admin/games/:id/category-restrictions
+   */
+  @Get(':id/category-restrictions')
+  async getCategoryRestrictions(@Param('id') id: number) {
+    return this.gameAdminService.getCategoryRestrictions(id);
+  }
+
+  /**
+   * Mettre à jour les restrictions de catégories d'un jeu
+   * PUT /admin/games/:id/category-restrictions
+   */
+  @Patch(':id/category-restrictions')
+  async updateCategoryRestrictions(
+    @Param('id') id: number,
+    @Body() dto: UpdateGameCategoryRestrictionsDto,
+  ) {
+    return this.gameAdminService.updateCategoryRestrictions(id, dto.categoryIds);
   }
 }

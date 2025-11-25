@@ -50,7 +50,8 @@ export default function CategoryNominationClient({
       }
       setCategory(categoryData);
 
-      const gamesData = await apiClient.get<Game[]>(`/game?year=${categoryData.year}`);
+      // Utiliser le nouvel endpoint qui applique le filtrage des restrictions
+      const gamesData = await apiClient.get<Game[]>(`/category/slug/${slug}/games/${categoryData.year}`);
       setGames(gamesData || []);
     } catch (err: any) {
       console.error('Erreur chargement:', err);

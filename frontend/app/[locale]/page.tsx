@@ -1,9 +1,11 @@
 import { getDictionary } from "@/lib/i18n";
 import { Locale } from "@/i18n.config";
+import { getCurrentPhase } from "@/lib/phases";
 import GameCard from "@/components/GameCard";
 import Image from "next/image";
+import Link from "next/link";
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL || 'https://api.oftheyear.eu';
+const API_URL = process.env.NEXT_PUBLIC_API_URL || "https://api.oftheyear.eu";
 
 interface Game {
   id: number;
@@ -21,7 +23,7 @@ async function getLatestGames(): Promise<Game[]> {
     if (!response.ok) return [];
     return await response.json();
   } catch (error) {
-    console.error('Failed to fetch latest games:', error);
+    console.error("Failed to fetch latest games:", error);
     return [];
   }
 }
@@ -34,6 +36,14 @@ export default async function Home({
   const { locale } = await params;
   const dict = await getDictionary(locale);
   const latestGames = await getLatestGames();
+  
+  // Déterminer le lien selon la phase
+  const currentPhase = getCurrentPhase();
+  const participateLink = currentPhase === 'vote' 
+    ? `/${locale}/user/vote` 
+    : currentPhase === 'results'
+    ? `/${locale}/results`
+    : `/${locale}/user/category`;
 
   return (
     <div className="relative min-h-screen text-gray-100">
@@ -48,7 +58,13 @@ export default async function Home({
       <div className="relative z-10">
         <header className="grid grid-cols-1 md:grid-cols-2 p-10">
           <div className="text-center m-auto">
-            <Image src="/logo/logo.png" width="350" height="350" alt="Logo" priority />
+            <Image
+              src="/logo/logo.png"
+              width="350"
+              height="350"
+              alt="Logo"
+              priority
+            />
           </div>
           <div className="text-white text-4xl md:text-5xl text-center m-auto uppercase font-bold">
             <p id="stars" className="text-yellow-400 mb-2">
@@ -70,18 +86,41 @@ export default async function Home({
         <main className="p-6 md:p-10 max-w-6xl mx-auto">
           {/* Pitch principal */}
           <section className="mb-8 bg-gray-800/60 rounded-lg p-6">
+            <h2 className="text-2xl font-bold mb-3">{dict.home.pitch.title}</h2>
+            <p>{dict.home.pitch.description}</p>
+          </section>
+
+          <section className="mb-8 bg-gray-800/60 rounded-lg p-6">
             <h2 className="text-2xl font-bold mb-3">
-              {dict.home.pitch.title}
+              {dict.home.howitworks.title}
             </h2>
-            <p>
-              {dict.home.pitch.description}
-            </p>
+
+            <p className="mb-4">{dict.home.howitworks.intro}</p>
+
+            <ul className="list-disc list-inside space-y-2 mb-4">
+              <li>{dict.home.howitworks.phase1}</li>
+              <li>{dict.home.howitworks.phase2}</li>
+              <li>{dict.home.howitworks.phase3}</li>
+            </ul>
+
+            <p className="mb-6">{dict.home.howitworks.extra}</p>
+
+            <div className="flex justify-center">
+              <Link 
+                href={participateLink}
+                className="px-6 py-3 bg-primary-600 hover:bg-primary-700 text-sky-400 uppercase rounded-lg text-lg font-semibold border border-sky-400 hover:bg-sky-400 hover:text-gray-200 transition-colors"
+              >
+                {dict.home.howitworks.cta}
+              </Link>
+            </div>
           </section>
 
           {/* Derniers jeux ajoutés */}
           <section className="mb-8">
             <div className="flex items-center justify-between mb-4">
-              <h2 className="text-2xl font-bold">{dict.home.latestGames.title}</h2>
+              <h2 className="text-2xl font-bold">
+                {dict.home.latestGames.title}
+              </h2>
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
@@ -89,7 +128,9 @@ export default async function Home({
                 latestGames.map((game) => (
                   <GameCard
                     key={game.id}
-                    image={game.image ? `${API_URL}/${game.image}` : "/logo/logo.png"}
+                    image={
+                      game.image ? `${API_URL}/${game.image}` : "/logo/logo.png"
+                    }
                     title={game.name}
                     year={game.year}
                     releaseDate={game.publishAt}
@@ -97,7 +138,8 @@ export default async function Home({
                 ))
               ) : (
                 <p className="col-span-3 text-center text-gray-400">
-                  {dict.home.latestGames.noGames || "Aucun jeu disponible pour le moment"}
+                  {dict.home.latestGames.noGames ||
+                    "Aucun jeu disponible pour le moment"}
                 </p>
               )}
             </div>

@@ -10,10 +10,12 @@ import {
   Index,
   ManyToOne,
   ManyToMany,
+  JoinTable,
 } from 'typeorm';
 import { Status } from './status.enum';
 import { v4 as uuidv4 } from 'uuid';
 import { User } from 'src/user/user.entity';
+import { Category } from 'src/category/category.entity';
 
 @Entity()
 @Unique(['name'])
@@ -48,6 +50,14 @@ export class Game {
 
   @ManyToOne(() => User, { nullable: false })
   author: User;
+
+  @ManyToMany(() => Category, (category) => category.restrictedGames)
+  @JoinTable({
+    name: 'game_category_restriction',
+    joinColumn: { name: 'gameId', referencedColumnName: 'id' },
+    inverseJoinColumn: { name: 'categoryId', referencedColumnName: 'id' },
+  })
+  allowedCategories: Category[];
 
   @CreateDateColumn({
     type: 'timestamptz',

@@ -7,6 +7,7 @@ import {
   IsInt,
   Min,
   Max,
+  IsArray,
 } from 'class-validator';
 
 export class CreateGameDto {
@@ -42,4 +43,10 @@ export class GameListQueryDto {
   @Min(2000)
   @Max(2100)
   year?: number;
+}
+
+export class UpdateGameCategoryRestrictionsDto {
+  @IsArray()
+  @IsInt({ each: true })
+  categoryIds: number[];
 }

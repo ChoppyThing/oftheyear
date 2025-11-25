@@ -1,9 +1,11 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { gameAdminService } from '@/services/admin/gameAdminService';
+import { categoryService } from '@/services/category/category';
 import { FaTimes } from 'react-icons/fa';
 import { Game, GameStatus } from '@/types/GameType';
+import { Category } from '@/types/CategoryType';
 import ImageUpload from './project/ImageUpload';
 
 interface EditGameModalProps {
@@ -18,6 +20,9 @@ export default function EditGameModal({ game, isOpen, onClose, onSuccess }: Edit
   const [loading, setLoading] = useState(false);
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [removeImage, setRemoveImage] = useState(false);
+  const [categories, setCategories] = useState<Category[]>([]);
+  const [selectedCategories, setSelectedCategories] = useState<number[]>([]);
+  const [loadingCategories, setLoadingCategories] = useState(false);
   
   const currentYear = new Date().getFullYear();
   
@@ -29,6 +34,46 @@ export default function EditGameModal({ game, isOpen, onClose, onSuccess }: Edit
     year: game.year || currentYear,
     status: game.status || 'sent',
   });
+
+  // Charger les catégories et restrictions au montage
+  useEffect(() => {
+    if (isOpen) {
+      loadCategories();
+      if (!isCreating) {
+        loadCategoryRestrictions();
+      }
+    }
+  }, [isOpen, isCreating, game.id]);
+
+  const loadCategories = async () => {
+    try {
+      const cats = await categoryService.getValidatedCategories();
+      setCategories(cats);
+    } catch (error) {
+      console.error('Erreur chargement catégories:', error);
+    }
+  };
+
+  const loadCategoryRestrictions = async () => {
+    if (!game.id) return;
+    setLoadingCategories(true);
+    try {
+      const { categoryIds } = await gameAdminService.getCategoryRestrictions(game.id);
+      setSelectedCategories(categoryIds);
+    } catch (error) {
+      console.error('Erreur chargement restrictions:', error);
+    } finally {
+      setLoadingCategories(false);
+    }
+  };
+
+  const toggleCategory = (categoryId: number) => {
+    setSelectedCategories(prev =>
+      prev.includes(categoryId)
+        ? prev.filter(id => id !== categoryId)
+        : [...prev, categoryId]
+    );
+  };
 
   if (!isOpen) return null;
 
@@ -56,6 +101,8 @@ export default function EditGameModal({ game, isOpen, onClose, onSuccess }: Edit
         alert('Jeu créé avec succès');
       } else {
         await gameAdminService.update(game.id, submitData);
+        // Mettre à jour les restrictions de catégories
+        await gameAdminService.updateCategoryRestrictions(game.id, selectedCategories);
         alert('Jeu modifié avec succès');
       }
       
@@ -183,6 +230,45 @@ export default function EditGameModal({ game, isOpen, onClose, onSuccess }: Edit
               <option value={GameStatus.Moderated}>Modéré</option>
             </select>
           </div>
+
+          {!isCreating && (
+            <div className="border-t pt-4">
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Restrictions de catégories
+              </label>
+              <p className="text-xs text-gray-500 mb-3">
+                Si aucune catégorie n'est sélectionnée, le jeu sera visible dans toutes les catégories.
+                Si au moins une catégorie est sélectionnée, le jeu ne sera visible QUE dans ces catégories.
+              </p>
+              {loadingCategories ? (
+                <p className="text-sm text-gray-500">Chargement...</p>
+              ) : (
+                <div className="max-h-48 overflow-y-auto border border-gray-200 rounded-md p-3 space-y-2">
+                  {categories.map((category) => (
+                    <label
+                      key={category.id}
+                      className="flex items-center space-x-2 cursor-pointer hover:bg-gray-50 p-2 rounded"
+                    >
+                      <input
+                        type="checkbox"
+                        checked={selectedCategories.includes(category.id)}
+                        onChange={() => toggleCategory(category.id)}
+                        className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+                      />
+                      <span className="text-sm text-gray-700">
+                        {category.translations?.fr?.title || category.name} ({category.year})
+                      </span>
+                    </label>
+                  ))}
+                </div>
+              )}
+              {selectedCategories.length > 0 && (
+                <p className="text-xs text-blue-600 mt-2">
+                  ✓ Ce jeu sera visible uniquement dans {selectedCategories.length} catégorie(s) sélectionnée(s)
+                </p>
+              )}
+            </div>
+          )}
 
           <div className="flex justify-end gap-3 pt-4 border-t">
             <button

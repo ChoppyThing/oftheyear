@@ -17,6 +17,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { CategoryPhase } from './category-phase.enum';
 import { CategoryVote } from 'src/category-vote/category-vote.entity';
 import { CategoryNominee } from 'src/category-nominee/category-nominee.entity';
+import { Game } from 'src/game/game.entity';
 
 @Entity()
 @Index(['name', 'year'], { unique: true })
@@ -68,6 +69,9 @@ export class Category {
 
   @OneToMany(() => CategoryNominee, (nominee) => nominee.category)
   nominees: CategoryNominee[]; // Phase 2
+
+  @ManyToMany(() => Game, (game) => game.allowedCategories)
+  restrictedGames: Game[];
 
   @BeforeInsert()
   @BeforeUpdate()

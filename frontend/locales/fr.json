@@ -32,7 +32,16 @@
     "latestGames": {
       "title": "Derniers jeux ajoutés"
     },
-    "currentLocale": "Langue actuelle :"
+    "currentLocale": "Langue actuelle :",
+    "howitworks": {
+      "title": "Comment cela fonctionne ?",
+      "intro": "Le concours se déroule en trois grandes phases :",
+      "phase1": "Les nominations : choisissez jusqu’à 5 jeux à nominer dans chaque catégorie.",
+      "phase2": "Les votes : un mois avant Noël, vous pourrez voter pour votre jeu favori dans chaque catégorie.",
+      "phase3": "Les résultats : les gagnants seront révélés le 24 décembre au matin !",
+      "extra": "Toute l’année, vous pouvez ajouter les jeux que vous avez aimés et que vous souhaitez voir concourir. Vous pouvez aussi proposer de nouvelles catégories, validées si elles sont pertinentes.",
+      "cta": "Je participe !"
+    }
   },
   "login": {
     "title": "Connexion",
@@ -254,9 +263,9 @@
       "title": "Besoin de nous contacter ?",
       "description": "Pour toute question concernant ces mentions légales ou vos données personnelles :"
     }
-  }
+  },
 
-  ,"common": {
+  "common": {
     "loading": "Chargement...",
     "noImage": "Pas d'image",
     "error": "Une erreur est survenue",
@@ -295,12 +304,10 @@
       "oops": "Oups !"
     }
   },
-
   "navigation": {
     "next": "Suivante",
     "prev": "Précédente",
     "nextAria": "Passer à la catégorie suivante",
     "prevAria": "Revenir à la catégorie précédente"
   }
- 
 }

@@ -30,7 +30,16 @@
       "title": "Latest games added",
       "template": "(template - will be replaced by API later)"
     },
-    "currentLocale": "Current locale:"
+    "currentLocale": "Current locale:",
+    "howitworks": {
+      "title": "How does it work?",
+      "intro": "The competition takes place in three main phases:",
+      "phase1": "Nominations: choose up to 5 games to nominate in each category.",
+      "phase2": "Voting: one month before Christmas, you can vote for your favorite game in each category.",
+      "phase3": "Results: winners will be announced on the morning of December 24!",
+      "extra": "Throughout the year, you can add the games you enjoyed and want to see compete. You can also suggest new categories, which will be approved if relevant.",
+      "cta": "Let's go!"
+    }
   },
   "login": {
     "title": "Login",
@@ -252,9 +261,9 @@
       "title": "Need to contact us?",
       "description": "For any questions regarding this legal notice or your personal data:"
     }
-  }
+  },
 
-  ,"common": {
+  "common": {
     "loading": "Loading...",
     "noImage": "No image",
     "error": "An error occurred",
@@ -300,5 +309,4 @@
     "nextAria": "Go to next category",
     "prevAria": "Go to previous category"
   }
- 
 }

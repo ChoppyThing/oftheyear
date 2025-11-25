@@ -6,6 +6,7 @@ import { GameController } from './game.controller';
 import { GameService } from './game.service';
 import { Game } from './game.entity';
 import { User } from 'src/user/user.entity';
+import { Category } from 'src/category/category.entity';
 import { CategoryModule } from 'src/category/category.module';
 import { GameAdminController } from './admin/game-admin.controller';
 import { GameAdminService } from './admin/game-admin.service';
@@ -17,7 +18,7 @@ import { UserModule } from 'src/user/user.module';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([Game, User]),
+    TypeOrmModule.forFeature([Game, User, Category]),
     forwardRef(() => CategoryModule),
     UserModule,
     JwtModule.registerAsync({

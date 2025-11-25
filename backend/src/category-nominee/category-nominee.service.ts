@@ -9,6 +9,7 @@ import { Repository } from 'typeorm';
 import { CategoryNominee } from './category-nominee.entity';
 import { Category } from 'src/category/category.entity';
 import { Game } from 'src/game/game.entity';
+import { GameService } from 'src/game/game.service';
 import { CategoryPhase } from 'src/category/category-phase.enum';
 import { Status } from 'src/game/status.enum';
 
@@ -21,6 +22,7 @@ export class CategoryNomineeService {
     private categoryRepository: Repository<Category>,
     @InjectRepository(Game)
     private gameRepository: Repository<Game>,
+    private gameService: GameService,
   ) {}
 
   /**
@@ -98,7 +100,20 @@ export class CategoryNomineeService {
       throw new NotFoundException('Jeu non trouvé ou non éligible');
     }
 
-    // 5. Créer la nomination
+    // 5. Vérifier que le jeu est éligible pour cette catégorie (restrictions)
+    const eligibleGames = await this.gameService.getGamesForCategory(
+      categoryId,
+      category.year,
+    );
+    const isEligible = eligibleGames.some((g) => g.id === gameId);
+
+    if (!isEligible) {
+      throw new BadRequestException(
+        "Ce jeu n'est pas éligible pour cette catégorie",
+      );
+    }
+
+    // 6. Créer la nomination
     const nominee = this.categoryNomineeRepository.create({
       category,
       game,

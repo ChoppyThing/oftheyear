@@ -6,6 +6,7 @@ import {
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Game } from '../game.entity';
+import { Category } from 'src/category/category.entity';
 import {
   CreateGameAdminDto,
   ListGamesAdminQueryDto,
@@ -21,6 +22,8 @@ export class GameAdminService {
   constructor(
     @InjectRepository(Game)
     private readonly gameRepository: Repository<Game>,
+    @InjectRepository(Category)
+    private readonly categoryRepository: Repository<Category>,
     private readonly imageService: ImageService,
     private readonly revalidationService: RevalidationService,
   ) {}
@@ -254,6 +257,56 @@ export class GameAdminService {
       validated,
       pending: sent,
       rejected: moderated,
+    };
+  }
+
+  /**
+   * Récupérer les restrictions de catégories d'un jeu
+   */
+  async getCategoryRestrictions(gameId: number) {
+    const game = await this.gameRepository.findOne({
+      where: { id: gameId },
+      relations: ['allowedCategories'],
+    });
+
+    if (!game) {
+      throw new NotFoundException(`Game with ID ${gameId} not found`);
+    }
+
+    return {
+      gameId: game.id,
+      categoryIds: game.allowedCategories?.map((cat) => cat.id) || [],
+      categories: game.allowedCategories || [],
+    };
+  }
+
+  /**
+   * Mettre à jour les restrictions de catégories d'un jeu
+   */
+  async updateCategoryRestrictions(gameId: number, categoryIds: number[]) {
+    const game = await this.gameRepository.findOne({
+      where: { id: gameId },
+      relations: ['allowedCategories'],
+    });
+
+    if (!game) {
+      throw new NotFoundException(`Game with ID ${gameId} not found`);
+    }
+
+    // Vérifier que toutes les catégories existent
+    const categories = await this.categoryRepository.findByIds(categoryIds);
+    if (categories.length !== categoryIds.length) {
+      throw new BadRequestException('One or more category IDs are invalid');
+    }
+
+    // Mettre à jour les catégories autorisées
+    game.allowedCategories = categories;
+    await this.gameRepository.save(game);
+
+    return {
+      gameId: game.id,
+      categoryIds: categories.map((cat) => cat.id),
+      categories,
     };
   }
 }

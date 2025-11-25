@@ -74,4 +74,12 @@ export const gameAdminService = {
   getStats: async (): Promise<{ total: number; validated: number; pending: number; rejected: number }> => {
     return apiClient.get('/admin/games/stats');
   },
+
+  getCategoryRestrictions: async (id: number): Promise<{ gameId: number; categoryIds: number[]; categories: any[] }> => {
+    return apiClient.get(`/admin/games/${id}/category-restrictions`);
+  },
+
+  updateCategoryRestrictions: async (id: number, categoryIds: number[]): Promise<{ gameId: number; categoryIds: number[]; categories: any[] }> => {
+    return apiClient.patch(`/admin/games/${id}/category-restrictions`, { categoryIds });
+  },
 };
