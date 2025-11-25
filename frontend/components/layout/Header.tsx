@@ -1,41 +1,66 @@
 'use client';
 
 import Link from 'next/link';
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect, useRef } from 'react';
 import AnimatedBackground from './AnimatedBackground';
 import UserButton from '../UserButton';
 import { Locale, defaultLocale } from '@/i18n.config';
 import LanguageSwitcher from '../LanguageSwitcher';
 import { getPhaseInfo } from '@/lib/phases';
+import { usePathname } from 'next/navigation';
 
 export default function Header({ locale, dict }: { locale: Locale; dict: any }) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const prefix = locale === defaultLocale ? '' : `/${locale}`;
+  const menuRef = useRef<HTMLDivElement>(null);
+  const pathname = usePathname();
   
   // Calculer la phase actuelle
   const phaseInfo = useMemo(() => getPhaseInfo(dict), [dict]);
 
+  // Fermer le menu au changement de page
+  useEffect(() => {
+    setIsMenuOpen(false);
+  }, [pathname]);
+
+  // Fermer le menu au clic en dehors
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
+        setIsMenuOpen(false);
+      }
+    };
+
+    if (isMenuOpen) {
+      document.addEventListener('mousedown', handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [isMenuOpen]);
+
   return (
     <header className="sticky top-0 z-50 w-full bg-[#0062bd] shadow-lg backdrop-blur-sm uppercase font-bold">
-      <div className="absolute">
+      <div className="absolute pointer-events-none">
         <AnimatedBackground />
       </div>
 
-      <nav className="container mx-auto px-4">
-        <div className="flex h-22 items-center justify-between">
+      <nav className="container mx-auto px-4 relative z-10" ref={menuRef}>
+        <div className="flex items-center justify-between">
           <div className="flex-1 md:block hidden"></div>
 
           {/* Navigation Links - Center (Desktop) */}
-          <div className="hidden md:flex items-center space-x-16 flex-1 justify-center font-bold">
+          <div className="hidden md:flex items-stretch flex-1 justify-center font-bold">
             <Link 
               href={`${prefix}/`}
-              className="text-white hover:text-blue-200 transition-colors duration-350 text-lg tracking-wider"
+              className="flex items-center px-10 py-6 text-white transition-colors text-lg tracking-wider whitespace-nowrap"
             >
               {dict.header.home}
             </Link>
             <Link 
               href={`${prefix}/about`}
-              className="text-white hover:text-blue-200 transition-colors duration-350 text-lg tracking-wider"
+              className="flex items-center px-10 py-6 text-white transition-colors text-lg tracking-wider whitespace-nowrap"
             >
               {dict.header.about}
             </Link>
@@ -43,13 +68,13 @@ export default function Header({ locale, dict }: { locale: Locale; dict: any }) 
             {/* Lien dynamique selon la phase */}
             <Link 
               href={`${prefix}/${phaseInfo.link}`}
-              className="text-white hover:text-blue-200 transition-colors duration-350 text-lg tracking-wider"
+              className="flex items-center px-10 py-6 text-white transition-colors text-lg tracking-wider whitespace-nowrap"
             >
               {phaseInfo.label}
             </Link>
           </div>
 
-          <div className="hidden md:flex items-center flex-1 justify-end">
+          <div className="hidden md:flex items-center flex-1 justify-end py-4">
             <LanguageSwitcher currentLocale={locale} />
             <UserButton dict={dict} />
           </div>
@@ -57,7 +82,7 @@ export default function Header({ locale, dict }: { locale: Locale; dict: any }) 
           {/* Mobile Menu Button */}
           <button
             onClick={() => setIsMenuOpen(!isMenuOpen)}
-            className="md:hidden text-white focus:outline-none ml-auto"
+            className="md:hidden text-white focus:outline-none ml-auto py-6"
             aria-label="Toggle menu"
           >
             <svg
@@ -80,18 +105,18 @@ export default function Header({ locale, dict }: { locale: Locale; dict: any }) 
 
         {/* Mobile Menu */}
         {isMenuOpen && (
-          <div className="md:hidden py-4 border-t border-blue-900">
-            <div className="flex flex-col space-y-3 text-center">
+          <div className="md:hidden border-t border-blue-900">
+            <div className="flex flex-col">
               <Link 
                 href={`${prefix}/`}
-                className="text-white hover:text-blue-200 transition-colors duration-200 font-medium py-2"
+                className="block w-full text-white transition-colors font-medium py-6 px-4 text-center"
                 onClick={() => setIsMenuOpen(false)}
               >
                 {dict.header.home}
               </Link>
               <Link 
                 href={`${prefix}/about`}
-                className="text-white hover:text-blue-200 transition-colors duration-200 font-medium py-2"
+                className="block w-full text-white transition-colors font-medium py-6 px-4 text-center"
                 onClick={() => setIsMenuOpen(false)}
               >
                 {dict.header.about}
@@ -100,13 +125,13 @@ export default function Header({ locale, dict }: { locale: Locale; dict: any }) 
               {/* Lien dynamique mobile */}
               <Link 
                 href={`${prefix}/${phaseInfo.link}`}
-                className="text-white hover:text-blue-200 transition-colors duration-200 font-medium py-2"
+                className="block w-full text-white transition-colors font-medium py-6 px-4 text-center"
                 onClick={() => setIsMenuOpen(false)}
               >
                 {phaseInfo.label}
               </Link>
               
-              <div className="pt-2">
+              <div className="px-4 py-4">
                 <LanguageSwitcher currentLocale={locale} />
                 <UserButton dict={dict} />
               </div>

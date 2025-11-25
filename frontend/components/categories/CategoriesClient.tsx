@@ -83,16 +83,16 @@ export default function CategoriesClient({ dict }: { dict?: any }) {
   }
 
   return (
-    <div className="space-y-8">
+    <div>
       {/* Sélecteur d'année */}
-      <div className="flex justify-center gap-2">
+      <div className="flex justify-center gap-2 mb-8" style={{ transition: 'none' }}>
         {[2025].map((year) => (
           <button
             key={year}
             onClick={() => setSelectedYear(year)}
-            className={`px-6 py-2 rounded-lg font-semibold transition-all ${
+            className={`px-6 py-2 rounded-lg font-semibold ${
               selectedYear === year
-                ? 'bg-blue-600 text-white shadow-lg shadow-blue-500/50'
+                ? 'bg-blue-600 text-white'
                 : 'bg-gray-800 text-gray-400 hover:bg-gray-700'
             }`}
           >

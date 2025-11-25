@@ -18,6 +18,11 @@ body {
   font-family: Arial, Helvetica, sans-serif;
 }
 
+/* Supprimer les focus rings par défaut */
+*:focus-visible {
+  outline: none !important;
+}
+
 /**
  * Homepage stars
  */
