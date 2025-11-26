@@ -117,7 +117,8 @@ body {
 
 
 
-/* This is just to transition when you change the viewport size. */
+/* Prefer explicit transitions — avoid animating transform/rotate globally */
+/* Keep smooth changes for colors, shadows and opacity only */
 * {
-  transition: all 0.5s ease-out;
+  transition: background-color 200ms ease-out, color 200ms ease-out, box-shadow 200ms ease-out, opacity 200ms ease-out;
 }

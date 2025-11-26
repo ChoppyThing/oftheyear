@@ -92,10 +92,13 @@ export default function CategoryNominationClient({
         <div className="text-center mb-8">
           <h1 className="text-4xl font-bold text-white mb-3">{(category as any).translations?.[locale]?.title || category.name}</h1>
           {((category as any).translations?.[locale]?.description || category.description) && <p className="text-gray-400 text-lg mb-2">{(category as any).translations?.[locale]?.description || category.description}</p>}
-          <div className="flex items-center justify-center gap-4 text-sm text-gray-500">
-            <span>Année : {category.year}</span>
-            <span>•</span>
-            <span>Max {category.maxNominations} nominations</span>
+          <div
+            className="flex items-center justify-center gap-4 text-sm text-gray-500"
+            style={{ transition: 'none', transform: 'none' }}
+          >
+            <span style={{ transition: 'none', transform: 'none' }}>Année : {category.year}</span>
+            <span style={{ transition: 'none', transform: 'none' }}>•</span>
+            <span style={{ transition: 'none', transform: 'none' }}>Max {category.maxNominations} nominations</span>
           </div>
         </div>
 
