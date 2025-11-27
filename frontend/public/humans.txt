@@ -1,0 +1,15 @@
+/* TEAM */
+Game of the Year Team
+Site: https://game.oftheyear.eu
+Twitter: @GameOfTheYear
+Location: France
+
+/* THANKS */
+Next.js, React, NestJS, TypeScript
+All the gaming community
+
+/* SITE */
+Last update: 2025/11/27
+Language: English, Français, Español, 中文
+Doctype: HTML5
+IDE: Visual Studio Code

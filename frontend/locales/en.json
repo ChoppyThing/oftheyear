@@ -1,7 +1,7 @@
 {
   "meta": {
     "title": "GOTY - Game of the Year",
-    "description": "Discover the best games of the year. Vote for your favorite game and explore the ultimate voting game community."
+    "description": "Vote for the best games of the year! Join the largest independent gaming community and elect the Game of the Year together. Your vote matters!"
   },
   "header": {
     "home": "Home",
@@ -274,7 +274,11 @@
     "index": {
       "title": "Voting categories",
       "description": "Discover all available categories to vote for your favorite games",
-      "empty": "No categories available for {year}"
+      "empty": "No categories available for {year}",
+      "meta": {
+        "title": "Game of the Year: GOTY {year} Categories",
+        "description": "Discover all GOTY {year} categories! Vote for your favorite games in each category and participate in electing the best game of the year."
+      }
     },
     "card": {
       "see": "See →"
@@ -287,7 +291,11 @@
     "nomination": {
       "title": "Vote for your favorite games",
       "noValidatedGames": "No validated games available for this category",
-      "maxNominationsReached": "Maximum {max} nominations reached"
+      "maxNominationsReached": "Maximum {max} nominations reached",
+      "meta": {
+        "title": "{categoryName}",
+        "description": "Vote for your favorite game in the {categoryName} category of GOTY {year}. Participate in the election and make your voice heard in the gaming community!"
+      }
     },
     "vote": {
       "skipButton": "Skip this category →",

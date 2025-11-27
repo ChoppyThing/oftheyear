@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
-import { locales, defaultLocale } from './i18n.config';
+import { locales, defaultLocale, Locale } from './i18n.config';
 
 function getLocale(request: NextRequest): string {
   const cookieLocale = request.cookies.get('NEXT_LOCALE')?.value;
@@ -9,10 +9,25 @@ function getLocale(request: NextRequest): string {
   }
 
   const acceptLanguage = request.headers.get('accept-language');
-  if (acceptLanguage) {
-    const browserLocale = acceptLanguage.split(',')[0].split('-')[0];
-    if (locales.includes(browserLocale as any)) {
-      return browserLocale;
+  if (!acceptLanguage) {
+    return defaultLocale;
+  }
+
+  // Parser les langues acceptées avec leurs q-values (ex: "fr-FR,fr;q=0.9,en-US;q=0.8,en;q=0.7")
+  const languages = acceptLanguage
+    .split(',')
+    .map(lang => {
+      const [locale, qValue] = lang.trim().split(';q=');
+      const quality = qValue ? parseFloat(qValue) : 1.0;
+      const shortLocale = locale.split('-')[0].toLowerCase(); // fr-FR → fr
+      return { locale: shortLocale, quality };
+    })
+    .sort((a, b) => b.quality - a.quality); // Trier par préférence (q-value décroissant)
+
+  // Trouver la première locale supportée
+  for (const { locale } of languages) {
+    if (locales.includes(locale as Locale)) {
+      return locale;
     }
   }
 
@@ -59,9 +74,10 @@ export function proxy(request: NextRequest) {
     return NextResponse.next();
   }
 
-  // Racine '/' → rediriger vers la locale par défaut
+  // Racine '/' → rediriger vers la locale détectée du navigateur
   if (pathname === '/') {
-    return NextResponse.redirect(new URL(`/${defaultLocale}`, request.url));
+    const locale = getLocale(request);
+    return NextResponse.redirect(new URL(`/${locale}`, request.url));
   }
 
   // Autre chemin sans locale → ajouter la locale détectée

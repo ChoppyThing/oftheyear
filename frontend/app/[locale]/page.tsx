@@ -1,9 +1,15 @@
 import { getDictionary } from "@/lib/i18n";
-import { Locale } from "@/i18n.config";
+import { Locale, locales } from "@/i18n.config";
 import { getCurrentPhase } from "@/lib/phases";
-import GameCard from "@/components/GameCard";
+import dynamic from 'next/dynamic';
 import Image from "next/image";
 import Link from "next/link";
+import type { Metadata } from "next";
+
+// Lazy load GameCard pour améliorer le First Contentful Paint
+const GameCard = dynamic(() => import('@/components/GameCard'), {
+  loading: () => <div className="aspect-4/3 bg-gray-800 animate-pulse rounded-lg" />,
+});
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || "https://api.oftheyear.eu";
 
@@ -18,7 +24,10 @@ interface Game {
 async function getLatestGames(): Promise<Game[]> {
   try {
     const response = await fetch(`${API_URL}/game/latest?limit=3`, {
-      next: { revalidate: 0 }, // Dynamique - toujours à jour
+      cache: 'force-cache', // SSG : génère une page statique au build
+      headers: {
+        'Accept': 'application/json',
+      },
     });
     if (!response.ok) return [];
     return await response.json();
@@ -28,11 +37,79 @@ async function getLatestGames(): Promise<Game[]> {
   }
 }
 
+type Props = { params: Promise<{ locale: Locale }> };
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { locale } = await params;
+  const dict = await getDictionary(locale);
+  const currentYear = new Date().getFullYear();
+  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://game.oftheyear.eu';
+
+  const title = dict.meta?.title || 'GOTY - Game of the Year';
+  const description = dict.meta?.description || 'Vote for the best games of the year!';
+
+  // Structured Data JSON-LD pour la page d'accueil
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'WebSite',
+    name: 'Game of the Year',
+    url: `${baseUrl}/${locale}`,
+    description: description,
+    inLanguage: locale,
+    publisher: {
+      '@type': 'Organization',
+      name: 'Game of the Year',
+      url: baseUrl,
+    },
+    potentialAction: {
+      '@type': 'VoteAction',
+      target: {
+        '@type': 'EntryPoint',
+        urlTemplate: `${baseUrl}/${locale}/user/category`,
+      },
+    },
+  };
+
+  return {
+    title,
+    description,
+    keywords: ['game of the year', 'GOTY', currentYear.toString(), 'gaming', 'vote', 'video games', 'best games', 'gaming community', 'game awards', locale === 'fr' ? 'jeu de l\'année' : ''],
+    alternates: {
+      canonical: `${baseUrl}/${locale}`,
+      languages: Object.fromEntries(
+        locales.map(loc => [loc, `${baseUrl}/${loc}`])
+      ),
+    },
+    openGraph: {
+      type: 'website',
+      title,
+      description,
+      url: `${baseUrl}/${locale}`,
+      siteName: 'Game of the Year',
+      locale: locale === 'en' ? 'en_US' : locale === 'fr' ? 'fr_FR' : locale === 'es' ? 'es_ES' : 'zh_CN',
+      images: [{
+        url: `${baseUrl}/logo/goty-og.png`,
+        width: 1200,
+        height: 630,
+        alt: 'Game of the Year',
+      }],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title,
+      description,
+      images: [`${baseUrl}/logo/goty-og.png`],
+    },
+    other: {
+      'application-name': 'Game of the Year',
+      'og:site_name': 'Game of the Year',
+    },
+  };
+}
+
 export default async function Home({
   params,
-}: {
-  params: Promise<{ locale: Locale }>;
-}) {
+}: Props) {
   const { locale } = await params;
   const dict = await getDictionary(locale);
   const latestGames = await getLatestGames();
@@ -40,13 +117,18 @@ export default async function Home({
   // Déterminer le lien selon la phase
   const currentPhase = getCurrentPhase();
   const participateLink = currentPhase === 'vote' 
-    ? `/${locale}/user/vote` 
+    ? `/${locale}/vote` 
     : currentPhase === 'results'
     ? `/${locale}/results`
-    : `/${locale}/user/category`;
+    : `/${locale}/category`;
 
   return (
     <div className="relative min-h-screen text-gray-100">
+      {/* Prefetch des pages importantes */}
+      <link rel="prefetch" href={`/${locale}/category`} />
+      <link rel="prefetch" href={`/${locale}/about`} />
+      <link rel="prerender" href={participateLink} />
+      
       <div aria-hidden="true" className="absolute inset-0 pointer-events-none">
         {/* legacy user gradient (defined in globals.css) */}
         <div className="gradient absolute left-1/2 top-1/4 -translate-x-1/2 -translate-y-1/2 -z-10 pointer-events-none mix-blend-screen opacity-80" />
@@ -60,10 +142,14 @@ export default async function Home({
           <div className="text-center m-auto">
             <Image
               src="/logo/logo.png"
-              width="350"
-              height="350"
-              alt="Logo"
+              width={350}
+              height={350}
+              alt="Game of the Year Logo"
               priority
+              quality={75}
+              sizes="(max-width: 768px) 250px, 350px"
+              placeholder="empty"
+              style={{ backgroundColor: 'transparent' }}
             />
           </div>
           <div className="text-white text-4xl md:text-5xl text-center m-auto uppercase font-bold">

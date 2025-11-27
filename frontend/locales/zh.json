@@ -1,7 +1,7 @@
 {
   "meta": {
     "title": "GOTY - 年度游戏",
-    "description": "发现年度最佳游戏。为您最喜欢的游戏投票，探索终极游戏社区。"
+    "description": "为年度最佳游戏投票！加入最大的独立游戏社区，共同选出年度游戏。您的投票很重要！"
   },
   "header": {
     "home": "首页",
@@ -277,7 +277,11 @@
     "index": {
       "title": "投票类别",
       "description": "查看所有可供投票的类别，选择你喜欢的游戏",
-      "empty": "暂无 {year} 年的可投票类别"
+      "empty": "暂无 {year} 年的可投票类别",
+      "meta": {
+        "title": "年度游戏：GOTY {year} 类别",
+        "description": "发现 GOTY {year} 的所有类别！在每个类别中为您喜欢的游戏投票，参与选出年度最佳游戏。"
+      }
     },
     "card": {
       "see": "查看 →"
@@ -290,7 +294,11 @@
     "nomination": {
       "title": "为您喜爱的游戏投票",
       "noValidatedGames": "该类别暂无已验证的游戏",
-      "maxNominationsReached": "达到最大 {max} 提名数"
+      "maxNominationsReached": "达到最大 {max} 提名数",
+      "meta": {
+        "title": "{categoryName}",
+        "description": "在 GOTY {year} 的 {categoryName} 类别中为您喜欢的游戏投票。参与选举，在游戏社区中发出您的声音！"
+      }
     },
     "vote": {
       "skipButton": "跳过此类别 →",

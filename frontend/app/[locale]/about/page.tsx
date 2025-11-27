@@ -13,9 +13,32 @@ interface AboutPageProps {
 export async function generateMetadata({ params }: AboutPageProps): Promise<Metadata> {
   const { locale } = await params;
   const dict = await getDictionary(locale);
+  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://game.oftheyear.eu';
+  
   return {
     title: dict.about.meta.title,
     description: dict.about.meta.description,
+    alternates: {
+      canonical: `${baseUrl}/${locale}/about`,
+      languages: {
+        'en': `${baseUrl}/en/about`,
+        'fr': `${baseUrl}/fr/about`,
+        'es': `${baseUrl}/es/about`,
+        'zh': `${baseUrl}/zh/about`,
+      },
+    },
+    openGraph: {
+      title: dict.about.meta.title,
+      description: dict.about.meta.description,
+      url: `${baseUrl}/${locale}/about`,
+      type: 'website',
+      locale: locale === 'en' ? 'en_US' : locale === 'fr' ? 'fr_FR' : locale === 'es' ? 'es_ES' : 'zh_CN',
+    },
+    twitter: {
+      card: 'summary',
+      title: dict.about.meta.title,
+      description: dict.about.meta.description,
+    },
   };
 }
 

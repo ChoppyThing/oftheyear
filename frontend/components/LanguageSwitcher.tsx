@@ -83,7 +83,7 @@ export default function LanguageSwitcher({ currentLocale }: { currentLocale: Loc
       </button>
 
       {isOpen && (
-        <div className="absolute right-0 mt-2 w-48 rounded-lg bg-gray-800 shadow-lg border border-gray-700 overflow-hidden z-50">
+        <div className="absolute right-0 mt-2 w-48 rounded-lg bg-gray-800 shadow-lg border border-gray-700 overflow-hidden z-100">
           {locales.map((locale) => (
             <button
               key={locale}

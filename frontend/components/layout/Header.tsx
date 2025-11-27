@@ -2,7 +2,6 @@
 
 import Link from 'next/link';
 import { useState, useMemo, useEffect, useRef } from 'react';
-import AnimatedBackground from './AnimatedBackground';
 import UserButton from '../UserButton';
 import { Locale, defaultLocale } from '@/i18n.config';
 import LanguageSwitcher from '../LanguageSwitcher';
@@ -41,11 +40,7 @@ export default function Header({ locale, dict }: { locale: Locale; dict: any }) 
   }, [isMenuOpen]);
 
   return (
-    <header className="sticky top-0 z-50 w-full bg-[#0062bd] shadow-lg backdrop-blur-sm uppercase font-bold">
-      <div className="absolute pointer-events-none">
-        <AnimatedBackground />
-      </div>
-
+    <header className="sticky top-0 z-50 w-full bg-gray-800 bg-opacity-80 shadow-lg backdrop-blur-sm uppercase font-bold">
       <nav className="container mx-auto px-4 relative z-10" ref={menuRef}>
         <div className="flex items-center justify-between">
           <div className="flex-1 md:block hidden"></div>

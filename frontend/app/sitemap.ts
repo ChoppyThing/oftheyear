@@ -6,11 +6,12 @@ const API_URL = process.env.NEXT_PUBLIC_API_URL || 'https://api.oftheyear.eu';
 
 async function getCategories() {
   try {
-    const response = await fetch(`${API_URL}/category`, {
+    const response = await fetch(`${API_URL}/category/nominated`, {
       next: { revalidate: 3600 }, // Revalider toutes les heures
     });
     if (!response.ok) return [];
-    return await response.json();
+    const data = await response.json();
+    return data;
   } catch (error) {
     console.error('Failed to fetch categories for sitemap:', error);
     return [];
@@ -19,34 +20,33 @@ async function getCategories() {
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const categories = await getCategories();
+  const currentYear = new Date().getFullYear();
 
-  // Pages statiques
+  // Pages statiques principales
   const staticPages = [
-    '',
-    '/about',
-    '/login',
-    '/register',
-    '/propose',
-    '/results',
-    '/cgu',
-    '/confidentiality',
-    '/legal',
+    { path: '', priority: 1.0, changeFrequency: 'daily' as const },
+    { path: '/about', priority: 0.9, changeFrequency: 'monthly' as const },
+    { path: '/category', priority: 0.95, changeFrequency: 'daily' as const },
+    { path: '/results', priority: 0.85, changeFrequency: 'weekly' as const },
+    { path: '/login', priority: 0.5, changeFrequency: 'monthly' as const },
+    { path: '/register', priority: 0.5, changeFrequency: 'monthly' as const },
+    { path: '/legal', priority: 0.3, changeFrequency: 'yearly' as const },
   ];
 
   // Générer les URLs pour chaque locale
   const staticUrls = locales.flatMap((locale) =>
     staticPages.map((page) => ({
-      url: `${BASE_URL}/${locale}${page}`,
+      url: `${BASE_URL}/${locale}${page.path}`,
       lastModified: new Date(),
-      changeFrequency: 'weekly' as const,
-      priority: page === '' ? 1.0 : 0.8,
+      changeFrequency: page.changeFrequency,
+      priority: page.priority,
     }))
   );
 
-  // URLs des catégories dynamiques
+  // URLs des catégories dynamiques (page nomination)
   const categoryUrls = locales.flatMap((locale) =>
-    categories.map((category: { slug: string; updatedAt: string }) => ({
-      url: `${BASE_URL}/${locale}/category/${category.slug}`,
+    categories.map((category: { slug: string; updatedAt: string; name: string }) => ({
+      url: `${BASE_URL}/${locale}/user/category/nomination/${category.slug}`,
       lastModified: new Date(category.updatedAt),
       changeFrequency: 'daily' as const,
       priority: 0.9,

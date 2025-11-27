@@ -2,57 +2,29 @@
 
 import { useEffect, useRef } from 'react';
 
-interface Shape {
-  id: number;
-  path: string;
-  gradient: string;
-  opacity: number;
-  duration: number;
-  filter: string;
-}
-
 export default function AnimatedBackground() {
-  const shapesRef = useRef<Shape[]>([]);
-  const animationFrameRef = useRef<number | null>(null);
-  const startTimeRef = useRef<number>(Date.now());
+  const hasRendered = useRef(false);
 
   useEffect(() => {
-    /*if (shapesRef.current.length === 0) {
-      shapesRef.current = [
-        { id: 1, path: generateSmoothPath(), gradient: 'smoke1', opacity: 0.9, duration: 50000, filter: 'strongGlow' },
-        { id: 2, path: generateSmoothPath(), gradient: 'smoke2', opacity: 0.5, duration: 60000, filter: 'strongGlow' },
-        { id: 3, path: generateSmoothPath(), gradient: 'smoke3', opacity: 0.45, duration: 55000, filter: 'softGlow' },
-        { id: 4, path: generateSmoothPath(), gradient: 'smoke4', opacity: 0.4, duration: 48000, filter: 'strongGlow' },
-        { id: 5, path: generateSmoothPath(), gradient: 'smoke2', opacity: 0.38, duration: 52000, filter: 'softGlow' },
-        { id: 6, path: generateSmoothPath(), gradient: 'smoke5', opacity: 0.95, duration: 32000, filter: 'softGlow' },
-      ];
-      startTimeRef.current = Date.now();
-    }*/
+    // Ne charger l'animation qu'une fois et seulement si les performances le permettent
+    if (hasRendered.current) return;
+    hasRendered.current = true;
 
-    /*const animate = () => {
-      const shapes = document.querySelectorAll('.morphing-shape');
-      
-      shapes.forEach((shape, index) => {
-        const shapeData = shapesRef.current[index];
-        if (!shapeData) return;
+    // Vérifier si l'utilisateur préfère les animations réduites
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (prefersReducedMotion) return;
 
-        const elapsed = Date.now() - startTimeRef.current;
-        const progress = (elapsed % shapeData.duration) / shapeData.duration;
-        
-        const newPath = generateSmoothPath(progress, index);
-        shape.setAttribute('d', newPath);
-      });
-
-      animationFrameRef.current = requestAnimationFrame(animate);
-    };*/
-
-    //animate();
-
-    return () => {
-      if (animationFrameRef.current !== null) {
-        cancelAnimationFrame(animationFrameRef.current);
-      }
+    // Lazy load de l'animation seulement si nécessaire
+    const loadAnimation = () => {
+      // Animation très légère si nécessaire
     };
+
+    // Charger après que le contenu principal soit chargé
+    if (document.readyState === 'complete') {
+      loadAnimation();
+    } else {
+      window.addEventListener('load', loadAnimation, { once: true });
+    }
   }, []);
 
   return (

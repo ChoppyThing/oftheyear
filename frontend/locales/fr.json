@@ -1,7 +1,7 @@
 {
   "meta": {
     "title": "GOTY - Jeu de l'Année",
-    "description": "Découvrez les meilleurs jeux de l'année. Votez pour votre jeu préféré et explorez la communauté des votes gaming."
+    "description": "Votez pour les meilleurs jeux de l'année ! Participez à la plus grande communauté gaming indépendante et élisez ensemble le Game of the Year. Votre vote compte !"
   },
   "header": {
     "home": "Accueil",
@@ -276,7 +276,11 @@
     "index": {
       "title": "Catégories de vote",
       "description": "Découvrez toutes les catégories disponibles pour voter pour vos jeux préférés",
-      "empty": "Aucune catégorie disponible pour {year}"
+      "empty": "Aucune catégorie disponible pour {year}",
+      "meta": {
+        "title": "Game of the Year : Les catégories du GOTY {year}",
+        "description": "Découvrez toutes les catégories du GOTY {year} ! Votez pour vos jeux préférés dans chaque catégorie et participez à l'élection du meilleur jeu de l'année."
+      }
     },
     "card": {
       "see": "Voir →"
@@ -289,7 +293,11 @@
     "nomination": {
       "title": "Votez pour vos jeux favoris",
       "noValidatedGames": "Aucun jeu validé disponible pour cette catégorie",
-      "maxNominationsReached": "Maximum {max} nominations atteint"
+      "maxNominationsReached": "Maximum {max} nominations atteint",
+      "meta": {
+        "title": "{categoryName}",
+        "description": "Votez pour votre jeu favori dans la catégorie {categoryName} du GOTY {year}. Participez à l'élection et faites entendre votre voix dans la communauté gaming !"
+      }
     },
     "vote": {
       "skipButton": "Passer cette catégorie →",
