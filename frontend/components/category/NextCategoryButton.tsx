@@ -30,9 +30,11 @@ export default function NextCategoryButton({
     const currentYear = year || new Date().getFullYear();
     const allCategories = (await apiClient.get<Category[]>(`/category?year=${currentYear}`)) || [];
     const filtered = phase ? allCategories.filter((c) => c.phase === phase) : allCategories;
-    // Trier par sort ASC, puis par name ASC en cas d'égalité
+    // Trier par sort ASC (valeur par défaut 0 si undefined), puis par name ASC en cas d'égalité
     return filtered.sort((a, b) => {
-      if (a.sort !== b.sort) return a.sort - b.sort;
+      const aSort = (a.sort ?? 0) as number;
+      const bSort = (b.sort ?? 0) as number;
+      if (aSort !== bSort) return aSort - bSort;
       return a.name.localeCompare(b.name);
     });
   };
