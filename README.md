@@ -25,3 +25,5 @@ docker system df
 ```
 
 Le script `deploy.sh` nettoie automatiquement les anciennes images à chaque déploiement.
+
+Deploy test
