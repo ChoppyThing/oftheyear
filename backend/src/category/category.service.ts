@@ -56,9 +56,13 @@ export class CategoryService {
 
       // Ensuite trier par sort selon la phase
       if (a.phase === CategoryPhase.Nomination) {
-        return b.sort - a.sort; // DESC pour Nomination
+        // DESC pour Nomination avec fallback sur name ASC
+        if (b.sort !== a.sort) return b.sort - a.sort;
+        return a.name.localeCompare(b.name);
       } else {
-        return a.sort - b.sort; // ASC pour Vote et Closed
+        // ASC pour Vote et Closed avec fallback sur name ASC
+        if (a.sort !== b.sort) return a.sort - b.sort;
+        return a.name.localeCompare(b.name);
       }
     });
   }
@@ -126,7 +130,8 @@ export class CategoryService {
       .createQueryBuilder('category')
       .leftJoinAndSelect('category.author', 'author')
       .where('category.phase = :phase', { phase: CategoryPhase.Vote })
-      .orderBy('category.name', 'ASC');
+      .orderBy('category.sort', 'ASC')
+      .addOrderBy('category.name', 'ASC');
 
     if (year) {
       queryBuilder.andWhere('category.year = :year', { year });
@@ -147,7 +152,8 @@ export class CategoryService {
       .where('category.phase = :phase', { phase: CategoryPhase.Nomination })
       .groupBy('category.id')
       .addGroupBy('author.id')
-      .orderBy('category.name', 'ASC');
+      .orderBy('category.sort', 'ASC')
+      .addOrderBy('category.name', 'ASC');
 
     if (year) {
       queryBuilder.andWhere('category.year = :year', { year });

@@ -10,6 +10,7 @@ export interface Category {
   description?: string; 
   slug: string;
   sort?: number;
+  forceFiltered?: boolean;
   translations?: {
     fr?: { title?: string; description?: string };
     en?: { title?: string; description?: string };

@@ -18,6 +18,7 @@ export default function CreateCategoryModal({ open, onOpenChange, onSuccess }: P
     year: new Date().getFullYear(),
     phase: CategoryPhase.Nomination,
     sort: 0,
+    forceFiltered: false,
   });
 
   const [translations, setTranslations] = useState({
@@ -45,7 +46,7 @@ export default function CreateCategoryModal({ open, onOpenChange, onSuccess }: P
       alert('Catégorie créée avec succès');
       onSuccess();
       onOpenChange(false);
-      setFormData({ name: '', year: new Date().getFullYear(), phase: CategoryPhase.Nomination, sort: 0 });
+      setFormData({ name: '', year: new Date().getFullYear(), phase: CategoryPhase.Nomination, sort: 0, forceFiltered: false });
       setTranslations({ fr: { title: '', description: '' }, en: { title: '', description: '' }, es: { title: '', description: '' }, zh: { title: '', description: '' } });
     } catch (error: any) {
       alert(error.response?.data?.message || 'Erreur lors de la création');
@@ -127,6 +128,19 @@ export default function CreateCategoryModal({ open, onOpenChange, onSuccess }: P
               onChange={(e) => setFormData({ ...formData, sort: parseInt(e.target.value || '0') })}
               className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
+          </div>
+
+          <div className="flex items-center">
+            <input
+              id="forceFiltered"
+              type="checkbox"
+              checked={formData.forceFiltered}
+              onChange={(e) => setFormData({ ...formData, forceFiltered: e.target.checked })}
+              className="h-4 w-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+            />
+            <label htmlFor="forceFiltered" className="ml-2 block text-sm text-gray-700">
+              Filtrage forcé (whitelist uniquement les jeux ajoutés)
+            </label>
           </div>
 
           <div className="flex justify-end gap-2 mt-6">

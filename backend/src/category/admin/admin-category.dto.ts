@@ -22,6 +22,10 @@ export class AdminCreateCategoryDto {
   sort?: number = 0;
 
   @IsOptional()
+  @Type(() => Boolean)
+  forceFiltered?: boolean = false;
+
+  @IsOptional()
   @IsObject()
   translations?: {
     fr?: { title?: string; description?: string };
@@ -49,6 +53,10 @@ export class AdminUpdateCategoryDto {
   @Type(() => Number)
   @IsInt()
   sort?: number;
+
+  @IsOptional()
+  @Type(() => Boolean)
+  forceFiltered?: boolean;
 
   @IsOptional()
   @IsObject()

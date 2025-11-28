@@ -29,7 +29,12 @@ export default function NextCategoryButton({
   const fetchFiltered = async () => {
     const currentYear = year || new Date().getFullYear();
     const allCategories = (await apiClient.get<Category[]>(`/category?year=${currentYear}`)) || [];
-    return phase ? allCategories.filter((c) => c.phase === phase) : allCategories;
+    const filtered = phase ? allCategories.filter((c) => c.phase === phase) : allCategories;
+    // Trier par sort ASC, puis par name ASC en cas d'égalité
+    return filtered.sort((a, b) => {
+      if (a.sort !== b.sort) return a.sort - b.sort;
+      return a.name.localeCompare(b.name);
+    });
   };
 
   const handleNext = async () => {

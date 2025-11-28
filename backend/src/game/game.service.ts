@@ -66,9 +66,9 @@ export class GameService {
 
   /**
    * Récupère les jeux éligibles pour une catégorie donnée
-   * Logique:
-   * 1. Si la catégorie a des jeux restreints -> retourner UNIQUEMENT ces jeux
-   * 2. Si la catégorie n'a pas de jeux restreints -> retourner tous les jeux NON-RESTREINTS (jeux sans allowedCategories ou allowedCategories vide)
+   * Logique forceFiltered :
+   * - Si forceFiltered = true : UNIQUEMENT les jeux dans restrictedGames
+   * - Si forceFiltered = false : TOUS les jeux SAUF ceux filtrés ailleurs (avec forceFiltered=true), MAIS inclure ceux explicitement dans restrictedGames
    */
   async getGamesForCategory(categoryId: number, year: number): Promise<Game[]> {
     // Récupérer la catégorie avec ses jeux restreints
@@ -81,9 +81,12 @@ export class GameService {
       throw new NotFoundException(`Category with ID ${categoryId} not found`);
     }
 
-    // Cas 1: La catégorie a des jeux restreints
-    if (category.restrictedGames && category.restrictedGames.length > 0) {
-      // Retourner uniquement les jeux restreints à cette catégorie qui sont validés et de l'année correcte
+    // Cas 1: forceFiltered = true (catégorie stricte, liste blanche)
+    if (category.forceFiltered) {
+      if (!category.restrictedGames || category.restrictedGames.length === 0) {
+        return [];
+      }
+
       return await this.gameRepository
         .createQueryBuilder('game')
         .innerJoin('game.allowedCategories', 'category')
@@ -94,17 +97,33 @@ export class GameService {
         .getMany();
     }
 
-    // Cas 2: La catégorie n'a pas de jeux restreints
-    // Retourner tous les jeux qui ne sont restreints à AUCUNE catégorie
-    const gamesWithoutRestrictions = await this.gameRepository
+    // Cas 2: forceFiltered = false (catégorie ouverte)
+    // Récupérer les jeux filtrés ailleurs (dans catégories avec forceFiltered = true)
+    const filteredElsewhereGames = await this.gameRepository
       .createQueryBuilder('game')
-      .leftJoin('game.allowedCategories', 'category')
-      .where('game.status = :status', { status: Status.Validated })
+      .innerJoin('game.allowedCategories', 'category')
+      .where('category.forceFiltered = :forceFiltered', { forceFiltered: true })
+      .andWhere('game.status = :status', { status: Status.Validated })
       .andWhere('game.year = :year', { year })
-      .andWhere('category.id IS NULL') // Jeux sans catégorie restreinte
-      .orderBy('game.name', 'ASC')
       .getMany();
 
-    return gamesWithoutRestrictions;
+    const filteredElsewhereIds = filteredElsewhereGames.map(g => g.id);
+    const explicitlyAllowedIds = category.restrictedGames?.map(g => g.id) || [];
+
+    // Récupérer tous les jeux de l'année
+    const queryBuilder = this.gameRepository
+      .createQueryBuilder('game')
+      .where('game.status = :status', { status: Status.Validated })
+      .andWhere('game.year = :year', { year });
+
+    // Exclure les jeux filtrés ailleurs SAUF ceux explicitement ajoutés ici
+    if (filteredElsewhereIds.length > 0) {
+      const idsToExclude = filteredElsewhereIds.filter(id => !explicitlyAllowedIds.includes(id));
+      if (idsToExclude.length > 0) {
+        queryBuilder.andWhere('game.id NOT IN (:...idsToExclude)', { idsToExclude });
+      }
+    }
+
+    return await queryBuilder.orderBy('game.name', 'ASC').getMany();
   }
 }

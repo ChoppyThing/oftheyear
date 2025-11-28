@@ -48,6 +48,9 @@ export class Category {
   @Column({ type: 'int', default: 0 })
   sort: number;
 
+  @Column({ type: 'boolean', default: false })
+  forceFiltered: boolean;
+
   @Column({
     type: 'enum',
     enum: CategoryPhase,
