@@ -14,9 +14,9 @@ const menuItems = [
   { href: '/admin/games', icon: LuGamepad2, label: 'Jeux' },
   { href: '/admin/category', icon: FiGrid, label: 'Categories' },
   { href: '/admin/category-stats', icon: IoIosStats, label: 'Categories Stats' },
-  { href: '/admin/validation', icon: FiCheckCircle, label: 'Validation' },
+  //{ href: '/admin/validation', icon: FiCheckCircle, label: 'Validation' },
   { href: '/admin/users', icon: FiUsers, label: 'Utilisateurs' },
-  { href: '/admin/settings', icon: FiSettings, label: 'Paramètres' },
+  //{ href: '/admin/settings', icon: FiSettings, label: 'Paramètres' },
 ];
 
 function SidebarItem({ href, icon: Icon, label }: any) {

@@ -196,25 +196,32 @@ export class CategoryAdminService {
 
     const categoriesStats: CategoryVoteStats[] = await Promise.all(
       categories.map(async (category) => {
-        // 1. Toujours récupérer les votes de nomination
-        const nominationVotes = category.votes || [];
-        const gameVotes = new Map<number, { id: number; name: string; count: number }>();
-
-        nominationVotes.forEach((vote) => {
-          if (vote.game) {
-            const current = gameVotes.get(vote.game.id) || { id: vote.game.id, name: vote.game.name, count: 0 };
-            current.count++;
-            gameVotes.set(vote.game.id, current);
+        // 1. Calculer les votes de nomination à partir des enregistrements CategoryNominee
+        const nominationMap = new Map<number, { id: number; gameId: number; gameName: string; voteCount: number }>();
+        (category.nominees || []).forEach((nominee) => {
+          if (nominee.game) {
+            const gid = nominee.game.id;
+            const existing = nominationMap.get(gid);
+            if (existing) {
+              existing.voteCount += 1;
+            } else {
+              nominationMap.set(gid, {
+                id: gid,
+                gameId: gid,
+                gameName: nominee.game.name,
+                voteCount: 1,
+              });
+            }
           }
         });
 
-        const allNominations = Array.from(gameVotes.values())
-          .sort((a, b) => b.count - a.count)
+        const allNominations = Array.from(nominationMap.values())
+          .sort((a, b) => b.voteCount - a.voteCount)
           .map((game) => ({
             id: game.id,
-            gameId: game.id,
-            gameName: game.name,
-            voteCount: game.count,
+            gameId: game.gameId,
+            gameName: game.gameName,
+            voteCount: game.voteCount,
             percentage: 0,
           }));
 
@@ -224,23 +231,39 @@ export class CategoryAdminService {
         });
 
         // 2. Toujours récupérer les votes finaux sur les nominees
-        const nominees = await Promise.all(
-          (category.nominees || []).map(async (nominee) => {
-            const voteCount = await this.finalVoteRepository.count({
-              where: {
-                nominee: { id: nominee.id },
-              },
-            });
+        // Aggregate nominees by game to avoid duplicates when multiple users nominated the same game
+        const nomineeAggregates = new Map<
+          number,
+          { gameId: number; gameName: string; voteCount: number }
+        >();
 
-            return {
-              id: nominee.id,
-              gameId: nominee.game.id,
+        for (const nominee of category.nominees || []) {
+          const voteCount = await this.finalVoteRepository.count({
+            where: {
+              nominee: { id: nominee.id },
+            },
+          });
+
+          const gameId = nominee.game.id;
+          const existing = nomineeAggregates.get(gameId);
+          if (existing) {
+            existing.voteCount += voteCount;
+          } else {
+            nomineeAggregates.set(gameId, {
+              gameId,
               gameName: nominee.game.name,
               voteCount,
-              percentage: 0,
-            };
-          }),
-        );
+            });
+          }
+        }
+
+        const nominees = Array.from(nomineeAggregates.values()).map((n) => ({
+          id: n.gameId,
+          gameId: n.gameId,
+          gameName: n.gameName,
+          voteCount: n.voteCount,
+          percentage: 0,
+        }));
 
         const totalFinalVotes = nominees.reduce((sum, n) => sum + n.voteCount, 0);
         nominees.forEach((nominee) => {

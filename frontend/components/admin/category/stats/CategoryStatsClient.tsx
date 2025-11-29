@@ -148,10 +148,19 @@ export default function CategoryStatsClient({ initialYear }: Props) {
       <div className="space-y-4">
         {stats.categories.map((category) => {
           const currentTab = activeTab[category.categoryId] || "all";
-          // Pour "Tous les jeux" : afficher nominationVotes si disponible, sinon nominees
-          // Pour "Top 5" : toujours afficher nominees (les votes finaux)
-          const allGames = category.nominationVotes || category.nominees || [];
-          const top5Games = category.nominees || [];
+          // Pour "Tous les jeux" : afficher nominationVotes s'il y a des votes, sinon nominees
+          // (attention : [] est truthy, il faut vérifier la longueur)
+          const allGames = (category.nominationVotes && category.nominationVotes.length > 0)
+            ? category.nominationVotes
+            : (category.nominees || []);
+          // Top5 should reflect the most relevant ranking depending on phase:
+          // - during nomination phase prefer `nominationVotes` (counts of nominations)
+          // - otherwise fall back to `nominees` (final vote aggregates)
+          const sourceForTop = (category.phase === "nomination")
+            ? (category.nominationVotes && category.nominationVotes.length > 0 ? category.nominationVotes : (category.nominees || []))
+            : (category.nominees || []);
+          // ensure sorting by voteCount desc then take top 5
+          const top5Games = (sourceForTop || []).slice().sort((a, b) => b.voteCount - a.voteCount).slice(0, 5);
           const displayGames = currentTab === "top5" ? top5Games : allGames;
 
           return (
@@ -210,34 +219,45 @@ export default function CategoryStatsClient({ initialYear }: Props) {
                 {/* Liste des jeux */}
                 <div className="space-y-4">
                   {displayGames && displayGames.length > 0 ? (
-                    displayGames.map((game, index) => (
-                      <div key={game.gameId} className="space-y-2">
-                        <div className="flex items-center justify-between text-sm">
-                          <div className="flex items-center gap-2">
-                            {currentTab === "top5" && (
-                              <span className="flex items-center justify-center w-6 h-6 text-xs font-bold bg-blue-100 text-blue-600 rounded-full">
-                                {index + 1}
+                    displayGames.map((game, index) => {
+                      // prefer final vote numbers from `category.nominees` when available
+                      const finalMatch = (category.nominees || []).find(
+                        (n) => n.gameId === game.gameId,
+                      );
+                      const voteCountToShow = finalMatch && finalMatch.voteCount > 0 ? finalMatch.voteCount : game.voteCount;
+                      const percentageToShow = finalMatch && typeof finalMatch.percentage === 'number' && finalMatch.percentage > 0
+                        ? finalMatch.percentage
+                        : (typeof game.percentage === 'number' ? game.percentage : 0);
+
+                      return (
+                        <div key={game.gameId} className="space-y-2">
+                          <div className="flex items-center justify-between text-sm">
+                            <div className="flex items-center gap-2">
+                              {currentTab === "top5" && (
+                                <span className="flex items-center justify-center w-6 h-6 text-xs font-bold bg-blue-100 text-blue-600 rounded-full">
+                                  {index + 1}
+                                </span>
+                              )}
+                              <span className="font-medium">{game.gameName}</span>
+                            </div>
+                            <div className="flex items-center gap-3">
+                              <span className="text-gray-500">
+                                {voteCountToShow} votes
                               </span>
-                            )}
-                            <span className="font-medium">{game.gameName}</span>
+                              <span className="px-2 py-1 text-xs border border-gray-300 rounded">
+                                {percentageToShow.toFixed(1)}%
+                              </span>
+                            </div>
                           </div>
-                          <div className="flex items-center gap-3">
-                            <span className="text-gray-500">
-                              {game.voteCount} votes
-                            </span>
-                            <span className="px-2 py-1 text-xs border border-gray-300 rounded">
-                              {game.percentage.toFixed(1)}%
-                            </span>
+                          <div className="w-full bg-gray-200 rounded-full h-2">
+                            <div
+                              className="bg-blue-600 h-2 rounded-full transition-all"
+                              style={{ width: `${percentageToShow}%` }}
+                            />
                           </div>
                         </div>
-                        <div className="w-full bg-gray-200 rounded-full h-2">
-                          <div
-                            className="bg-blue-600 h-2 rounded-full transition-all"
-                            style={{ width: `${game.percentage}%` }}
-                          />
-                        </div>
-                      </div>
-                    ))
+                      );
+                    })
                   ) : (
                     <div className="text-center py-8 text-gray-500">
                       <p>Aucun jeu dans cette catégorie</p>
