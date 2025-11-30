@@ -1,6 +1,6 @@
-'use client';
+"use client";
 
-import { ReactNode } from 'react';
+import { ReactNode, useState } from 'react';
 import { FiHome, FiUsers, FiGrid, FiCheckCircle, FiSettings, FiLogOut } from 'react-icons/fi';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
@@ -40,14 +40,31 @@ function SidebarItem({ href, icon: Icon, label }: any) {
 
 function AdminLayoutContent({ children }: { children: ReactNode }) {
   const { user, logout } = useUser();
+  const [mobileOpen, setMobileOpen] = useState(false);
 
   return (
     <div className="flex bg-gray-100">
+      {/* Mobile overlay when sidebar open */}
+      {mobileOpen && (
+        <div
+          className="fixed inset-0 bg-black/50 z-40 md:hidden"
+          onClick={() => setMobileOpen(false)}
+          aria-hidden
+        />
+      )}
+
       {/* Sidebar */}
-      <aside className="w-64 bg-gray-800 text-white flex flex-col">
+      <aside className={`fixed inset-y-0 left-0 z-50 w-64 bg-gray-800 text-white flex flex-col transform transition-transform md:relative md:translate-x-0 ${mobileOpen ? 'translate-x-0' : '-translate-x-full'}`}>
         {/* Logo */}
-        <div className="p-6 border-b border-gray-700">
+        <div className="p-6 border-b border-gray-700 flex items-center justify-between">
           <h1 className="text-2xl font-bold">Admin Panel</h1>
+          <button
+            className="md:hidden ml-2 p-2 rounded-md bg-gray-700 hover:bg-gray-600"
+            onClick={() => setMobileOpen(false)}
+            aria-label="Fermer le menu"
+          >
+            ✕
+          </button>
         </div>
 
         {/* Menu */}
@@ -77,9 +94,25 @@ function AdminLayoutContent({ children }: { children: ReactNode }) {
           </button>
         </div>
       </aside>
-
       {/* Main content */}
       <main className="flex-1 overflow-y-auto">
+        {/* Mobile header */}
+        <div className="md:hidden flex items-center justify-between bg-white/5 p-3 border-b border-gray-200">
+          <div className="flex items-center gap-3">
+            <button
+              onClick={() => setMobileOpen(true)}
+              className="p-2 rounded-md bg-gray-800 text-white"
+              aria-label="Ouvrir le menu"
+            >
+              ☰
+            </button>
+            <div className="font-semibold">Admin Panel</div>
+          </div>
+          <div>
+            <button onClick={logout} className="px-3 py-1 rounded bg-red-600 text-white">Déconnexion</button>
+          </div>
+        </div>
+
         {/* Content */}
         <div className="p-4">
           {children}
