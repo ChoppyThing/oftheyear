@@ -46,6 +46,13 @@
       "vote": "年度游戏投票阶段已开启！",
       "results": "立即查看年度游戏的最终结果"
     }
+    ,
+    "finishedNominations": {
+      "title": "恭喜！",
+      "message": "您已为所有类别提名了游戏。请期待最后的投票！",
+      "ctaHome": "返回首页",
+      "ctaResults": "查看结果"
+    }
   },
   "login": {
     "title": "登录",

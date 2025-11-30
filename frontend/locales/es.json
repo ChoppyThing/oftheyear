@@ -46,6 +46,13 @@
       "vote": "¡La fase de votación del Juego del Año está abierta!",
       "results": "Consulta ahora los resultados del Juego del Año"
     }
+    ,
+    "finishedNominations": {
+      "title": "¡Felicidades!",
+      "message": "Has nominado juegos para todas las categorías. ¡Nos vemos pronto para las votaciones finales!",
+      "ctaHome": "Volver al inicio",
+      "ctaResults": "Ver resultados"
+    }
   },
   "login": {
     "title": "Iniciar sesión",

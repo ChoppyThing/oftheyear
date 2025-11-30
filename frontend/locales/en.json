@@ -46,6 +46,13 @@
       "vote": "The voting phase for Game of the Year is open!",
       "results": "Find the Game of the Year results now"
     }
+    ,
+    "finishedNominations": {
+      "title": "Congratulations!",
+      "message": "You've nominated games for all categories. See you soon for the final votes — thanks for participating!",
+      "ctaHome": "Back to home",
+      "ctaResults": "See results"
+    }
   },
   "login": {
     "title": "Login",

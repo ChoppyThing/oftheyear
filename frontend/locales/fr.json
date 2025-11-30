@@ -48,6 +48,13 @@
       "vote": "La phase de votes des jeux de l'année est ouverte",
       "results": "Retrouvez dès à présent les résultats des jeux de l'année"
     }
+    ,
+    "finishedNominations": {
+      "title": "Félicitations !",
+      "message": "Vous avez nommé des jeux pour toutes les catégories. Rendez-vous bientôt pour les votes finaux !",
+      "ctaHome": "Accueil",
+      "ctaResults": "Voir les résultats"
+    }
   },
   "login": {
     "title": "Connexion",
