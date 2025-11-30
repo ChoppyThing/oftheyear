@@ -166,8 +166,33 @@ export default async function Home({
             <p id="slogan" className="text-lg md:text-2xl mt-4">
               <span className="font-semibold">{dict.home.slogan}</span>
             </p>
+
+                    {/* Small dynamic phase panel under the main header */}
+        <div className="max-w-6xl mx-auto px-6 md:px-10 text-sm mt-6">
+          <div className="">
+            {currentPhase === 'nomination' && (
+              <div className="bg-emerald-600/10 border border-emerald-600/20 text-emerald-300 px-4 py-3 text-center rounded-md">
+                {dict.home?.phasePanel?.nomination || 'Les nominations sont en cours ! Allez vite nominer vos jeux'}
+              </div>
+            )}
+
+            {currentPhase === 'vote' && (
+              <div className="bg-blue-700/10 border border-blue-700/20 text-blue-200 px-4 py-3 text-center rounded-md">
+                {dict.home?.phasePanel?.vote || "La phase de votes des jeux de l'année est ouverte"}
+              </div>
+            )}
+
+            {currentPhase === 'results' && (
+              <div className="bg-yellow-700/10 border border-yellow-700/20 text-yellow-200 px-4 py-3 text-center rounded-md">
+                {dict.home?.phasePanel?.results || "Retrouvez dès à présent les résultats des jeux de l'année"}
+              </div>
+            )}
+          </div>
+        </div>
           </div>
         </header>
+
+
 
         <main className="p-6 md:p-10 max-w-6xl mx-auto">
           {/* Pitch principal */}
