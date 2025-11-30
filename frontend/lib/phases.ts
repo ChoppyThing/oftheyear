@@ -30,7 +30,7 @@ export function getVotingStartDate(year: number): Date {
  */
 export function getCurrentPhase(): VotingPhase {
   // Dev
-  //return 'vote';
+  // return 'results';
 
   const now = new Date();
   const currentYear = now.getFullYear();

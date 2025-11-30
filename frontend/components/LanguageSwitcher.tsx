@@ -1,23 +1,47 @@
-'use client';
+
+"use client";
 
 import { usePathname, useRouter } from 'next/navigation';
 import { locales, Locale, localeNames, localeFlags, defaultLocale } from '@/i18n.config';
 import { useState, useRef, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 
 export default function LanguageSwitcher({ currentLocale }: { currentLocale: Locale }) {
   const pathname = usePathname();
   const router = useRouter();
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
+  const buttonRef = useRef<HTMLButtonElement>(null);
+  const [coords, setCoords] = useState<{ top: number; left: number; width: number } | null>(null);
 
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+      const target = event.target as Node;
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(target) &&
+        buttonRef.current &&
+        !buttonRef.current.contains(target)
+      ) {
         setIsOpen(false);
       }
     }
+
+    function handleScrollOrResize() {
+      if (!buttonRef.current) return;
+      const rect = buttonRef.current.getBoundingClientRect();
+      setCoords({ top: rect.bottom + 8, left: rect.right - rect.width, width: rect.width });
+    }
+
     document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
+    window.addEventListener('resize', handleScrollOrResize);
+    window.addEventListener('scroll', handleScrollOrResize, true);
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+      window.removeEventListener('resize', handleScrollOrResize);
+      window.removeEventListener('scroll', handleScrollOrResize, true);
+    };
   }, []);
 
   const switchLocale = (newLocale: Locale) => {
@@ -64,9 +88,17 @@ export default function LanguageSwitcher({ currentLocale }: { currentLocale: Loc
   };
 
   return (
-    <div className="relative" ref={dropdownRef}>
+    <div className="relative" >
       <button
-        onClick={() => setIsOpen(!isOpen)}
+        ref={buttonRef}
+        onClick={() => {
+          const willOpen = !isOpen;
+          setIsOpen(willOpen);
+          if (willOpen && buttonRef.current) {
+            const rect = buttonRef.current.getBoundingClientRect();
+            setCoords({ top: rect.bottom + 8, left: rect.left, width: rect.width });
+          }
+        }}
         className="flex items-center gap-2 px-3 py-2 rounded-lg bg-gray-800 hover:bg-gray-700 transition-colors"
         aria-label="Change language"
       >
@@ -82,8 +114,12 @@ export default function LanguageSwitcher({ currentLocale }: { currentLocale: Loc
         </svg>
       </button>
 
-      {isOpen && (
-        <div className="absolute right-0 mt-2 w-48 rounded-lg bg-gray-800 shadow-lg border border-gray-700 overflow-hidden z-100">
+      {isOpen && coords && createPortal(
+        <div
+          ref={dropdownRef}
+          style={{ position: 'fixed', top: coords.top, left: coords.left, minWidth: coords.width }}
+          className="rounded-lg bg-gray-800 shadow-lg border border-gray-700 overflow-hidden z-50"
+        >
           {locales.map((locale) => (
             <button
               key={locale}
@@ -102,7 +138,8 @@ export default function LanguageSwitcher({ currentLocale }: { currentLocale: Loc
               )}
             </button>
           ))}
-        </div>
+        </div>,
+        document.body
       )}
     </div>
   );

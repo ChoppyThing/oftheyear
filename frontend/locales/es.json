@@ -40,6 +40,12 @@
       "extra": "Durante todo el año puedes añadir los juegos que te hayan gustado y quieras ver competir. También puedes proponer nuevas categorías que serán aprobadas si son pertinentes.",
       "cta": "Yo participo"
     }
+    ,
+    "phasePanel": {
+      "nomination": "¡Las nominaciones están en curso! ¡Ve a nominar tus juegos!",
+      "vote": "¡La fase de votación del Juego del Año está abierta!",
+      "results": "Consulta ahora los resultados del Juego del Año"
+    }
   },
   "login": {
     "title": "Iniciar sesión",

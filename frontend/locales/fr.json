@@ -42,6 +42,12 @@
       "extra": "Toute l’année, vous pouvez ajouter les jeux que vous avez aimés et que vous souhaitez voir concourir. Vous pouvez aussi proposer de nouvelles catégories, validées si elles sont pertinentes.",
       "cta": "Je participe !"
     }
+    ,
+    "phasePanel": {
+      "nomination": "Les nominations sont en cours ! Allez vite nominer vos jeux",
+      "vote": "La phase de votes des jeux de l'année est ouverte",
+      "results": "Retrouvez dès à présent les résultats des jeux de l'année"
+    }
   },
   "login": {
     "title": "Connexion",

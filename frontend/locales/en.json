@@ -40,6 +40,12 @@
       "extra": "Throughout the year, you can add the games you enjoyed and want to see compete. You can also suggest new categories, which will be approved if relevant.",
       "cta": "Let's go!"
     }
+    ,
+    "phasePanel": {
+      "nomination": "Nominations are open — go nominate your games now!",
+      "vote": "The voting phase for Game of the Year is open!",
+      "results": "Find the Game of the Year results now"
+    }
   },
   "login": {
     "title": "Login",
