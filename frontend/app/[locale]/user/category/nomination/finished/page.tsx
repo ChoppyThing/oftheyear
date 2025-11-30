@@ -20,8 +20,8 @@ export default async function Finished({ params }: Props) {
         <p className="mb-6">{message}</p>
 
         <div className="flex justify-center gap-4">
-          <Link href={`/${locale}`} className="px-4 py-2 bg-sky-600 hover:bg-sky-700 rounded-md">{ctaHome}</Link>
-          <Link href={`/${locale}/results`} className="px-4 py-2 border border-slate-600 rounded-md">{ctaResults}</Link>
+          <Link href={`/`} className="px-4 py-2 bg-sky-600 hover:bg-sky-700 rounded-md">{ctaHome}</Link>
+          {/*<Link href={`/${locale}/results`} className="px-4 py-2 border border-slate-600 rounded-md">{ctaResults}</Link>*/}
         </div>
       </div>
     </div>
