@@ -10,7 +10,7 @@ import {
 import ImageUpload from "@/components/admin/project/ImageUpload";
 import debounce from "lodash/debounce";
 
-export default function ProposeGameClient() {
+export default function ProposeGameClient({ dict }: { dict?: any }) {
   const router = useRouter();
   const currentYear = new Date().getFullYear();
 
@@ -135,11 +135,15 @@ export default function ProposeGameClient() {
   if (!proposalInfo?.canPropose) {
     return (
       <div className="bg-sky-900 border-2 border-sky-900 rounded-lg p-8 text-center">
-        <h2 className="text-2xl font-bold text-white mb-3">Limite atteinte</h2>
+        <h2 className="text-2xl font-bold text-white mb-3">
+          {dict?.user?.proposeLimitTitle || 'Limite atteinte'}
+        </h2>
         <p className="text-gray-100 mb-6">
-          Vous avez déjà proposé {proposalInfo?.currentCount || 5} jeux pour{" "}
-          {currentYear}.<br />
-          Vous ne pouvez pas proposer plus de 5 jeux par an.
+          {dict?.user?.proposeLimitMessage
+            ? dict.user.proposeLimitMessage
+                .replace('{count}', String(proposalInfo?.currentCount || 5))
+                .replace('{year}', String(currentYear))
+            : `Vous avez déjà proposé ${proposalInfo?.currentCount || 5} jeux pour ${currentYear}.\nVous ne pouvez pas proposer plus de 5 jeux par an.`}
         </p>
       </div>
     );
@@ -150,11 +154,13 @@ export default function ProposeGameClient() {
       {/* Compteur */}
       <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 text-gray-800">
         <p className="text-sm font-medium">
-          Propositions restantes :{" "}
-          <span className="text-blue-600 font-bold">
-            {proposalInfo.remaining}/5
-          </span>{" "}
-          pour {currentYear}
+          {dict?.user?.remainingProposalsLabel
+            ? dict.user.remainingProposalsLabel
+                .replace('{remaining}', String(proposalInfo.remaining))
+                .replace('{year}', String(currentYear))
+            : (
+              <>Propositions restantes : <span className="text-blue-600 font-bold">{proposalInfo.remaining}/5</span> pour {currentYear}</>
+            )}
         </p>
       </div>
 
@@ -165,12 +171,14 @@ export default function ProposeGameClient() {
         {/* Image */}
         <div className="mb-6">
           <label className="block text-sm font-medium text-gray-700 mb-2">
-            Image du jeu
+            {dict?.user?.imageLabel || 'Image du jeu'}
           </label>
           <ImageUpload
             onImageSelect={setSelectedImage}
             onImageRemove={() => setSelectedImage(null)}
           />
+          <p className="text-xs text-gray-500 mt-2">{dict?.user?.uploadHint || 'Cliquez pour uploader une image'}</p>
+          <p className="text-xs text-gray-400">{dict?.user?.formatsHint || 'PNG, JPG, WebP (max. 5 MB)'}</p>
         </div>
 
         {/* Nom */}
@@ -179,7 +187,7 @@ export default function ProposeGameClient() {
             htmlFor="name"
             className="block text-sm font-medium text-gray-700 mb-2"
           >
-            Nom du jeu *
+            {dict?.user?.nameLabel || 'Nom du jeu *'}
           </label>
           <input
             type="text"
@@ -189,7 +197,7 @@ export default function ProposeGameClient() {
             value={formData.name}
             onChange={handleChange}
             className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-800"
-            placeholder="Ex: The Legend of Zelda"
+            placeholder={dict?.user?.namePlaceholder || 'Ex: The Legend of Zelda'}
           />
           
           {/* Résultats de recherche */}
@@ -243,7 +251,7 @@ export default function ProposeGameClient() {
             htmlFor="description"
             className="block text-sm font-medium text-gray-700 mb-2"
           >
-            Description
+            {dict?.user?.descriptionLabel || 'Description'}
           </label>
           <textarea
             id="description"
@@ -252,7 +260,7 @@ export default function ProposeGameClient() {
             value={formData.description}
             onChange={handleChange}
             className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
-            placeholder="Décrivez brièvement le jeu..."
+            placeholder={dict?.user?.descriptionPlaceholder || 'Décrivez brièvement le jeu...'}
           />
         </div>
 
@@ -262,7 +270,7 @@ export default function ProposeGameClient() {
             htmlFor="developer"
             className="block text-sm font-medium text-gray-700 mb-2"
           >
-            Développeur *
+            {dict?.user?.developerLabel || 'Développeur *'}
           </label>
           <input
             type="text"
@@ -272,7 +280,7 @@ export default function ProposeGameClient() {
             value={formData.developer}
             onChange={handleChange}
             className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
-            placeholder="Ex: Nintendo"
+            placeholder={dict?.user?.developerPlaceholder || 'Ex: Nintendo'}
           />
         </div>
 
@@ -282,7 +290,7 @@ export default function ProposeGameClient() {
             htmlFor="editor"
             className="block text-sm font-medium text-gray-700 mb-2"
           >
-            Éditeur *
+            {dict?.user?.editorLabel || 'Éditeur *'}
           </label>
           <input
             type="text"
@@ -292,7 +300,7 @@ export default function ProposeGameClient() {
             value={formData.editor}
             onChange={handleChange}
             className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
-            placeholder="Ex: Nintendo"
+            placeholder={dict?.user?.editorPlaceholder || 'Ex: Nintendo'}
           />
         </div>
 
@@ -303,7 +311,7 @@ export default function ProposeGameClient() {
         <div className="mb-6 bg-blue-50 border border-blue-200 rounded-lg p-4">
           <div className="flex items-start gap-3">
             <svg
-              className="w-5 h-5 text-blue-600 flex-shrink-0 mt-0.5"
+              className="w-5 h-5 text-blue-600 shrink-0 mt-0.5"
               fill="currentColor"
               viewBox="0 0 20 20"
             >
@@ -315,10 +323,10 @@ export default function ProposeGameClient() {
             </svg>
             <div>
               <h4 className="text-sm font-medium text-blue-900 mb-1">
-                Votre proposition sera examinée
+                {dict?.user?.reviewTitle || 'Votre proposition sera examinée'}
               </h4>
               <p className="text-sm text-blue-700">
-                Merci de participer aux Game of the Year !
+                {dict?.user?.reviewMessage || 'Merci de participer aux Game of the Year !'}
               </p>
             </div>
           </div>
@@ -331,7 +339,7 @@ export default function ProposeGameClient() {
             disabled={isSubmitting}
             className="flex-1 px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:bg-gray-400 transition-colors font-medium"
           >
-            {isSubmitting ? "Envoi en cours..." : "Proposer le jeu"}
+            {isSubmitting ? (dict?.common?.loading || 'Envoi en cours...') : (dict?.user?.submitGame || 'Proposer le jeu')}
           </button>
 
           <button
@@ -339,7 +347,7 @@ export default function ProposeGameClient() {
             onClick={() => router.back()}
             className="px-6 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors"
           >
-            Annuler
+            {dict?.user?.cancel || 'Annuler'}
           </button>
         </div>
       </form>

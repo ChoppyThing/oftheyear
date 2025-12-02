@@ -26,6 +26,7 @@ export default function NextCategoryButton({
   const [loadingNext, setLoadingNext] = useState(false);
   const [loadingPrev, setLoadingPrev] = useState(false);
   const [isLast, setIsLast] = useState(false);
+  const [isFirst, setIsFirst] = useState(false);
   const [isAllNominated, setIsAllNominated] = useState<boolean | null>(null);
 
   const fetchFiltered = async () => {
@@ -115,8 +116,10 @@ export default function NextCategoryButton({
         const filtered = await fetchFiltered();
         const idx = filtered.findIndex((c) => c.slug === currentSlug);
         const last = idx >= 0 && idx === filtered.length - 1;
+        const first = idx === 0;
         if (!mounted) return;
         setIsLast(last);
+        setIsFirst(first);
 
         if (last) {
           try {
@@ -160,19 +163,20 @@ export default function NextCategoryButton({
   const handlePrev = async () => {
     setLoadingPrev(true);
     try {
-      if (!currentSlug) {
-        router.push(fallbackPath);
-        return;
-      }
+        if (!currentSlug) {
+          // nothing to do when no current slug
+          return;
+        }
 
-      const filtered = await fetchFiltered();
-      const idx = filtered.findIndex((c) => c.slug === currentSlug);
+        const filtered = await fetchFiltered();
+        const idx = filtered.findIndex((c) => c.slug === currentSlug);
 
-      if (idx > 0) {
-        router.push(`${targetPathPrefix}/${filtered[idx - 1].slug}`);
-      } else {
-        router.push(fallbackPath);
-      }
+        if (idx > 0) {
+          router.push(`${targetPathPrefix}/${filtered[idx - 1].slug}`);
+        } else {
+          // On first category: do not navigate to a fallback that may not exist (avoids 404)
+          return;
+        }
     } catch (err) {
       console.error("NextCategoryButton(prev) error:", err);
       router.push(fallbackPath);
@@ -192,9 +196,10 @@ export default function NextCategoryButton({
       {currentSlug && (
         <button
           onClick={handlePrev}
-          disabled={loadingPrev}
+          disabled={loadingPrev || isFirst}
           aria-label={prevAria}
-          className={`fixed left-4 bottom-6 z-40 rounded-full px-3 py-2 bg-white/10 backdrop-blur-sm border border-white/10 text-white flex items-center gap-2 shadow-lg hover:bg-white/20 transition ${loadingPrev ? 'opacity-60 cursor-wait' : ''}`}
+          title={isFirst ? dict?.navigation?.firstCategoryTitle || 'Première catégorie' : undefined}
+          className={`fixed left-4 bottom-6 z-40 rounded-full px-3 py-2 bg-white/10 backdrop-blur-sm border border-white/10 text-white flex items-center gap-2 shadow-lg transition ${loadingPrev ? 'opacity-60 cursor-wait' : ''} ${isFirst && !loadingPrev ? 'opacity-50 cursor-not-allowed hover:bg-white/10' : 'hover:bg-white/20'}`}
         >
           <svg className="w-5 h-5 rotate-180" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
             <path d="M5 12h14" />

@@ -6,7 +6,7 @@ import { toast } from 'sonner';
 import { categoryUserService, CreateCategoryDto } from '@/services/user/categoryUserService';
 import Link from 'next/link';
 
-export default function ProposeCategoryClient() {
+export default function ProposeCategoryClient({ dict }: { dict?: any }) {
   const router = useRouter();
   const currentYear = new Date().getFullYear();
   
@@ -84,11 +84,12 @@ export default function ProposeCategoryClient() {
     return (
       <div className="bg-sky-900 border-2 border-sky-900 rounded-lg p-8 text-center">
         <h2 className="text-2xl font-bold text-white mb-3">
-          Catégorie déjà proposée
+          {dict?.user?.categoryAlreadyProposedTitle || 'Catégorie déjà proposée'}
         </h2>
         <p className="text-gray-100 mb-6">
-          Vous avez déjà proposé une catégorie pour {currentYear}.<br />
-          Nous vons en remercions !
+          {dict?.user?.categoryAlreadyProposedMessage
+            ? dict.user.categoryAlreadyProposedMessage.replace('{year}', String(currentYear))
+            : `Vous avez déjà proposé une catégorie pour ${currentYear}.\nNous vous en remercions !`}
         </p>
       </div>
     );
@@ -152,7 +153,7 @@ export default function ProposeCategoryClient() {
       <div className="mb-6 bg-blue-50 border border-blue-200 rounded-lg p-4">
         <div className="flex items-start gap-3">
           <svg
-            className="w-5 h-5 text-blue-600 flex-shrink-0 mt-0.5"
+            className="w-5 h-5 text-blue-600 shrink-0 mt-0.5"
             fill="currentColor"
             viewBox="0 0 20 20"
           >
@@ -164,10 +165,10 @@ export default function ProposeCategoryClient() {
           </svg>
           <div>
             <h4 className="text-sm font-medium text-blue-900 mb-1">
-              Nous allons voir si cette catégorie peut-être intégrée
+              {dict?.user?.categoryReviewTitle || 'Nous allons voir si cette catégorie peut-être intégrée'}
             </h4>
             <p className="text-sm text-blue-700">
-              Nous vous remercions de participer aux game of the year ! 
+              {dict?.user?.categoryReviewMessage || 'Nous vous remercions de participer aux game of the year !'}
             </p>
           </div>
         </div>
@@ -198,10 +199,10 @@ export default function ProposeCategoryClient() {
                   d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
                 />
               </svg>
-              Envoi en cours...
+              {dict?.common?.loading || 'Envoi en cours...'}
             </span>
           ) : (
-            'Proposer la catégorie'
+            dict?.user?.categorySubmitButton || 'Proposer la catégorie'
           )}
         </button>
 
@@ -210,7 +211,7 @@ export default function ProposeCategoryClient() {
           onClick={() => router.back()}
           className="px-6 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors"
         >
-          Annuler
+          {dict?.user?.cancel || 'Annuler'}
         </button>
       </div>
     </form>

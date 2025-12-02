@@ -16,6 +16,7 @@ export default function UserButton({ dict }: { dict: any }) {
   const { user, isLoading, logout } = useAuth();
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [buttonRect, setButtonRect] = useState<DOMRect | null>(null);
+  const wrapperRef = useRef<HTMLDivElement>(null);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const buttonRef = useRef<HTMLButtonElement>(null);
   const params = useParams();
@@ -49,7 +50,7 @@ export default function UserButton({ dict }: { dict: any }) {
   }
 
   return (
-    <div className="relative cursor-pointer" ref={dropdownRef}>
+    <div className="relative cursor-pointer" ref={wrapperRef}>
       <button
         ref={buttonRef}
         onClick={() => setIsDropdownOpen(!isDropdownOpen)}
@@ -87,6 +88,7 @@ export default function UserButton({ dict }: { dict: any }) {
           />
 
           <div 
+            ref={dropdownRef}
             className="fixed w-56 bg-white rounded-lg shadow-xl py-2 z-100 border border-gray-200"
             style={{
               top: `${buttonRect.bottom + 8}px`,

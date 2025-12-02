@@ -1,6 +1,5 @@
 import ProposeCategoryClient from '@/components/user/Category/ProposeCategoryClient';
 import { Metadata } from 'next';
-import NextCategoryButton from '@/components/category/NextCategoryButton';
 import { getDictionary } from '@/lib/i18n';
 
 type Props = { params: Promise<{ locale: string }> };
@@ -23,8 +22,7 @@ export default async function ProposeCategoryPage({ params }: Props) {
         </p>
       </div>
 
-      <ProposeCategoryClient />
-      <NextCategoryButton phase="nomination" dict={dict} />
+      <ProposeCategoryClient dict={dict} />
     </div>
   );
 }

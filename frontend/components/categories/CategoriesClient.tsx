@@ -148,7 +148,7 @@ export default function CategoriesClient({ dict }: { dict?: any }) {
                 <div className="flex items-center justify-between pt-4 border-t border-gray-700">
                   <div className="flex items-center gap-2 text-sm text-gray-500">
                     <IoGameController className="w-4 h-4" />
-                    <span>{category.gamesCount || 0} jeux</span>
+                    <span>{category.gamesCount || 0} nominations</span>
                   </div>
 
                   <span className="text-blue-400 text-sm font-semibold group-hover:translate-x-1 transition-transform">
