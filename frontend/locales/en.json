@@ -311,7 +311,7 @@
   "category": {
     "index": {
       "title": "Voting categories",
-      "description": "Discover all available categories to vote for your favorite games",
+        "description": "Nominate games for each category",
       "empty": "No categories available for {year}",
       "meta": {
         "title": "Game of the Year: GOTY {year} Categories",
@@ -320,6 +320,8 @@
     },
     "card": {
       "see": "See →"
+      ,
+      "nominations": "nominations"
     },
     "phase": {
       "vote": "Vote",

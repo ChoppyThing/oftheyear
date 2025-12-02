@@ -314,7 +314,7 @@
   "category": {
     "index": {
       "title": "投票类别",
-      "description": "查看所有可供投票的类别，选择你喜欢的游戏",
+      "description": "为每个类别提名游戏",
       "empty": "暂无 {year} 年的可投票类别",
       "meta": {
         "title": "年度游戏：GOTY {year} 类别",
@@ -323,6 +323,8 @@
     },
     "card": {
       "see": "查看 →"
+      ,
+      "nominations": "提名"
     },
     "phase": {
       "vote": "投票",

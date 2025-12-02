@@ -63,8 +63,53 @@ export class UserAdminService {
 
     const [users, total] = await queryBuilder.getManyAndCount();
 
+    // Utility: mask last name showing only first two chars then asterisks
+    const maskLastName = (lastName?: string | null) => {
+      if (!lastName) return '';
+      const trimmed = lastName.trim();
+      if (trimmed.length <= 2) return trimmed;
+      return trimmed.slice(0, 2) + '*'.repeat(trimmed.length - 2);
+    };
+
+    // Utility: mask email according to rules:
+    // - show up to first two chars of each alphanumeric segment
+    // - keep separators ('.' and '_' and '@') and reveal following segment's first two chars
+    // - for short segments (<=2) show them as-is
+    const maskEmail = (email?: string | null) => {
+      if (!email) return '';
+      const parts: string[] = [];
+      // We'll split into sequences of word chars and separators
+      const tokens = email.split(/([._@])/g);
+      for (const token of tokens) {
+        if (token === '.' || token === '_' || token === '@') {
+          parts.push(token);
+          continue;
+        }
+        // token is an alphanumeric sequence (or domain part)
+        if (token.length <= 2) {
+          parts.push(token);
+        } else {
+          parts.push(token.slice(0, 2) + '*'.repeat(token.length - 2));
+        }
+      }
+      return parts.join('');
+    };
+
+    // Sanitize users before returning to admin UI to comply with GDPR
+    const sanitized = users.map((u) => ({
+      id: u.id,
+      firstName: u.firstName || '',
+      lastName: maskLastName(u.lastName),
+      nickname: u.nickname,
+      email: maskEmail(u.email),
+      roles: u.roles,
+      isVerified: u.isVerified,
+      createdAt: u.createdAt,
+      updatedAt: u.updatedAt,
+    }));
+
     return {
-      data: users,
+      data: sanitized,
       meta: {
         total,
         page,
