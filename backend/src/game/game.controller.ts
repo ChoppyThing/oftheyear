@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post, Query, Request } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Query, Request, BadRequestException } from '@nestjs/common';
 import { Public } from 'src/auth/public.decorator';
 import { GameService } from './game.service';
 import { CreateGameDto, GameListQueryDto } from './game.dto';
@@ -28,6 +28,22 @@ export class GameController {
   @Get('latest')
   async getLatest(@Query('limit') limit?: number): Promise<Game[]> {
     return await this.gameService.findLatest(limit || 3);
+  }
+
+  /**
+   * Récupère un jeu par son ID
+   * GET /game/:id
+   */
+  @Public()
+  @Get(':id')
+  async getOne(@Param('id') id: string): Promise<Game> {
+    const parsed = Number(id);
+    if (!isNaN(parsed) && parsed > 0) {
+      return await this.gameService.findOne(parsed);
+    }
+
+    // If the param is not a positive number, try to resolve as slug
+    return await this.gameService.findBySlug(id);
   }
 
   /**

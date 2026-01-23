@@ -192,9 +192,13 @@
     "proposal": {
       "title": "Proposez vos jeux et catégories",
       "intro": "Game of the Year, c'est aussi votre créativité. Chaque membre inscrit peut contribuer activement à la plateforme :",
+      "game": {
+        "voteNow": "Votez maintenant pour ce jeu !",
+        "linksTitle": "Liens du jeu"
+      },
       "games": {
         "title": "Proposition de jeux",
-        "description": "Vous pouvez proposer jusqu'à 5 jeux que vous souhaitez voir dans la compétition. Avant de soumettre, vérifiez via la recherche que le jeu n'est pas déjà présent.",
+        "description": "Vous pouvez proposer jusqu'à 5 jeux que vous aimeriez voir en compétition. Avant de soumettre, vérifiez par recherche que le jeu n'est pas déjà présent.",
         "validation": "Chaque jeu proposé est soumis à validation : il doit être sorti durant l'année en cours, et l'image fournie doit respecter nos standards de qualité."
       },
       "categories": {
@@ -308,6 +312,9 @@
     "noImage": "Pas d'image",
     "error": "Une erreur est survenue",
     "backToCategories": "Retour aux catégories"
+  },
+  "game": {
+    "voteNow": "Votez maintenant pour ce jeu !"
   },
 
   "category": {

@@ -1,5 +1,15 @@
-import { IsString, IsNotEmpty, IsOptional, MaxLength, IsInt, Min } from 'class-validator';
+import { IsString, IsNotEmpty, IsOptional, MaxLength, IsInt, Min, IsArray, ValidateNested, IsUrl } from 'class-validator';
 import { Type } from 'class-transformer';
+
+export class LinkDto {
+  @IsString()
+  @IsNotEmpty()
+  label: string;
+
+  @IsUrl({ require_tld: false })
+  @IsNotEmpty()
+  url: string;
+}
 
 export class CreateGameUserDto {
   @IsString()
@@ -26,6 +36,12 @@ export class CreateGameUserDto {
   @Min(1970)
   @Type(() => Number)
   year: number;
+
+  @IsOptional()
+  @IsArray()
+  @ValidateNested({ each: true })
+  @Type(() => LinkDto)
+  links?: LinkDto[];
 }
 
 export class ListGamesUserQueryDto {

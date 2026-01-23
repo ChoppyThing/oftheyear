@@ -80,6 +80,9 @@ export class Game {
   })
   publishAt: Date;
 
+  @Column('json', { nullable: true })
+  links?: any; // Expected format: [{ label: string, url: string }]
+
   @Index({ unique: true })
   @Column()
   slug: string;

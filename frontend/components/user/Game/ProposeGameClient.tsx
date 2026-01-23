@@ -30,6 +30,8 @@ export default function ProposeGameClient({ dict }: { dict?: any }) {
     year: currentYear,
   });
 
+  const [links, setLinks] = useState<{ label: string; url: string }[]>([]);
+
   // Recherche de jeux existants
   const [searchResults, setSearchResults] = useState<any[]>([]);
   const [isSearching, setIsSearching] = useState(false);
@@ -76,7 +78,7 @@ export default function ProposeGameClient({ dict }: { dict?: any }) {
 
     try {
       await gameUserService.createProposal(
-        formData,
+        { ...formData, links },
         selectedImage || undefined
       );
 
@@ -96,6 +98,7 @@ export default function ProposeGameClient({ dict }: { dict?: any }) {
         year: currentYear,
       });
       setSelectedImage(null);
+      setLinks([]);
 
       if (typeof window !== "undefined") {
         window.location.reload();
@@ -123,6 +126,11 @@ export default function ProposeGameClient({ dict }: { dict?: any }) {
       searchGames(value);
     }
   };
+
+  const addLink = () => setLinks((s) => [...s, { label: '', url: '' }]);
+  const updateLink = (index: number, key: 'label' | 'url', value: string) =>
+    setLinks((s) => s.map((l, i) => (i === index ? { ...l, [key]: value } : l)));
+  const removeLink = (index: number) => setLinks((s) => s.filter((_, i) => i !== index));
 
   if (checking) {
     return (
@@ -302,6 +310,34 @@ export default function ProposeGameClient({ dict }: { dict?: any }) {
             className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
             placeholder={dict?.user?.editorPlaceholder || 'Ex: Nintendo'}
           />
+        </div>
+
+        {/* Links */}
+        <div className="mb-6">
+          <label className="block text-sm font-medium text-gray-700 mb-2">Liens</label>
+          <p className="text-xs text-gray-500 mb-2">Ajoutez des liens externes (Steam, site officiel...)</p>
+          <div className="space-y-2">
+            {links.map((link, idx) => (
+              <div key={idx} className="flex gap-2">
+                <input
+                  type="text"
+                  placeholder="Label"
+                  value={link.label}
+                  onChange={(e) => updateLink(idx, 'label', e.target.value)}
+                  className="flex-1 px-3 py-2 border border-gray-300 rounded-md"
+                />
+                <input
+                  type="url"
+                  placeholder="https://..."
+                  value={link.url}
+                  onChange={(e) => updateLink(idx, 'url', e.target.value)}
+                  className="flex-1 px-3 py-2 border border-gray-300 rounded-md"
+                />
+                <button type="button" onClick={() => removeLink(idx)} className="px-3 py-2 bg-red-500 text-white rounded">Suppr</button>
+              </div>
+            ))}
+            <button type="button" onClick={addLink} className="px-3 py-2 bg-gray-100 rounded">+ Ajouter un lien</button>
+          </div>
         </div>
 
         {/* Année (caché) */}

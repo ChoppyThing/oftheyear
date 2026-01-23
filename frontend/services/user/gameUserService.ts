@@ -6,6 +6,7 @@ export interface CreateGameUserDto {
   developer: string;
   editor: string;
   year: number;
+  links?: { label: string; url: string }[];
 }
 
 export interface GameProposal {
@@ -44,6 +45,10 @@ export const gameUserService = {
     if (data.description) {
       formData.append('description', data.description);
     }
+
+    if (data.links) {
+      formData.append('links', JSON.stringify(data.links));
+    }
     
     if (image) {
       formData.append('image', image);
@@ -60,6 +65,15 @@ export const gameUserService = {
       params: { query },
     });
     return response;
+  },
+
+  // Obtenir un jeu par son ID ou slug (public)
+  async getById(id: number | string) {
+    if (id === undefined || id === null) {
+      throw new Error('Missing game id');
+    }
+    const endpoint = `/game/${typeof id === 'number' ? id : encodeURIComponent(String(id))}`;
+    return apiClient.get(endpoint);
   },
 
   // Obtenir mes propositions

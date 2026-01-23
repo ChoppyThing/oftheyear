@@ -8,6 +8,7 @@ export interface CreateGameData {
   editor?: string;
   image?: string;
   status?: GameStatus;
+  links?: { label: string; url: string }[];
 }
 
 export interface UpdateGameData {
@@ -18,6 +19,7 @@ export interface UpdateGameData {
   image?: string;
   status?: GameStatus;
   removeImage?: boolean;
+  links?: { label: string; url: string }[];
 }
 
 export interface GamesListResponse {

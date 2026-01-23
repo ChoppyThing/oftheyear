@@ -34,6 +34,7 @@ export default function EditGameModal({ game, isOpen, onClose, onSuccess }: Edit
     year: game.year || currentYear,
     status: game.status || 'sent',
   });
+  const [links, setLinks] = useState<{ label: string; url: string }[]>(game.links || []);
 
   // Charger les catégories et restrictions au montage
   useEffect(() => {
@@ -88,6 +89,9 @@ export default function EditGameModal({ game, isOpen, onClose, onSuccess }: Edit
       if (formData.developer) submitData.append('developer', formData.developer);
       if (formData.editor) submitData.append('editor', formData.editor);
       if (formData.description) submitData.append('description', formData.description);
+      if (links && links.length > 0) {
+        submitData.append('links', JSON.stringify(links));
+      }
       submitData.append('status', formData.status);
 
       if (imageFile) {
@@ -214,6 +218,33 @@ export default function EditGameModal({ game, isOpen, onClose, onSuccess }: Edit
               setRemoveImage(true);
             }}
           />
+
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Liens</label>
+            <p className="text-xs text-gray-500 mb-2">Ajoutez des liens externes (Steam, site officiel...)</p>
+            <div className="space-y-2">
+              {links.map((link, idx) => (
+                <div key={idx} className="flex gap-2">
+                  <input
+                    type="text"
+                    placeholder="Label"
+                    value={link.label}
+                    onChange={(e) => setLinks((s) => s.map((l, i) => i === idx ? { ...l, label: e.target.value } : l))}
+                    className="flex-1 px-3 py-2 border border-gray-300 rounded-md"
+                  />
+                  <input
+                    type="url"
+                    placeholder="https://..."
+                    value={link.url}
+                    onChange={(e) => setLinks((s) => s.map((l, i) => i === idx ? { ...l, url: e.target.value } : l))}
+                    className="flex-1 px-3 py-2 border border-gray-300 rounded-md"
+                  />
+                  <button type="button" onClick={() => setLinks((s) => s.filter((_, i) => i !== idx))} className="px-3 py-2 bg-red-500 text-white rounded">Suppr</button>
+                </div>
+              ))}
+              <button type="button" onClick={() => setLinks((s) => [...s, { label: '', url: '' }])} className="px-3 py-2 bg-gray-100 rounded">+ Ajouter un lien</button>
+            </div>
+          </div>
 
           <div>
             <label htmlFor="status" className="block text-sm font-medium text-gray-700 mb-1">

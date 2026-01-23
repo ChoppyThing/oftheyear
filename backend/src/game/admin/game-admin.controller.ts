@@ -11,8 +11,16 @@ import {
   Post,
   UseInterceptors,
   UploadedFile,
+  UsePipes,
+  ValidationPipe,
+  PipeTransform,
+  Injectable,
+  ArgumentMetadata,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
+import { plainToInstance } from 'class-transformer';
+import { validate } from 'class-validator';
+import { BadRequestException } from '@nestjs/common';
 import { GameAdminService } from './game-admin.service';
 import { CreateGameAdminDto, ListGamesAdminQueryDto, UpdateGameAdminDto } from './game-admin.dto';
 import { UpdateGameCategoryRestrictionsDto } from '../game.dto';
@@ -20,6 +28,20 @@ import { AdminGuard } from '../../auth/guards/admin.guard';
 import { User } from 'src/user/user.entity';
 import { CurrentUser } from 'src/auth/current-user.decorator';
 import { multerConfig } from 'src/common/config/multer.config';
+
+@Injectable()
+class ParseLinksPipe implements PipeTransform {
+  transform(value: any, metadata: ArgumentMetadata) {
+    if (value && typeof value === 'object' && value.links && typeof value.links === 'string') {
+      try {
+        value.links = JSON.parse(value.links as string);
+      } catch (e) {
+        // leave as-is, let validation handle it
+      }
+    }
+    return value;
+  }
+}
 
 @Controller('admin/games')
 @UseGuards(AdminGuard)
@@ -56,15 +78,28 @@ export class GameAdminController {
   @Post()
   @UseInterceptors(FileInterceptor('image', multerConfig))
   async createGame(
-    @Body() createGameDto: CreateGameAdminDto,
+    @Body() body: any,
     @CurrentUser() user: User,
     @UploadedFile() image?: Express.Multer.File,
   ) {
-    // Transform year from string to number if needed (FormData sends strings)
-    if (typeof createGameDto.year === 'string') {
-      createGameDto.year = parseInt(createGameDto.year, 10);
+    if (typeof body.year === 'string') {
+      body.year = parseInt(body.year, 10);
     }
-    return this.gameAdminService.createGame(createGameDto, user, image);
+    if (body.links && typeof body.links === 'string') {
+      try {
+        body.links = JSON.parse(body.links as string);
+      } catch (e) {
+        // leave as-is
+      }
+    }
+
+    const dto = plainToInstance(CreateGameAdminDto, body);
+    const errors = await validate(dto, { whitelist: true, forbidNonWhitelisted: false });
+    if (errors.length > 0) {
+      throw new BadRequestException(errors);
+    }
+
+    return this.gameAdminService.createGame(dto, user, image);
   }
 
   /**
@@ -75,13 +110,26 @@ export class GameAdminController {
   @UseInterceptors(FileInterceptor('image', multerConfig))
   async updateGame(
     @Param('id') id: number,
-    @Body() dto: UpdateGameAdminDto,
+    @Body() body: any,
     @UploadedFile() image?: Express.Multer.File,
   ) {
-    // Transform year from string to number if needed (FormData sends strings)
-    if (dto.year && typeof dto.year === 'string') {
-      dto.year = parseInt(dto.year, 10);
+    if (body.year && typeof body.year === 'string') {
+      body.year = parseInt(body.year, 10);
     }
+    if (body.links && typeof body.links === 'string') {
+      try {
+        body.links = JSON.parse(body.links as string);
+      } catch (e) {
+        // leave as-is
+      }
+    }
+
+    const dto = plainToInstance(UpdateGameAdminDto, body);
+    const errors = await validate(dto, { whitelist: true, forbidNonWhitelisted: false });
+    if (errors.length > 0) {
+      throw new BadRequestException(errors);
+    }
+
     return this.gameAdminService.updateGame(id, dto, image);
   }
 

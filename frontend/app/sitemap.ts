@@ -18,9 +18,24 @@ async function getCategories() {
   }
 }
 
+async function getGamesForSitemap(year: number) {
+  try {
+    const response = await fetch(`${API_URL}/game?year=${year}`, {
+      next: { revalidate: 3600 },
+    });
+    if (!response.ok) return [];
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error('Failed to fetch games for sitemap:', error);
+    return [];
+  }
+}
+
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const categories = await getCategories();
   const currentYear = new Date().getFullYear();
+  const games = await getGamesForSitemap(currentYear);
 
   // Pages statiques principales
   const staticPages = [
@@ -53,5 +68,24 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     }))
   );
 
-  return [...staticUrls, ...categoryUrls];
+  // Game pages and their external links
+  const gameUrls = locales.flatMap((locale) =>
+    (games || []).flatMap((game: any) => {
+      const page = {
+        url: `${BASE_URL}/${locale}/games/${game.id}`,
+        lastModified: new Date(game.updatedAt),
+        changeFrequency: 'weekly' as const,
+        priority: 0.8,
+      };
+
+      const externalLinks = (game.links || []).map((l: any) => ({
+        url: l.url,
+        lastModified: new Date(game.updatedAt),
+      }));
+
+      return [page, ...externalLinks];
+    })
+  );
+
+  return [...staticUrls, ...categoryUrls, ...gameUrls];
 }

@@ -1,5 +1,15 @@
-import { IsOptional, IsString, IsInt, Min, IsEnum, IsUrl, IsNotEmpty, MaxLength } from 'class-validator';
+import { IsOptional, IsString, IsInt, Min, IsEnum, IsUrl, IsNotEmpty, MaxLength, IsArray, ValidateNested } from 'class-validator';
 import { Type } from 'class-transformer';
+
+export class LinkDto {
+  @IsString()
+  @IsNotEmpty()
+  label: string;
+
+  @IsUrl({ require_tld: false })
+  @IsNotEmpty()
+  url: string;
+}
 import { Status } from '../status.enum';
 
 export class ListGamesAdminQueryDto {
@@ -86,6 +96,12 @@ export class CreateGameAdminDto {
   @IsOptional()
   @Type(() => Date)
   publishedAt?: Date;
+
+  @IsOptional()
+  @IsArray()
+  @ValidateNested({ each: true })
+  @Type(() => LinkDto)
+  links?: LinkDto[];
 }
 
 export class UpdateGameAdminDto {
@@ -118,4 +134,10 @@ export class UpdateGameAdminDto {
   @IsOptional()
   @IsEnum(Status)
   status?: Status;
+
+  @IsOptional()
+  @IsArray()
+  @ValidateNested({ each: true })
+  @Type(() => LinkDto)
+  links?: LinkDto[];
 }

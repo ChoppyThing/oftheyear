@@ -12,6 +12,9 @@ import {
   UploadedFile,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
+import { plainToInstance } from 'class-transformer';
+import { validate } from 'class-validator';
+import { BadRequestException } from '@nestjs/common';
 import { User } from 'src/user/user.entity';
 import { GameUserService } from './game-user.service';
 import { CreateGameUserDto, ListGamesUserQueryDto } from './game-user.dto';
@@ -61,7 +64,30 @@ export class GameUserController {
     @CurrentUser() user: User,
     @UploadedFile() image?: Express.Multer.File,
   ) {
-    return this.gameUserService.createGameProposal(dto, user, image);
+    if (dto.links && typeof dto.links === 'string') {
+      try {
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+        dto.links = JSON.parse(dto.links as unknown as string);
+      } catch (e) {
+        // ignore parse error
+      }
+    }
+      const body = { ...dto, links: dto.links };
+      if (body.links && typeof body.links === 'string') {
+        try {
+          body.links = JSON.parse(body.links as string);
+        } catch (e) {
+          // leave as-is
+        }
+      }
+
+      const newDto = plainToInstance(CreateGameUserDto, body);
+      const errors = await validate(newDto, { whitelist: true, forbidNonWhitelisted: false });
+      if (errors.length > 0) {
+        throw new BadRequestException(errors);
+      }
+
+      return this.gameUserService.createGameProposal(newDto, user, image);
   }
 
   /**

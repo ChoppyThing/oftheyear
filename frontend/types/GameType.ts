@@ -24,6 +24,7 @@ export interface Game {
     pseudo: string;
     email: string;
   };
+  links?: { label: string; url: string }[];
 }
 
 export interface GamesListResponse {

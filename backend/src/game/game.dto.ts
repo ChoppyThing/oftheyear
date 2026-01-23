@@ -8,7 +8,18 @@ import {
   Min,
   Max,
   IsArray,
+  ValidateNested,
 } from 'class-validator';
+
+export class LinkDto {
+  @IsString()
+  @IsNotEmpty()
+  label: string;
+
+  @IsUrl({ require_tld: false })
+  @IsNotEmpty()
+  url: string;
+}
 
 export class CreateGameDto {
   @IsString()
@@ -34,6 +45,12 @@ export class CreateGameDto {
   @IsOptional()
   @IsString()
   slug?: string;
+
+  @IsOptional()
+  @IsArray()
+  @ValidateNested({ each: true })
+  @Type(() => LinkDto)
+  links?: LinkDto[];
 }
 
 export class GameListQueryDto {

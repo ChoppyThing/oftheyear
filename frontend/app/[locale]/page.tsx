@@ -237,15 +237,32 @@ export default async function Home({
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
               {latestGames.length > 0 ? (
                 latestGames.map((game) => (
-                  <GameCard
-                    key={game.id}
-                    image={
-                      game.image ? `${API_URL}/${game.image}` : "/logo/logo.png"
-                    }
-                    title={game.name}
-                    year={game.year}
-                    releaseDate={game.publishAt}
-                  />
+                  <div key={game.id}>
+                    <Link href={`/${locale}/games/${game.id}`} className="block">
+                      <GameCard
+                        image={
+                          game.image ? `${API_URL}/${game.image}` : "/logo/logo.png"
+                        }
+                        title={game.name}
+                        year={game.year}
+                        releaseDate={game.publishAt}
+                      />
+                    </Link>
+
+                    {game.links && game.links.length > 0 && (
+                      <div className="mt-2 text-sm text-gray-300">
+                        <ul className="list-disc list-inside">
+                          {game.links.map((l: { label: string; url: string }, idx: number) => (
+                            <li key={idx}>
+                              <a href={l.url} target="_blank" rel="noopener noreferrer" className="text-sky-300 hover:underline">
+                                {l.label || l.url}
+                              </a>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    )}
+                  </div>
                 ))
               ) : (
                 <p className="col-span-3 text-center text-gray-400">

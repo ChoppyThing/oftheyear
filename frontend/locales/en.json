@@ -190,9 +190,13 @@
     "proposal": {
       "title": "Propose your games and categories",
       "intro": "Game of the Year is also your creativity. Every registered member can actively contribute to the platform:",
+      "game": {
+        "voteNow": "Vote now for this game!",
+        "linksTitle": "Game links"
+      },
       "games": {
         "title": "Game proposals",
-        "description": "You can propose up to 5 games you want to see in the competition. Before submitting, check via search that the game isn't already present.",
+        "description": "You can propose up to 5 games you would like to see in the competition. Before submitting, verify by searching that the game isn't already present.",
         "validation": "Each proposed game is subject to validation: it must have been released during the current year, and the provided image must meet our quality standards."
       },
       "categories": {
@@ -306,6 +310,9 @@
     "noImage": "No image",
     "error": "An error occurred",
     "backToCategories": "Back to categories"
+  },
+  "game": {
+    "voteNow": "Vote now for this game!"
   },
 
   "category": {

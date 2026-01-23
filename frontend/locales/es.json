@@ -5,6 +5,10 @@
   },
   "header": {
     "home": "Inicio",
+    "game": {
+      "voteNow": "¡Vota ahora por este juego!",
+      "linksTitle": "Enlaces del juego"
+    },
     "about": "Acerca de",
     "categories": "Categorías",
     "login": "Iniciar sesión",
@@ -190,6 +194,10 @@
     "proposal": {
       "title": "Propón tus juegos y categorías",
       "intro": "Game of the Year también es tu creatividad. Cada miembro registrado puede contribuir activamente a la plataforma:",
+      "game": {
+        "voteNow": "¡Vota ahora por este juego!",
+        "linksTitle": "Enlaces del juego"
+      },
       "games": {
         "title": "Propuesta de juegos",
         "description": "Puedes proponer hasta 5 juegos que te gustaría ver en la competición. Antes de enviar, verifica mediante la búsqueda que el juego no esté ya presente.",

@@ -64,6 +64,19 @@ export class GameService {
     return game;
   }
 
+  async findBySlug(slug: string): Promise<Game> {
+    const game = await this.gameRepository.findOne({
+      where: { slug },
+      relations: ['author'],
+    });
+
+    if (!game) {
+      throw new NotFoundException(`Game with slug ${slug} not found`);
+    }
+
+    return game;
+  }
+
   /**
    * Récupère les jeux éligibles pour une catégorie donnée
    * Logique forceFiltered :
