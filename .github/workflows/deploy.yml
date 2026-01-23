@@ -20,6 +20,9 @@ jobs:
           script: |
             set -e
             cd /opt/oftheyear
+
+            # Login to GHCR to pull private images
+            echo "${{ secrets.GHCR_TOKEN }}" | docker login ghcr.io -u "${{ secrets.GHCR_USERNAME || 'choppything' }}" --password-stdin
             
             # Update image tags in docker-compose.yml
             FRONT_TAG="ghcr.io/choppything/oftheyear-frontend:sha-${{ github.event.workflow_run.head_sha }}"
