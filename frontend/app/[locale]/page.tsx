@@ -19,6 +19,7 @@ interface Game {
   image?: string;
   year: number;
   publishAt: string;
+  links?: { label: string; url: string }[];
 }
 
 async function getLatestGames(): Promise<Game[]> {
