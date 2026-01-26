@@ -25,7 +25,7 @@ export class RevalidationService {
       const locales = ['en', 'fr', 'es', 'zh'];
       
       for (const locale of locales) {
-        const url = `${this.frontendUrl}/api/revalidate?secret=${this.revalidateSecret}&path=/${locale}`;
+        const url = `${this.frontendUrl}/internal/revalidate?secret=${this.revalidateSecret}&path=/${locale}`;
         const response = await fetch(url, { method: 'POST' });
         
         if (response.ok) {
@@ -52,7 +52,7 @@ export class RevalidationService {
       const locales = ['en', 'fr', 'es', 'zh'];
       
       for (const locale of locales) {
-        const url = `${this.frontendUrl}/api/revalidate?secret=${this.revalidateSecret}&path=/${locale}/category/${categorySlug}`;
+        const url = `${this.frontendUrl}/internal/revalidate?secret=${this.revalidateSecret}&path=/${locale}/category/${categorySlug}`;
         const response = await fetch(url, { method: 'POST' });
         
         if (response.ok) {
@@ -76,7 +76,7 @@ export class RevalidationService {
     }
 
     try {
-      const url = `${this.frontendUrl}/api/revalidate?secret=${this.revalidateSecret}&path=/sitemap.xml`;
+      const url = `${this.frontendUrl}/internal/revalidate?secret=${this.revalidateSecret}&path=/sitemap.xml`;
       const response = await fetch(url, { method: 'POST' });
       
       if (response.ok) {
