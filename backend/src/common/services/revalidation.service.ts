@@ -52,7 +52,7 @@ export class RevalidationService {
       const locales = ['en', 'fr', 'es', 'zh'];
       
       for (const locale of locales) {
-        const url = `${this.frontendUrl}/internal/revalidate?secret=${this.revalidateSecret}&path=/${locale}/category/${categorySlug}`;
+        const url = `${this.frontendUrl}/internal/revalidate?secret=${this.revalidateSecret}&path=/${locale}/user/category/nomination/${categorySlug}`;
         const response = await fetch(url, { method: 'POST' });
         
         if (response.ok) {

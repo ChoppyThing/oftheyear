@@ -159,6 +159,10 @@ export class GameAdminService {
 
     const savedGame = await this.gameRepository.save(game);
 
+    // Revalider la page d'accueil et le sitemap pour afficher le nouveau jeu
+    await this.revalidationService.revalidateHome();
+    await this.revalidationService.revalidateSitemap();
+
     return savedGame;
   }
 

@@ -41,9 +41,14 @@ export function proxy(request: NextRequest) {
   if (
     pathname.startsWith('/_next') ||
     pathname.startsWith('/api') ||
+    pathname.startsWith('/internal') ||
     pathname.includes('.') ||
     pathname.startsWith('/favicon')
   ) {
+    return NextResponse.next();
+  }
+
+  if (locales.some((locale) => pathname.startsWith(`/${locale}/internal`))) {
     return NextResponse.next();
   }
 
@@ -86,5 +91,5 @@ export function proxy(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ['/((?!_next|api|favicon.ico|.*\\..*).*)'],
+  matcher: ['/((?!_next|api|internal|favicon.ico|.*\\..*).*)'],
 };
