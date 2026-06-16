@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, FormEvent } from "react";
+import { useState, FormEvent, useRef, useEffect } from "react";
 import Link from "next/link";
 import AnimatedBackground from "@/components/layout/AnimatedBackground";
 import Image from "next/image";
@@ -52,6 +52,12 @@ export default function RegisterForm({
   const [apiError, setApiError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [success, setSuccess] = useState(false);
+  const [honeypot, setHoneypot] = useState("");
+  const formLoadedAt = useRef<number>(Date.now());
+
+  useEffect(() => {
+    formLoadedAt.current = Date.now();
+  }, []);
 
   const handleChange = (field: keyof RegisterFormData, value: string) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
@@ -68,6 +74,16 @@ export default function RegisterForm({
     setIsLoading(true);
 
     try {
+      if (honeypot) {
+        setIsLoading(false);
+        return;
+      }
+
+      const timeSpent = Date.now() - formLoadedAt.current;
+      if (timeSpent < 3000) {
+        throw new Error("Submission trop rapide. Veuillez patienter quelques secondes.");
+      }
+
       // Validation avec Zod
       const validatedData = registerSchema.parse(formData);
 
@@ -245,6 +261,17 @@ export default function RegisterForm({
               )}
 
               <form onSubmit={handleSubmit} className="space-y-4">
+                <input
+                  type="text"
+                  name="website"
+                  value={honeypot}
+                  onChange={(e) => setHoneypot(e.target.value)}
+                  tabIndex={-1}
+                  autoComplete="off"
+                  aria-hidden="true"
+                  className="absolute opacity-0 h-0 w-0 overflow-hidden pointer-events-none"
+                  style={{ position: 'absolute', left: '-9999px' }}
+                />
                 {/* Email */}
                 <div>
                   <label

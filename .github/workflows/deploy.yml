@@ -9,6 +9,8 @@ jobs:
   deploy:
     if: ${{ github.event.workflow_run.conclusion == 'success' }}
     runs-on: ubuntu-latest
+    permissions:
+      packages: read
     steps:
       - name: Deploy on server via SSH
         uses: appleboy/ssh-action@master
@@ -22,7 +24,7 @@ jobs:
             cd /opt/oftheyear
 
             # Login to GHCR to pull private images
-            echo "${{ secrets.GHCR_TOKEN }}" | docker login ghcr.io -u "${{ secrets.GHCR_USERNAME || 'choppything' }}" --password-stdin
+            echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u "${{ github.actor }}" --password-stdin
             
             # Update image tags in docker-compose.yml
             FRONT_TAG="ghcr.io/choppything/oftheyear-frontend:sha-${{ github.event.workflow_run.head_sha }}"

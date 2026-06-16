@@ -46,12 +46,12 @@ export default function LoginForm({
       const data = await response.json();
 
       if (!response.ok) {
-        if (data.message === "Please verify your email before logging in") {
-          throw new Error(
-            dict.login.emailNotVerified ||
-              "Veuillez vérifier votre email avant de vous connecter"
-          );
-        }
+        // if (data.message === "Please verify your email before logging in") {
+        //   throw new Error(
+        //     dict.login.emailNotVerified ||
+        //       "Veuillez vérifier votre email avant de vous connecter"
+        //   );
+        // }
         throw new Error(data.message || dict.login.error);
       }
 
