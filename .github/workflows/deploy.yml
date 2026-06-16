@@ -36,4 +36,4 @@ jobs:
             
             # Run deploy script
             echo "Running deploy.sh..."
-            ./deploy.sh
+            bash deploy.sh
