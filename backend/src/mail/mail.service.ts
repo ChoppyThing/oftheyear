@@ -84,8 +84,8 @@ export class MailService {
     
     if (nodeEnv === 'production') {
       const brevoApiKey = this.config.get('BREVO_API_KEY');
-      const mailFromName = this.config.get('MAIL_FROM_NAME') || 'OfTheYear';
-      const mailFromAddress = this.config.get('MAIL_FROM_ADDRESS') || this.config.get('MAIL_FROM') || 'no-reply@oftheyear.eu';
+      const mailFromName = this.config.get('MAIL_FROM_NAME') || 'Game of the Year';
+      const mailFromAddress = this.config.get('MAIL_FROM_ADDRESS') || this.config.get('MAIL_FROM') || 'noreply@game.oftheyear.eu';
 
       if (!brevoApiKey) {
         this.logger.error('BREVO_API_KEY is not configured in production');
@@ -127,7 +127,7 @@ export class MailService {
     } else {
       // Development: use nodemailer SMTP
       const mail = {
-        from: this.config.get('MAIL_FROM') || 'no-reply@example.com',
+        from: this.config.get('MAIL_FROM') || 'noreply@game.oftheyear.eu',
         to: options.to,
         subject: options.subject,
         html: options.html,
